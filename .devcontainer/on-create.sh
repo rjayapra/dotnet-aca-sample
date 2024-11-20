@@ -4,10 +4,11 @@ sudo apt-get update && \
     sudo apt clean -y && \
     sudo rm -rf /var/lib/apt/lists/*
 
+echo Update .NET workloads
+dotnet workload update --from-previous-sdk
+
 echo Install .NET dev certs
 dotnet dev-certs https --trust
-# dotnet tool update -g linux-dev-certs
-# dotnet linux-dev-certs install
 
 echo Install Aspire 9 templates
 dotnet new install Aspire.ProjectTemplates
