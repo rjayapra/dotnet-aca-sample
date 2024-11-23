@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -7,6 +7,8 @@
 
     <AssemblyName>eShopLite.Store</AssemblyName>
     <RootNamespace>eShopLite.Store</RootNamespace>
+
+    <UserSecretsId>1ffc2aab-f1e5-42be-906c-3461644e7786</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
