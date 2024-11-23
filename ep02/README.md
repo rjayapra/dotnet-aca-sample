@@ -212,7 +212,7 @@ Instead of using Azure CLI, you can use Azure Developer CLI (azd) to deploy the 
     azd init
     ```
 
-   During initialization, you'll be asked to provide the Azure subscription ID, environment name, and location.
+   > During initialization, you'll be asked to provide the environment name.
 
 1. Once the initialization is complete, update the `azure.yaml` file with the Docker settings to use ACR remote build.
 
@@ -234,7 +234,7 @@ Instead of using Azure CLI, you can use Azure Developer CLI (azd) to deploy the 
         # 👆👆👆 Add the docker settings above
     ```
 
-1. Because the .NET container app uses the target port number of `8080`, you need to update the `/infra/resources.bicep` file to use the correct target port number.
+1. Because the .NET container app uses the target port number of `8080`, you need to update the `infra/resources.bicep` file to use the correct target port number.
 
     ```bicep
     // Update resources.bicep with the target port value
@@ -271,6 +271,8 @@ Instead of using Azure CLI, you can use Azure Developer CLI (azd) to deploy the 
     ```bash
     azd up
     ```
+
+   > While executing this command, you'll be asked to provide the Azure subscription ID and location.
 
 1. Open your web browser and navigate to the URL provided by the ACA instance on the screen to see the monolith app running in ACA.
 
