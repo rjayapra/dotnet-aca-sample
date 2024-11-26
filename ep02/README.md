@@ -4,31 +4,17 @@ This sample app demonstrates how to containerize and deploy a monolith app (Blaz
 
 ## Prerequisites
 
-To run this sample app, you need the following tools installed on your machine:
-
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-- [Visual Studio 2022 ](https://visualstudio.microsoft.com/vs/) or [Visual Studio Code](https://code.visualstudio.com/) with [C# Dev Kit extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit)
-- [Docker Desktop](https://docs.docker.com/desktop/)
-- [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) with [Azure Container Apps extension](https://learn.microsoft.com/cli/azure/azure-cli-extensions-list)
-- [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd)
-
-**For Windows users**:
-
-- Make sure that you have [WSL2](https://learn.microsoft.com/windows/wsl/install) enabled and installed a Linux distro like Debian or Ubuntu on your machine.
-- Make sure that you have [PowerShell 7+](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows) installed on your machine.
+To run this sample app, make sure you have all the [prerequisites](../README.md#prerequisites).
 
 ## Getting Started
 
 ### Getting the repository root
 
+To simplify the copy paste of the commands that somethines required an absolute path, we will be using the variable `REPOSITORY_ROOT` to keep the path of the root folder where you cloned/ downloaded this repository. The command `git rev-parse --show-toplevel` returns that path. 
+
 ```bash
 # Bazh/Zsh
 REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
-```
-
-```powershell
-# PowerShell
-$REPOSITORY_ROOT = git rev-parse --show-toplevel
 ```
 
 ### Running the Monolith App Locally
@@ -88,117 +74,10 @@ Once you have the container image of the monolith app, you can run it in a conta
 
 1. Open your web browser and navigate to `http://localhost:8080` to see the monolith app running in a container.
 
-### Deploying the Monolith App to ACA via Azure CLI
 
-Once you're happy with the monoith app running in a container, you can deploy it to ACA.
+### Deploying the Monolith App to ACA via Azure Developer CLI (AZD)
 
-1. Set environment variables like `AZURE_ENV_NAME` and `AZURE_LOCATION`. `{{LOCATION}}` is the Azure region where you want to deploy the resources.
-
-    ```bash
-    # Bash/Zsh
-    AZURE_ENV_NAME="acadotnet$(($RANDOM%9000+1000))"
-    AZURE_LOCATION={{LOCATION}}
-    ```
-
-    ```powershell
-    # PowerShell
-    $AZURE_ENV_NAME = "acadotnet$(Get-Random -Minimum 1000 -Maximum 9999)"
-    $AZURE_LOCATION = "{{LOCATION}}"
-    ```
-
-1. Provision relevant resources onto Azure, including [Azure Container Registry (ACR)](https://learn.microsoft.com/azure/container-registry/container-registry-intro), [Azure Container App Environment (CAE)](https://learn.microsoft.com/azure/container-apps/environment), and Azure Container Apps (ACA) instances.
-
-    ```bash
-    # Bash/Zsh
-    resources=$(az deployment sub create \
-        -n $AZURE_ENV_NAME \
-        -l $AZURE_LOCATION \
-        --template-file ./bicep/main.bicep \
-        --parameters @bicep/main.parameters.json \
-        --parameters environmentName=$AZURE_ENV_NAME \
-        --parameters location=$AZURE_LOCATION \
-        --parameters eshopliteStoreExists=false)
-    ```
-
-    ```powershell
-    # PowerShell
-    $resources = $(az deployment sub create `
-        -n $AZURE_ENV_NAME `
-        -l $AZURE_LOCATION `
-        --template-file ./bicep/main.bicep `
-        --parameters `@bicep/main.parameters.json `
-        --parameters environmentName=$AZURE_ENV_NAME `
-        --parameters location=$AZURE_LOCATION `
-        --parameters eshopliteStoreExists=false) | ConvertFrom-Json
-    ```
-
-1. Build the container image using Azure Container Registry (ACR).
-
-    ```bash
-    # Bash/Zsh
-    ACR_NAME=$(echo $resources | jq -r ".properties.outputs.azureContainerRegistryName.value")
-    az acr build \
-        -r $ACR_NAME \
-        -t eshoplite/store:latest \
-        -f "$REPOSITORY_ROOT/ep02/Dockerfile.store" \
-        "$REPOSITORY_ROOT/ep02"
-    ```
-
-    ```powershell
-    # PowerShell
-    $ACR_NAME = $resources.properties.outputs.azureContainerRegistryName.value
-    az acr build `
-        -r $ACR_NAME `
-        -t eshoplite/store:latest `
-        -f "$REPOSITORY_ROOT/ep02/Dockerfile.store" `
-        "$REPOSITORY_ROOT/ep02"
-    ```
-
-1. Deploy the container image to ACA.
-
-    ```bash
-    # Bash/Zsh
-    ACA_NAME=$(echo $resources | jq -r ".properties.outputs.azureContainerAppName.value")
-    CAE_NAME=$(echo $resources | jq -r ".properties.outputs.azureContainerAppEnvironmentName.value")
-    az containerapp up \
-        -n $ACA_NAME \
-        --environment $CAE_NAME \
-        -i "$ACR_NAME.azurecr.io/eshoplite/store:latest"
-    ```
-
-    ```powershell
-    # PowerShell
-    $ACA_NAME = $resources.properties.outputs.azureContainerAppName.value
-    $CAE_NAME = $resources.properties.outputs.azureContainerAppEnvironmentName.value
-    az containerapp up `
-        -n $ACA_NAME `
-        --environment $CAE_NAME `
-        -i "$ACR_NAME.azurecr.io/eshoplite/store:latest"
-    ```
-
-1. Open your web browser and navigate to the URL provided by the ACA instance to see the monolith app running in ACA. You can find the URL in the output of the previous command.
-
-    ```bash
-    # Bash/Zsh
-    ACA_URL=$(echo $resources | jq -r ".properties.outputs.azureContainerAppUrl.value")
-    echo $ACA_URL
-    ```
-
-    ```powershell
-    # PowerShell
-    $ACA_URL = $resources.properties.outputs.azureContainerAppUrl.value
-    echo $ACA_URL
-    ```
-
-1. To clean up the resources, run the following command:
-
-    ```bash
-    az group delete -g rg-$AZURE_ENV_NAME --no-wait --yes
-    ```
-
-### Deploying the Monolith App to ACA via Azure Developer CLI
-
-Instead of using Azure CLI, you can use Azure Developer CLI (azd) to deploy the monolith app to ACA.
+Instead of using Azure CLI, you can use Azure Developer CLI (AZD) to deploy the monolith app to ACA.
 
 1. Make sure that you're in the `ep02` directory.
 
@@ -276,8 +155,14 @@ Instead of using Azure CLI, you can use Azure Developer CLI (azd) to deploy the 
 
 1. Open your web browser and navigate to the URL provided by the ACA instance on the screen to see the monolith app running in ACA.
 
-1. To clean up the resources, run the following command:
+### Optional Learning
 
-    ```bash
-    azd down --force --purge
-    ```
+There multiple ways to deploy your application to Azure. Learn how to [Deploy to ACA using Azure CLI](./extra.md)
+
+## Clean up the deployed resources
+
+To clean up the resources, run the following command:
+
+```bash
+azd down --force --purge
+```
