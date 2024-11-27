@@ -10,11 +10,16 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
 
 ### Getting the repository root
 
-To simplify the copy paste of the commands that somethines required an absolute path, we will be using the variable `REPOSITORY_ROOT` to keep the path of the root folder where you cloned/ downloaded this repository. The command `git rev-parse --show-toplevel` returns that path. 
+To simplify the copy paste of the commands that sometimes required an absolute path, we will be using the variable `REPOSITORY_ROOT` to keep the path of the root folder where you cloned/ downloaded this repository. The command `git rev-parse --show-toplevel` returns that path.
 
 ```bash
 # Bazh/Zsh
 REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
+```
+
+```powershell
+# PowerShell
+$REPOSITORY_ROOT = git rev-parse --show-toplevel
 ```
 
 ### Running the Monolith App Locally
