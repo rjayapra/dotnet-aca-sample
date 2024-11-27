@@ -1,14 +1,14 @@
 # EP02: Monolith App on ACA - EXTRA
 
-This section is totally optional and demontronstrate a more advance technique to deploy Azure resources using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/).
+This section is totally optional and demonstrates a more advance technique to deploy Azure resources using [Azure CLI](https://learn.microsoft.com/cli/azure/).
 
 ## Prerequisites
 
-You have done and complete the [ep02](README.md) content.
+You have done and completed the [ep02](README.md) content.
 
 ### Getting the repository root
 
-If you planned to use PowerShell you will need to initaialized the  variable `REPOSITORY_ROOT` in a PowerShell terminal, or you can continue using bash.
+If you planned to use PowerShell you will need to initialize the variable `REPOSITORY_ROOT` in a PowerShell terminal, or you can continue using bash.
 
 ```bash
 # Bazh/Zsh
@@ -22,7 +22,7 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 
 ## Deploying the Monolith App to ACA via Azure CLI
 
-Once you're happy with the monoith app running in a container, you can deploy it to ACA.
+Once you're happy with the monolith app running in a container, you can deploy it to ACA.
 
 1. Set environment variables like `AZURE_ENV_NAME` and `AZURE_LOCATION`. `{{LOCATION}}` is the Azure region where you want to deploy the resources.
 
@@ -130,4 +130,3 @@ Once you're happy with the monoith app running in a container, you can deploy it
     ```bash
     az group delete -g rg-$AZURE_ENV_NAME --no-wait --yes
     ```
-
