@@ -21,9 +21,10 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 
 
 - We will break-down the current project into 3 projects:
-  - `eShopLite.Store`: Current project, but will keep only the frontend components
-  - `eShopLite.Api`: New project where we will move all the backend components
-  - `eShopLite.Products`: New project where we will move all the data entities
+  - `eShopLite.Store`: It's as the same name as in the previous monolith, but kept only the frontend components.
+  - `eShopLite.Products`: New web API project where the product API and dabases were moved
+  - `eShopLite.Weather`: New web API project where the product API and dabases were moved
+  - `eShopLite.DataEntities`: New class library project where the data entities
 
 
 

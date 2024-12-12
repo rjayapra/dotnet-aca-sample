@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopLite.Store", "eShopLit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopLite.Products", "eShopLite.Products\eShopLite.Products.csproj", "{7191D093-AEC2-488C-AF83-7AEE71316117}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopLite.Weather", "eShopLite.Weather\eShopLite.Weather.csproj", "{8EEDEA76-12DA-43E3-AC2B-0DFA17C1A465}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{7191D093-AEC2-488C-AF83-7AEE71316117}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7191D093-AEC2-488C-AF83-7AEE71316117}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7191D093-AEC2-488C-AF83-7AEE71316117}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EEDEA76-12DA-43E3-AC2B-0DFA17C1A465}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EEDEA76-12DA-43E3-AC2B-0DFA17C1A465}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EEDEA76-12DA-43E3-AC2B-0DFA17C1A465}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EEDEA76-12DA-43E3-AC2B-0DFA17C1A465}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
