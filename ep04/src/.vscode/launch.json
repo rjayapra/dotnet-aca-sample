@@ -4,21 +4,21 @@
         {
             "name": "Run all",
             "configurations": [
-                "Run api product",
-				"Run api weather",
+                "Run api-product",
+				"Run api-weather",
                 "Run web"
             ]
         }
     ],
     "configurations": [
         {
-            "name": "Run api product",
+            "name": "Run api-product",
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}\\eShopLite.Products\\eShopLite.Products.csproj"
         },
 		{
-            "name": "Run api weather",
+            "name": "Run api-weather",
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}\\eShopLite.Weather\\eShopLite.Weather.csproj"

@@ -1,4 +1,4 @@
-using eShopLite.Store.DataEntities;
+using eShopLite.DataEntities;
 
 namespace eShopLite.Store.ApiClients;
 

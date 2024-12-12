@@ -1,7 +1,9 @@
 ﻿@page "/products"
 @using DataEntities
 @using Store.Services
-@inject ProductService ProductService
+@using eShopLite.Store.ApiClients
+@* @inject ProductService ProductService *@
+@inject ProductApiClient ProductApi
 @inject IConfiguration Configuration
 @attribute [StreamRendering(true)]
 
@@ -15,7 +17,7 @@
 {
     <p><em>Loading...</em></p>
 }
-else if (products.Count == 0) {
+else if (products == null) {
     <p><em>There is a problem loading our products. Please try again later.</em></p>
 }
 else
@@ -45,12 +47,12 @@ else
 }
 
 @code {
-    private List<Product>? products;
+    private IEnumerable<Product>? products;
 
     protected override async Task OnInitializedAsync()
     {
         // Simulate asynchronous loading to demonstrate streaming rendering
-        products = await ProductService.GetProducts();
+        products = await ProductApi.GetProductsAsync();
     }
 
 }
