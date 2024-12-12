@@ -4,32 +4,14 @@ using eShopLite.Store.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// // Setup Product API
-// builder.Services.AddSingleton<ProductService>();
-// builder.Services.AddHttpClient<ProductService>(c =>
-// {
-//     var url = builder.Configuration["ProductEndpoint"] ?? throw new InvalidOperationException("ProductEndpoint is not set");
-
-//     c.BaseAddress = new(url);
-// });
-
-// // Setup Weather API
-// builder.Services.AddSingleton<WeatherService>();
-// builder.Services.AddHttpClient<WeatherService>(c =>
-// {
-//     var url = builder.Configuration["ProductEndpoint"] ?? throw new InvalidOperationException("ProductEndpoint is not set");
-
-//     c.BaseAddress = new(url);
-// });
-
 // Add HTTP clients
 builder.Services.AddHttpClient<ProductApiClient>(client =>
 {
-    client.BaseAddress = new("http://localhost:5228");
+    client.BaseAddress = new("http://products:8080");
 });
 builder.Services.AddHttpClient<WeatherApiClient>(client =>
 {
-    client.BaseAddress = new("http://localhost:5151");
+    client.BaseAddress = new("http://weather:8080");
 });
 
 // Add services to the container.
@@ -46,7 +28,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();

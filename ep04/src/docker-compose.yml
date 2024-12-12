@@ -1,0 +1,46 @@
+
+version: '3.4'
+
+name: eshoplite
+services:
+
+  eshoplite-product:
+    image: eshoplite-product
+    container_name: eshoplite-product
+    hostname: products
+    build:
+      context: .
+      dockerfile: ./Dockerfile.products
+    networks:
+      - eshop-net
+
+  eshoplite-weather:
+    image: eshoplite-weather
+    container_name: eshoplite-weather
+    hostname: weather
+    build:
+      context: .
+      dockerfile: ./Dockerfile.weather
+    networks:
+      - eshop-net
+      
+  eshoplite-store:
+    image: eshoplite-store
+    container_name: eshoplite-store
+    hostname: store
+    build:
+      context: .
+      dockerfile: ./Dockerfile.store
+    ports:
+      - 5158:8080
+    links:
+      - eshoplite-product:products
+      - eshoplite-weather:weather
+    depends_on:
+      - eshoplite-product
+      - eshoplite-weather
+    networks:
+      - eshop-net
+
+networks:
+  eshop-net:
