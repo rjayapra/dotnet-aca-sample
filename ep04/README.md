@@ -60,17 +60,60 @@ builder.Services.AddHttpClient<WeatherApiClient>(client =>
 });
 ```
 
-To **build** and then **run** the container one by one you could use command similar to those one:
+**Build** all the container with the following commands:
 
 ```bash
 docker build -t eshoplite-weather:latest  -f .\Dockerfile.weather . 
 
-docker run -p 5151:8080 --name eshoplite-weather eshoplite-weather:latest
+docker build -t eshoplite-products:latest  -f .\Dockerfile.products . 
+
+docker build -t eshoplite-store:latest  -f .\Dockerfile.store . 
 ```
 
-But to build and run the entire solution you could use the following command:
+To run the entire solution locally use the following command:
 
 ```bash
-docker compose -f .\docker-compose.yml up --build
+docker compose -f .\docker-compose.yml up 
 ```
 
+## Deploying to Azure
+
+```bash
+azd init
+```
+
+Once initialized update the services `src/azure.yaml`:
+
+```
+services:
+    eshoplite-products:
+        project: src/eShopLite.Products
+        host: containerapp
+        language: dotnet
+        docker:
+            path: src/Dockerfile.products
+            context: ./
+            remoteBuild: true
+    eshoplite-store:
+        project: src/eShopLite.Store
+        host: containerapp
+        language: dotnet
+        docker:
+            path: src/Dockerfile.store
+            context: ./
+            remoteBuild: true
+    eshoplite-weather:
+        project: src/eShopLite.Weather
+        host: containerapp
+        language: dotnet
+        docker:
+            path: src/Dockerfile.weather
+            context: ./
+            remoteBuild: true
+```
+
+
+THen should be able to deploy the solution with the following command:
+```bash
+azd up
+```
