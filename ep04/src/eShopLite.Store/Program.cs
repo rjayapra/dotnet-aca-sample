@@ -1,6 +1,6 @@
 using eShopLite.Store.ApiClients;
 using eShopLite.Store.Components;
-using eShopLite.Store.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

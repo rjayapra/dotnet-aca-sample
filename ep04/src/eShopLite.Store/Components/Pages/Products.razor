@@ -1,6 +1,5 @@
 ﻿@page "/products"
 @using DataEntities
-@using Store.Services
 @using eShopLite.Store.ApiClients
 @* @inject ProductService ProductService *@
 @inject ProductApiClient ProductApi
@@ -51,7 +50,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
         products = await ProductApi.GetProductsAsync();
     }
 
