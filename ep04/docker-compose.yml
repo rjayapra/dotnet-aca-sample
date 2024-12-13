@@ -4,9 +4,9 @@ version: '3.4'
 name: eshoplite
 services:
 
-  eshoplite-product:
-    image: eshoplite-product
-    container_name: eshoplite-product
+  eshoplite-products:
+    image: eshoplite-products
+    container_name: eshoplite-products
     hostname: products
     build:
       context: .
@@ -34,10 +34,10 @@ services:
     ports:
       - 5158:8080
     links:
-      - eshoplite-product:products
+      - eshoplite-products:products
       - eshoplite-weather:weather
     depends_on:
-      - eshoplite-product
+      - eshoplite-products
       - eshoplite-weather
     networks:
       - eshop-net

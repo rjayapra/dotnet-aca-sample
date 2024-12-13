@@ -1,10 +1,5 @@
 # EP04: Transforming Monolith App to MSA
 
-There is 2 folders in this module:
-- `start`: This is the monolith app before the transformation
-- `final`: this is the microservice app after the transformation
-
-
 ### Getting the repository root
 
 ```bash
@@ -29,60 +24,74 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 
 To execute the solution locally you need to start all those project independantly. We created a Launch Profile in VSCode that does just that. Open the folder `ep4/scr` in VSCode and run the `Run all` profile, In the Run & Debug panel.
 
-Make sure the httpClient in `eShopLite.Store/Program.cs` look like this to execute the solution locally.
+.NET will launch all the project on localhost using different ports. Make validate the values of `ProductsApi` and `WeatherApi` in `appsettings.json` file look like this to execute the solution locally.
 
-```csharp
-builder.Services.AddHttpClient<ProductApiClient>(client =>
-{
-    client.BaseAddress = new("http://localhot:5258");
-});
-builder.Services.AddHttpClient<WeatherApiClient>(client =>
-{
-    client.BaseAddress = new("http://localhot:5151");
-});
+```json
+"ProductsApi": "http://localhot:5258",
+"WeatherApi": "http://localhot:5151"
 ```
-
-
 
 
 ## Execute the solution with Docker
 
-Update the httpClient in `eShopLite.Store/Program.cs` to point to the new API endpoints:
+Just like we learn previously we can containerize the each project in it's own container. The main difference is that if you look to `Dockerfile.products` and `Dockerfile.store` you will notice that in the first section of the file we are copying the `eShopLite.DataEntities` project to the container. This is because the `eShopLite.Products` and `eShopLite.Store` projects depend on the `eShopLite.DataEntities` project.
 
-```csharp
-builder.Services.AddHttpClient<ProductApiClient>(client =>
-{
-    client.BaseAddress = new("http://products:8080");
-});
-builder.Services.AddHttpClient<WeatherApiClient>(client =>
-{
-    client.BaseAddress = new("http://weather:8080");
-});
+```dockerfile
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
+COPY ./src/eShopLite.Products /source/eShopLite.Products
+COPY ./src/eShopLite.DataEntities /source/eShopLite.DataEntities
 ```
 
-**Build** all the container with the following commands:
+You could build each container individually with the following commands:
 
 ```bash
 docker build -t eshoplite-weather:latest  -f .\Dockerfile.weather . 
-
 docker build -t eshoplite-products:latest  -f .\Dockerfile.products . 
-
 docker build -t eshoplite-store:latest  -f .\Dockerfile.store . 
 ```
 
-To run the entire solution locally use the following command:
+Then run them with the following commands:
 
 ```bash
-docker compose -f .\docker-compose.yml up 
+docker run -p 5151:8080 --name eshoplite-weather eshoplite-weather:latest
+...
 ```
 
+But there is a better way to do this. We can use Docker Compose to orchestrate the containers. Looking at the `docker-compose.yml` file you will see that we are defining the services for each project. We also created **links** between the services to make it easier for eshoplite-store reach the other services.
+
+The next step is to update the `appsettings.json` file in the `eShopLite.Store` project to point to the new API endpoints:
+
+```json
+"ProductsApi": "http://products:8080",
+"WeatherApi": "http://weather:8080"
+```
+
+To run the entire solution locally using container execute the following command:
+
+```bash
+docker compose -f .\docker-compose.yml up --build -d
+```
+
+Using the command `docker ps` you will see the 3 containers up and running. You can navigate to the eShotLite website from your bowser at the URL `http://localhost:5158`.
+
+## Stopping the solution
+
+To stop the solution execute the docker compose down command:
+
+```bash
+docker compose -f .\docker-compose.yml down
+```
+
+
 ## Deploying to Azure
+
+Initialize the Azure Developer CLI (azd) in the current directory.
 
 ```bash
 azd init
 ```
 
-Once initialized update the services `src/azure.yaml`:
+Once the initialization is complete, update the `azure.yaml` file with the Docker settings to use ACR remote build.
 
 ```
 services:
@@ -91,29 +100,52 @@ services:
         host: containerapp
         language: dotnet
         docker:
-            path: src/Dockerfile.products
-            context: ./
+            path: ../../Dockerfile.products
+            context: ../../
             remoteBuild: true
     eshoplite-store:
         project: src/eShopLite.Store
         host: containerapp
         language: dotnet
         docker:
-            path: src/Dockerfile.store
-            context: ./
+            path: ../../Dockerfile.store
+            context: ../../
             remoteBuild: true
     eshoplite-weather:
         project: src/eShopLite.Weather
         host: containerapp
         language: dotnet
         docker:
-            path: src/Dockerfile.weather
-            context: ./
+            path: ../../Dockerfile.weather
+            context: ../../
             remoteBuild: true
 ```
 
 
-THen should be able to deploy the solution with the following command:
+Just like before, you need to update the `infra/resources.bicep` file to use the correct target port number. Because the .NET container app uses the target port number of `8080` instead of `80`. You will need to update the values for the 3 services.
+
+```yaml
+...
+ // ingressTargetPort: 80
+ ingressTargetPort: 8080
+...
+    {
+        name: 'PORT'
+        // value: '80'
+        value: '8080'
+    }
+```
+
+
+Then provision and deploy the solution to Azure Container Apps with the Azure Developer CLI command:
 ```bash
 azd up
+```
+
+
+
+To clean up the resources, run the following command:
+
+```bash
+azd down --force --purge
 ```

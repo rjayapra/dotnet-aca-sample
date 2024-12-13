@@ -15,19 +15,19 @@
             "name": "Run api-product",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}\\eShopLite.Products\\eShopLite.Products.csproj"
+            "projectPath": "${workspaceFolder}\\src\\eShopLite.Products\\eShopLite.Products.csproj"
         },
 		{
             "name": "Run api-weather",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}\\eShopLite.Weather\\eShopLite.Weather.csproj"
+            "projectPath": "${workspaceFolder}\\src\\eShopLite.Weather\\eShopLite.Weather.csproj"
         },
         {
             "name": "Run web",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}\\eShopLite.Store\\eShopLite.Store.csproj"
+            "projectPath": "${workspaceFolder}\\src\\eShopLite.Store\\eShopLite.Store.csproj"
         }
     ]
 }

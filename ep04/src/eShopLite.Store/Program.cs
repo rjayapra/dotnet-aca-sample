@@ -1,17 +1,27 @@
 using eShopLite.Store.ApiClients;
 using eShopLite.Store.Components;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add HTTP clients
 builder.Services.AddHttpClient<ProductApiClient>(client =>
 {
-    client.BaseAddress = new("http://products:8080");
+    var productsApiUrl = builder.Configuration.GetValue<string>("ProductsApi");
+    if (string.IsNullOrEmpty(productsApiUrl))
+    {
+        throw new ArgumentNullException(nameof(productsApiUrl), "ProductsApi configuration value is missing or empty.");
+    }
+    client.BaseAddress = new Uri(productsApiUrl);
 });
+
 builder.Services.AddHttpClient<WeatherApiClient>(client =>
 {
-    client.BaseAddress = new("http://weather:8080");
+    var weatherApiUrl = builder.Configuration.GetValue<string>("WeatherApi");
+    if (string.IsNullOrEmpty(weatherApiUrl))
+    {
+        throw new ArgumentNullException(nameof(weatherApiUrl), "WeatherApi configuration value is missing or empty.");
+    }
+    client.BaseAddress = new Uri(weatherApiUrl);
 });
 
 // Add services to the container.
