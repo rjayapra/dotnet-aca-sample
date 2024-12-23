@@ -485,3 +485,4 @@ $RECYCLE.BIN/
 
 # Repository-specific
 Database.*
+.vscode/settings.json
