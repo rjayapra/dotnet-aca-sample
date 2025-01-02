@@ -3,10 +3,15 @@ using eShopLite.Store.Components;
 using eShopLite.Store.Endpoints;
 using eShopLite.Store.Extensions;
 using eShopLite.Store.ProductData;
+using eShopLite.Store.Services;
 
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add HTTP context.
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
