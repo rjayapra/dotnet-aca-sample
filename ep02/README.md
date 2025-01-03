@@ -8,7 +8,7 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
 
 ## Getting Started
 
-### Getting the repository root
+### Getting the Repository Root
 
 To simplify the copy paste of the commands that sometimes required an absolute path, we will be using the variable `REPOSITORY_ROOT` to keep the path of the root folder where you cloned/ downloaded this repository. The command `git rev-parse --show-toplevel` returns that path.
 
@@ -51,7 +51,7 @@ There are a few steps to containerize this monolith app using Docker.
 1. Build the container image using Docker CLI.
 
     ```bash
-    docker build . -f ./Dockerfile.store -t eshoplite-store:latest
+    docker build -f ./Dockerfile.store -t eshoplite-store:latest .
     ```
 
 ### Running the Monolith App in a Container
