@@ -15,9 +15,6 @@ set -e
 # REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
 REPOSITORY_ROOT="$(dirname "$(realpath "$0")")/../.."
 
-# Load the azd environment variables
-"$REPOSITORY_ROOT/infra/hooks/load_azd_env.sh"
-
 # AZD LOGIN
 # Check if the user is logged in to Azure
 login_status=$(azd auth login --check-status)
@@ -36,9 +33,10 @@ if [[ -z "$EXPIRED_TOKEN" ]]; then
     az login --scope https://graph.microsoft.com/.default -o none
 fi
 
-if [[ -z "${AZURE_SUBSCRIPTION_ID:-}" ]]; then
+AZURE_SUBSCRIPTION_ID=$(azd env get-value AZURE_SUBSCRIPTION_ID || echo "")
+if [ -z "$AZURE_SUBSCRIPTION_ID" ] || [[ "$AZURE_SUBSCRIPTION_ID" == *"not found"* ]]; then
     ACCOUNT=$(az account show --query '[id,name]')
-    echo "You can set the \`AZURE_SUBSCRIPTION_ID\` environment variable with \`azd env set AZURE_SUBSCRIPTION_ID\`."
+    echo "You can set the 'AZURE_SUBSCRIPTION_ID' environment variable with 'azd env set AZURE_SUBSCRIPTION_ID'."
     echo $ACCOUNT
 
     read -r -p "Do you want to use the above subscription? (Y/n) " response

@@ -11,9 +11,6 @@
 # $REPOSITORY_ROOT = git rev-parse --show-toplevel
 $REPOSITORY_ROOT = "$(Split-Path $MyInvocation.MyCommand.Path)/../.."
 
-# Load the azd environment variables
-& "$REPOSITORY_ROOT/infra/hooks/load_azd_env.ps1"
-
 # AZD LOGIN
 # Check if the user is logged in to Azure
 $login_status = azd auth login --check-status
@@ -32,7 +29,13 @@ if ([string]::IsNullOrEmpty($EXPIRED_TOKEN)) {
     az login --scope https://graph.microsoft.com/.default -o none
 }
 
-if ([string]::IsNullOrEmpty($env:AZURE_SUBSCRIPTION_ID)) {
+$AZURE_SUBSCRIPTION_ID = try {
+    $(azd env get-value AZURE_SUBSCRIPTION_ID)
+} catch {
+    ""
+}
+
+if ([string]::IsNullOrEmpty($AZURE_SUBSCRIPTION_ID) -or $($AZURE_SUBSCRIPTION_ID | Where-Object { $_.Trim() -ne "" }) -match "not found") {
     $ACCOUNT = az account show --query '[id,name]'
     Write-Host "You can set the 'AZURE_SUBSCRIPTION_ID' environment variable with 'azd env set AZURE_SUBSCRIPTION_ID'."
     Write-Host $ACCOUNT
@@ -64,5 +67,5 @@ if ([string]::IsNullOrEmpty($env:AZURE_SUBSCRIPTION_ID)) {
     }
 }
 else {
-    az account set -s $env:AZURE_SUBSCRIPTION_ID
+    az account set -s $AZURE_SUBSCRIPTION_ID
 }
