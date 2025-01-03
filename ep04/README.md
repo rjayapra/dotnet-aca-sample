@@ -178,55 +178,101 @@ Once you're happy with the microservice apps running in a container, you can dep
 1. Once the initialization is complete, update the `azure.yaml` file with the Docker settings to use ACR remote build.
 
     ```yaml
+    name: ep04
+    metadata:
+      template: azd-init@1.11.0
     services:
-        eshoplite-products:
-            project: src/eShopLite.Products
-            host: containerapp
-            language: dotnet
-            docker:
-                path: ../../Dockerfile.products
-                context: ../../
-                remoteBuild: true
-        eshoplite-store:
-            project: src/eShopLite.Store
-            host: containerapp
-            language: dotnet
-            docker:
-                path: ../../Dockerfile.store
-                context: ../../
-                remoteBuild: true
-        eshoplite-weather:
-            project: src/eShopLite.Weather
-            host: containerapp
-            language: dotnet
-            docker:
-                path: ../../Dockerfile.weather
-                context: ../../
-                remoteBuild: true
+      eshoplite-products:
+        project: src/eShopLite.Products
+        host: containerapp
+        language: dotnet
+        # 👇👇👇 Add the docker settings below
+        docker:
+          path: ../../Dockerfile.products
+          context: ../../
+          remoteBuild: true
+        # 👆👆👆 Add the docker settings above
+      eshoplite-store:
+        project: src/eShopLite.Store
+        host: containerapp
+        language: dotnet
+        # 👇👇👇 Add the docker settings below
+        docker:
+          path: ../../Dockerfile.store
+          context: ../../
+          remoteBuild: true
+        # 👆👆👆 Add the docker settings above
+      eshoplite-weather:
+        project: src/eShopLite.Weather
+        host: containerapp
+        language: dotnet
+        # 👇👇👇 Add the docker settings below
+        docker:
+          path: ../../Dockerfile.weather
+          context: ../../
+          remoteBuild: true
+        # 👆👆👆 Add the docker settings above
     ```
 
+1. Because the .NET container app uses the target port number of `8080`, you need to update the `infra/resources.bicep` file to use the correct target port number. This time, you have three ACA instances: `eshoplite-products`, `eshoplite-store` and `eshoplite-weather`. Therefore, you will have to update three locations of the `ingressTargetPort` and `PORT` values.
 
-Just like before, you need to update the `infra/resources.bicep` file to use the correct target port number. Because the .NET container app uses the target port number of `8080` instead of `80`. You will need to update the values for the 3 services.
+    ```bicep
+    ...
+     // ingressTargetPort: 80
+     ingressTargetPort: 8080
+    ...
+        {
+            name: 'PORT'
+            // value: '80'
+            value: '8080'
+        }
+    ```
 
-```yaml
-...
- // ingressTargetPort: 80
- ingressTargetPort: 8080
-...
-    {
-        name: 'PORT'
-        // value: '80'
-        value: '8080'
+1. Also the Store app should be able to discover both Products and Weather APIs. Therefore, also update the `infra/resources.bicep` for the service discovery.
+
+    ```bicep
+    module eshopliteStore 'br/public:avm/res/app/container-app:0.8.0' = {
+      name: 'eshopliteStore'
+      ...
+            env: union([
+              {
+                name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+                value: monitoring.outputs.applicationInsightsConnectionString
+              }
+              {
+                name: 'AZURE_CLIENT_ID'
+                value: eshopliteStoreIdentity.outputs.clientId
+              }
+              {
+                name: 'PORT'
+                value: '8080'
+              }
+              // 👇👇👇 Add the environment variables below
+              {
+                name: 'ProductsApi'
+                value: 'https://${eshopliteProducts.outputs.fqdn}'
+              }
+              {
+                name: 'WeatherApi'
+                value: 'https://${eshopliteWeather.outputs.fqdn}'
+              }
+              // 👆👆👆 Add the environment variables above
+            ],
+      ...
     }
-```
+    ```
 
+1. Provision and deploy the microservice apps to ACA.
 
-Then provision and deploy the solution to Azure Container Apps with the Azure Developer CLI command:
-```bash
-azd up
-```
+    ```bash
+    azd up
+    ```
 
+   > While executing this command, you'll be asked to provide the Azure subscription ID and location.
 
+1. Open your web browser and navigate to the URLs provided by the ACA instances on the screen to see the microservice apps running in ACA.
+
+## Clean up the deployed resources
 
 To clean up the resources, run the following command:
 
