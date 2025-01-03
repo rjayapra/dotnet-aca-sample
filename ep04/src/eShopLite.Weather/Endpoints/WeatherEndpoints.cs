@@ -1,5 +1,4 @@
 using eShopLite.DataEntities;
-using eShopLite.Weather;
 
 namespace eShopLite.Weather.Endpoints;
 

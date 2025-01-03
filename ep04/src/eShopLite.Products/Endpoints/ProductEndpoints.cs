@@ -1,6 +1,7 @@
 ﻿using eShopLite.DataEntities;
-using Microsoft.EntityFrameworkCore;
 using eShopLite.Products.Data;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace eShopLite.Products.Endpoints;
 
@@ -10,60 +11,68 @@ public static class ProductEndpoints
     {
         var group = routes.MapGroup("/api/products");
 
-        group.MapGet("/", async (ProductDataContext db) =>
+        group.MapPost("/", async (Product product, ProductDbContext db) =>
+        {
+            db.Product.Add(product);
+            await db.SaveChangesAsync();
+
+            return Results.Created($"/api/products/{product.Id}",product);
+        })
+        .WithTags("products")
+        .WithName("CreateProduct")
+        .Produces<Product>(StatusCodes.Status201Created);
+
+        group.MapGet("/", async (ProductDbContext db) =>
         {
             return await db.Product.ToListAsync();
         })
+        .WithTags("products")
         .WithName("GetAllProducts")
         .Produces<List<Product>>(StatusCodes.Status200OK);
 
-        group.MapGet("/{id}", async  (int id, ProductDataContext db) =>
+        group.MapGet("/{id}", async  (int id, ProductDbContext db) =>
         {
-            return await db.Product.AsNoTracking()
-                .FirstOrDefaultAsync(model => model.Id == id)
-                is Product model
+            var product = await db.Product
+                                  .AsNoTracking()
+                                  .SingleOrDefaultAsync(model => model.Id == id);
+
+            return product is Product model
                     ? Results.Ok(model)
                     : Results.NotFound();
         })
+        .WithTags("products")
         .WithName("GetProductById")
         .Produces<Product>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status404NotFound);
 
-        group.MapPut("/{id}", async  (int id, Product product, ProductDataContext db) =>
+        group.MapPut("/{id}", async  (int id, Product product, ProductDbContext db) =>
         {
             var affected = await db.Product
-                .Where(model => model.Id == id)
-                .ExecuteUpdateAsync(setters => setters
-                  .SetProperty(m => m.Id, product.Id)
-                  .SetProperty(m => m.Name, product.Name)
-                  .SetProperty(m => m.Description, product.Description)
-                  .SetProperty(m => m.Price, product.Price)
-                  .SetProperty(m => m.ImageUrl, product.ImageUrl)
-                );
+                                   .Where(model => model.Id == id)
+                                   .ExecuteUpdateAsync(setters => setters
+                                       .SetProperty(m => m.Id, product.Id)
+                                       .SetProperty(m => m.Name, product.Name)
+                                       .SetProperty(m => m.Description, product.Description)
+                                       .SetProperty(m => m.Price, product.Price)
+                                       .SetProperty(m => m.ImageUrl, product.ImageUrl)
+                                   );
 
             return affected == 1 ? Results.Ok() : Results.NotFound();
         })
+        .WithTags("products")
         .WithName("UpdateProduct")
         .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status204NoContent);
 
-        group.MapPost("/", async (Product product, ProductDataContext db) =>
-        {
-            db.Product.Add(product);
-            await db.SaveChangesAsync();
-            return Results.Created($"/api/Product/{product.Id}",product);
-        })
-        .WithName("CreateProduct")
-        .Produces<Product>(StatusCodes.Status201Created);
-
-        group.MapDelete("/{id}", async  (int id, ProductDataContext db) =>
+        group.MapDelete("/{id}", async  (int id, ProductDbContext db) =>
         {
             var affected = await db.Product
-                .Where(model => model.Id == id)
-                .ExecuteDeleteAsync();
+                                   .Where(model => model.Id == id)
+                                   .ExecuteDeleteAsync();
 
             return affected == 1 ? Results.Ok() : Results.NotFound();
         })
+        .WithTags("products")
         .WithName("DeleteProduct")
         .Produces<Product>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status404NotFound);

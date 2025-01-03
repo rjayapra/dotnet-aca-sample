@@ -3,6 +3,13 @@ using eShopLite.Store.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
+builder.Services.AddProblemDetails();
+
+// Add razor components
+builder.Services.AddRazorComponents()
+                .AddInteractiveServerComponents();
+
 // Add HTTP clients
 builder.Services.AddHttpClient<ProductApiClient>(client =>
 {
@@ -24,10 +31,6 @@ builder.Services.AddHttpClient<WeatherApiClient>(client =>
     client.BaseAddress = new Uri(weatherApiUrl);
 });
 
-// Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -38,12 +41,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
-app.UseStaticFiles();
 app.UseAntiforgery();
 
+app.MapStaticAssets();
+
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+   .AddInteractiveServerRenderMode();
 
 app.Run();

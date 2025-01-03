@@ -1,33 +1,33 @@
 {
-    "version": "0.2.0",
-    "compounds": [
-        {
-            "name": "Run all",
-            "configurations": [
-                "Run api-product",
-				"Run api-weather",
-                "Run web"
-            ]
-        }
-    ],
-    "configurations": [
-        {
-            "name": "Run api-product",
-            "type": "dotnet",
-            "request": "launch",
-            "projectPath": "${workspaceFolder}\\src\\eShopLite.Products\\eShopLite.Products.csproj"
-        },
-		{
-            "name": "Run api-weather",
-            "type": "dotnet",
-            "request": "launch",
-            "projectPath": "${workspaceFolder}\\src\\eShopLite.Weather\\eShopLite.Weather.csproj"
-        },
-        {
-            "name": "Run web",
-            "type": "dotnet",
-            "request": "launch",
-            "projectPath": "${workspaceFolder}\\src\\eShopLite.Store\\eShopLite.Store.csproj"
-        }
-    ]
+  "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "Run all",
+      "configurations": [
+        "Run api-product",
+        "Run api-weather",
+        "Run web"
+      ]
+    }
+  ],
+  "configurations": [
+    {
+      "name": "Run api-product",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/eShopLite.Products/eShopLite.Products.csproj"
+    },
+    {
+      "name": "Run api-weather",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/eShopLite.Weather/eShopLite.Weather.csproj"
+    },
+    {
+      "name": "Run web",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/eShopLite.Store/eShopLite.Store.csproj"
+    }
+  ]
 }
