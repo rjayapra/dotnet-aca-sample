@@ -8,10 +8,10 @@
       "location": {
         "value": "${AZURE_LOCATION}"
       },
-      "eshopLiteStoreContainerappExists": {
+      "eshopliteStoreExists": {
         "value": "${SERVICE_CONTAINERAPP_RESOURCE_EXISTS=false}"
       },
-      "eshopLiteStoreContainerappDefinition": {
+      "eshopliteStoreDefinition": {
         "value": {
           "settings": [
             {

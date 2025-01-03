@@ -27,13 +27,14 @@ module monitoring 'br/public:avm/ptn/azd/monitoring:0.1.0' = {
 }
 
 // Container registry
-module containerRegistry 'br/public:avm/res/container-registry/registry:0.1.1' = {
+module containerRegistry 'br/public:avm/res/container-registry/registry:0.6.0' = {
   name: 'registry'
   params: {
     name: '${abbrs.containerRegistryRegistries}${resourceToken}'
     location: location
     acrAdminUserEnabled: true
     tags: tags
+    exportPolicyStatus: 'enabled'
     publicNetworkAccess: 'Enabled'
     roleAssignments:[
       {
@@ -46,7 +47,7 @@ module containerRegistry 'br/public:avm/res/container-registry/registry:0.1.1' =
 }
 
 // Container apps environment
-module containerAppsEnvironment 'br/public:avm/res/app/managed-environment:0.4.5' = {
+module containerAppsEnvironment 'br/public:avm/res/app/managed-environment:0.8.1' = {
   name: 'container-apps-environment'
   params: {
     logAnalyticsWorkspaceResourceId: monitoring.outputs.logAnalyticsWorkspaceResourceId
@@ -56,7 +57,7 @@ module containerAppsEnvironment 'br/public:avm/res/app/managed-environment:0.4.5
   }
 }
 
-module eshopliteStoreIdentity 'br/public:avm/res/managed-identity/user-assigned-identity:0.2.1' = {
+module eshopliteStoreIdentity 'br/public:avm/res/managed-identity/user-assigned-identity:0.4.0' = {
   name: 'eshopliteStoreidentity'
   params: {
     name: '${abbrs.managedIdentityUserAssignedIdentities}eshopliteStore-${resourceToken}'
@@ -83,7 +84,7 @@ var eshopliteStoreEnv = map(filter(eshopliteStoreAppSettingsArray, i => i.?secre
   value: i.value
 })
 
-module eshopliteStore 'br/public:avm/res/app/container-app:0.8.0' = {
+module eshopliteStore 'br/public:avm/res/app/container-app:0.11.0' = {
   name: 'eshopliteStore'
   params: {
     name: 'eshoplite-store'
@@ -91,7 +92,7 @@ module eshopliteStore 'br/public:avm/res/app/container-app:0.8.0' = {
     scaleMinReplicas: 1
     scaleMaxReplicas: 10
     secrets: {
-      secureList:  union([
+      secureList: union([
       ],
       map(eshopliteStoreSecrets, secret => {
         name: secret.secretRef
@@ -144,7 +145,7 @@ module eshopliteStore 'br/public:avm/res/app/container-app:0.8.0' = {
 }
 
 // Create a keyvault to store secrets
-module keyVault 'br/public:avm/res/key-vault/vault:0.6.1' = {
+module keyVault 'br/public:avm/res/key-vault/vault:0.11.1' = {
   name: 'keyvault'
   params: {
     name: '${abbrs.keyVaultVaults}${resourceToken}'

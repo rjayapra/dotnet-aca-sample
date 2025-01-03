@@ -4,9 +4,9 @@ param location string = resourceGroup().location
 @description('Tags that will be applied to all resources')
 param tags object = {}
 
-param eshopLiteStoreContainerappExists bool
+param eshopliteStoreExists bool
 @secure()
-param eshopLiteStoreContainerappDefinition object
+param eshopliteStoreDefinition object
 
 @description('Id of the user or app to assign application roles')
 param principalId string
@@ -38,7 +38,7 @@ module containerRegistry 'br/public:avm/res/container-registry/registry:0.6.0' =
     publicNetworkAccess: 'Enabled'
     roleAssignments:[
       {
-        principalId: eshopLiteStoreContainerappIdentity.outputs.principalId
+        principalId: eshopliteStoreIdentity.outputs.principalId
         principalType: 'ServicePrincipal'
         roleDefinitionIdOrName: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
       }
@@ -57,51 +57,51 @@ module containerAppsEnvironment 'br/public:avm/res/app/managed-environment:0.8.1
   }
 }
 
-module eshopLiteStoreContainerappIdentity 'br/public:avm/res/managed-identity/user-assigned-identity:0.4.0' = {
-  name: 'eshopLiteStoreContainerappidentity'
+module eshopliteStoreIdentity 'br/public:avm/res/managed-identity/user-assigned-identity:0.4.0' = {
+  name: 'eshopliteStoreidentity'
   params: {
-    name: '${abbrs.managedIdentityUserAssignedIdentities}eshopLiteStoreContainerapp-${resourceToken}'
+    name: '${abbrs.managedIdentityUserAssignedIdentities}eshopliteStore-${resourceToken}'
     location: location
   }
 }
 
-module eshopLiteStoreContainerappFetchLatestImage './modules/fetch-container-image.bicep' = {
-  name: 'eshopLiteStoreContainerapp-fetch-image'
+module eshopliteStoreFetchLatestImage './modules/fetch-container-image.bicep' = {
+  name: 'eshopliteStore-fetch-image'
   params: {
-    exists: eshopLiteStoreContainerappExists
-    name: 'eshopLiteStore-containerapp'
+    exists: eshopliteStoreExists
+    name: 'eshoplite-store'
   }
 }
 
-var eshopLiteStoreContainerappAppSettingsArray = filter(array(eshopLiteStoreContainerappDefinition.settings), i => i.name != '')
-var eshopLiteStoreContainerappSecrets = map(filter(eshopLiteStoreContainerappAppSettingsArray, i => i.?secret != null), i => {
+var eshopliteStoreAppSettingsArray = filter(array(eshopliteStoreDefinition.settings), i => i.name != '')
+var eshopliteStoreSecrets = map(filter(eshopliteStoreAppSettingsArray, i => i.?secret != null), i => {
   name: i.name
   value: i.value
   secretRef: i.?secretRef ?? take(replace(replace(toLower(i.name), '_', '-'), '.', '-'), 32)
 })
-var eshopLiteStoreContainerappEnv = map(filter(eshopLiteStoreContainerappAppSettingsArray, i => i.?secret == null), i => {
+var eshopliteStoreEnv = map(filter(eshopliteStoreAppSettingsArray, i => i.?secret == null), i => {
   name: i.name
   value: i.value
 })
 
-module eshopLiteStoreContainerapp 'br/public:avm/res/app/container-app:0.11.0' = {
-  name: 'eshopLiteStoreContainerapp'
+module eshopliteStore 'br/public:avm/res/app/container-app:0.11.0' = {
+  name: 'eshopliteStore'
   params: {
-    name: 'eshoplitestore-containerapp'
+    name: 'eshoplite-store'
     ingressTargetPort: 8080
     scaleMinReplicas: 1
     scaleMaxReplicas: 10
     secrets: {
       secureList: union([
       ],
-      map(eshopLiteStoreContainerappSecrets, secret => {
+      map(eshopliteStoreSecrets, secret => {
         name: secret.secretRef
         value: secret.value
       }))
     }
     containers: [
       {
-        image: eshopLiteStoreContainerappFetchLatestImage.outputs.?containers[?0].?image ?? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+        image: eshopliteStoreFetchLatestImage.outputs.?containers[?0].?image ?? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
         name: 'main'
         resources: {
           cpu: json('0.5')
@@ -114,15 +114,15 @@ module eshopLiteStoreContainerapp 'br/public:avm/res/app/container-app:0.11.0' =
           }
           {
             name: 'AZURE_CLIENT_ID'
-            value: eshopLiteStoreContainerappIdentity.outputs.clientId
+            value: eshopliteStoreIdentity.outputs.clientId
           }
           {
             name: 'PORT'
             value: '8080'
           }
         ],
-        eshopLiteStoreContainerappEnv,
-        map(eshopLiteStoreContainerappSecrets, secret => {
+        eshopliteStoreEnv,
+        map(eshopliteStoreSecrets, secret => {
             name: secret.name
             secretRef: secret.secretRef
         }))
@@ -130,17 +130,17 @@ module eshopLiteStoreContainerapp 'br/public:avm/res/app/container-app:0.11.0' =
     ]
     managedIdentities:{
       systemAssigned: false
-      userAssignedResourceIds: [eshopLiteStoreContainerappIdentity.outputs.resourceId]
+      userAssignedResourceIds: [eshopliteStoreIdentity.outputs.resourceId]
     }
     registries:[
       {
         server: containerRegistry.outputs.loginServer
-        identity: eshopLiteStoreContainerappIdentity.outputs.resourceId
+        identity: eshopliteStoreIdentity.outputs.resourceId
       }
     ]
     environmentResourceId: containerAppsEnvironment.outputs.resourceId
     location: location
-    tags: union(tags, { 'azd-service-name': 'eshoplitestore-containerapp' })
+    tags: union(tags, { 'azd-service-name': 'eshoplite-store' })
   }
 }
 
@@ -152,20 +152,21 @@ module keyVault 'br/public:avm/res/key-vault/vault:0.11.1' = {
     location: location
     tags: tags
     enableRbacAuthorization: false
-    accessPolicies: [
+    accessPolicies: concat([
+      {
+        objectId: eshopliteStoreIdentity.outputs.principalId
+        permissions: {
+          secrets: [ 'get', 'list' ]
+        }
+      }
+    ], principalId != '' ? [
       {
         objectId: principalId
         permissions: {
           secrets: [ 'get', 'list' ]
         }
       }
-      {
-        objectId: eshopLiteStoreContainerappIdentity.outputs.principalId
-        permissions: {
-          secrets: [ 'get', 'list' ]
-        }
-      }
-    ]
+    ] : [])
     secrets: [
     ]
   }
@@ -175,6 +176,6 @@ output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerRegistry.outputs.logi
 output AZURE_KEY_VAULT_ENDPOINT string = keyVault.outputs.uri
 output AZURE_KEY_VAULT_NAME string = keyVault.outputs.name
 
-output AZURE_RESOURCE_CONTAINERAPP_ID string = eshopLiteStoreContainerapp.outputs.resourceId
-output AZURE_RESOURCE_CONTAINERAPP_NAME string = eshopLiteStoreContainerapp.outputs.name
-output AZURE_RESOURCE_CONTAINERAPP_URL string = 'https://${eshopLiteStoreContainerapp.outputs.fqdn}'
+output AZURE_RESOURCE_CONTAINERAPP_ID string = eshopliteStore.outputs.resourceId
+output AZURE_RESOURCE_CONTAINERAPP_NAME string = eshopliteStore.outputs.name
+output AZURE_RESOURCE_CONTAINERAPP_URL string = 'https://${eshopliteStore.outputs.fqdn}'

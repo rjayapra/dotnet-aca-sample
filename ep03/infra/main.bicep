@@ -9,9 +9,9 @@ param environmentName string
 @description('Primary location for all resources')
 param location string
 
-param eshopLiteStoreContainerappExists bool
+param eshopliteStoreExists bool
 @secure()
-param eshopLiteStoreContainerappDefinition object
+param eshopliteStoreDefinition object
 
 @description('Id of the user or app to assign application roles')
 param principalId string
@@ -39,8 +39,8 @@ module resources 'resources.bicep' = {
     location: location
     tags: tags
     principalId: principalId
-    eshopLiteStoreContainerappExists: eshopLiteStoreContainerappExists
-    eshopLiteStoreContainerappDefinition: eshopLiteStoreContainerappDefinition
+    eshopliteStoreExists: eshopliteStoreExists
+    eshopliteStoreDefinition: eshopliteStoreDefinition
   }
 }
 
