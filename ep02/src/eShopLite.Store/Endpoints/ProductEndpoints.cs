@@ -16,7 +16,7 @@ public static class ProductEndpoints
             db.Product.Add(product);
             await db.SaveChangesAsync();
 
-            return Results.Created($"/api/Product/{product.Id}", product);
+            return Results.Created($"/api/products/{product.Id}", product);
         })
         .WithTags("products")
         .WithName("CreateProduct")

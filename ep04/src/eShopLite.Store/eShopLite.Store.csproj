@@ -4,7 +4,9 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>preview</LangVersion>
+
+    <AssemblyName>eShopLite.Store</AssemblyName>
+    <RootNamespace>eShopLite.Store</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

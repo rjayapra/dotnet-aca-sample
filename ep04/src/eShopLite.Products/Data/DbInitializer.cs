@@ -1,35 +1,10 @@
 ﻿using eShopLite.DataEntities;
-using Microsoft.EntityFrameworkCore;
 
 namespace eShopLite.Products.Data;
 
-public class ProductDataContext : DbContext
-{
-    public ProductDataContext (DbContextOptions<ProductDataContext> options)
-        : base(options)
-    {
-    }
-
-    public DbSet<Product> Product { get; set; } = default!;
-}
-
-public static class Extensions
-{
-    public static void CreateDbIfNotExists(this IHost host)
-    {
-        using var scope = host.Services.CreateScope();
-
-        var services = scope.ServiceProvider;
-        var context = services.GetRequiredService<ProductDataContext>();
-        context.Database.EnsureCreated();
-        DbInitializer.Initialize(context);
-    }
-}
-
-
 public static class DbInitializer
 {
-    public static void Initialize(ProductDataContext context)
+    public static void Initialize(ProductDbContext context)
     {
         if (context.Product.Any())
             return;

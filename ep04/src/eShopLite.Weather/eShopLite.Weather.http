@@ -1,6 +1,6 @@
 @eShopLite.Weather_HostAddress = http://localhost:5151
 
-GET {{eShopLite.Weather_HostAddress}}/weatherforecast/
+GET {{eShopLite.Weather_HostAddress}}/api/weatherforecast/
 Accept: application/json
 
 ###
