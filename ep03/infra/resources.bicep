@@ -175,8 +175,7 @@ module keyVault 'br/public:avm/res/key-vault/vault:0.11.1' = {
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerRegistry.outputs.loginServer
 output AZURE_KEY_VAULT_ENDPOINT string = keyVault.outputs.uri
 output AZURE_KEY_VAULT_NAME string = keyVault.outputs.name
-output AZURE_RESOURCE_ESHOPLITE_STORE_ID string = eshopliteStore.outputs.resourceId
-output AZURE_CONTAINER_REGISTRY_NAME string = containerRegistry.outputs.name
-output AZURE_CONTAINER_APP_ENVIRONMENT_NAME string = containerAppsEnvironment.outputs.name
-output AZURE_CONTAINER_APP_NAME string = eshopliteStore.outputs.name
-output AZURE_CONTAINER_APP_URL string = 'https://${eshopliteStore.outputs.fqdn}'
+
+output AZURE_RESOURCE_CONTAINERAPP_ID string = eshopliteStore.outputs.resourceId
+output AZURE_RESOURCE_CONTAINERAPP_NAME string = eshopliteStore.outputs.name
+output AZURE_RESOURCE_CONTAINERAPP_URL string = 'https://${eshopliteStore.outputs.fqdn}'

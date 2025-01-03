@@ -1,6 +1,6 @@
 # EP02: Monolith App on ACA
 
-This sample app demonstrates how to containerize and deploy a monolith app (Blazor web app) to [Azure Container Apps (ACA)](https://learn.microsoft.com/en-us/azure/container-apps/overview).
+This sample app demonstrates how to containerize and deploy a monolith app (Blazor web app) to [Azure Container Apps (ACA)](https://learn.microsoft.com/azure/container-apps/overview).
 
 ## Prerequisites
 
@@ -79,10 +79,9 @@ Once you have the container image of the monolith app, you can run it in a conta
 
 1. Open your web browser and navigate to `http://localhost:8080` to see the monolith app running in a container.
 
-
 ### Deploying the Monolith App to ACA via Azure Developer CLI (AZD)
 
-Instead of using Azure CLI, you can use Azure Developer CLI (AZD) to deploy the monolith app to ACA.
+Once you're happy with the monolith app running in a container, you can deploy it to ACA through Azure Developer CLI (AZD).
 
 1. Make sure that you're in the `ep02` directory.
 
@@ -122,7 +121,7 @@ Instead of using Azure CLI, you can use Azure Developer CLI (AZD) to deploy the 
 
     ```bicep
     // Update resources.bicep with the target port value
-    module eshopliteStore 'br/public:avm/res/app/container-app:0.8.0' = {
+    module eshopliteStore 'br/public:avm/res/app/container-app:0.11.0' = {
       name: 'eshopliteStore'
       params: {
         name: 'eshoplite-store'
@@ -160,7 +159,7 @@ Instead of using Azure CLI, you can use Azure Developer CLI (AZD) to deploy the 
 
 1. Open your web browser and navigate to the URL provided by the ACA instance on the screen to see the monolith app running in ACA.
 
-### Optional Learning
+## Optional Learning
 
 There multiple ways to deploy your application to Azure. Learn how to [Deploy to ACA using Azure CLI](./extra.md)
 
