@@ -7,15 +7,10 @@
 # $REPOSITORY_ROOT = git rev-parse --show-toplevel
 $REPOSITORY_ROOT = "$(Split-Path $MyInvocation.MyCommand.Path)/../.."
 
-# Load the azd environment variables
-# & "$REPOSITORY_ROOT/infra/hooks/load_azd_env.ps1" -ShowMessage
-
 if ([string]::IsNullOrEmpty($env:GITHUB_WORKSPACE)) {
     # The GITHUB_WORKSPACE is not set, meaning this is not running in a GitHub Action
     & "$REPOSITORY_ROOT/infra/hooks/login.ps1"
 }
-
-$AZURE_ENV_NAME = $env:AZURE_ENV_NAME
 
 # Run only if GITHUB_WORKSPACE is NOT set - this is NOT running in a GitHub Action workflow
 if ([string]::IsNullOrEmpty($env:GITHUB_WORKSPACE)) {
@@ -28,7 +23,7 @@ if ([string]::IsNullOrEmpty($env:GITHUB_WORKSPACE)) {
         ""
     }
     $appName = "spn-$(azd env get-value AZURE_ENV_NAME)"
-    if ([string]::IsNullOrEmpty($appId) -or $appId -match "not found") {
+    if ([string]::IsNullOrEmpty($appId) -or $($appId | Where-Object { $_.Trim() -ne "" }) -match "not found") {
         $appId = az ad app list --display-name $appName --query "[].appId" -o tsv
         if ([string]::IsNullOrEmpty($appId)) {
             $appId = az ad app create --display-name $appName --query "appId" -o tsv

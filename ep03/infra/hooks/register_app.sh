@@ -11,9 +11,6 @@ set -e
 # REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
 REPOSITORY_ROOT="$(dirname "$(realpath "$0")")/../.."
 
-# Load the azd environment variables
-# source "$REPOSITORY_ROOT/infra/hooks/load_azd_env.sh" --show-message
-
 if [ -z "$GITHUB_WORKSPACE" ]; then
     # The GITHUB_WORKSPACE is not set, meaning this is not running in a GitHub Action
     source "$REPOSITORY_ROOT/infra/hooks/login.sh"

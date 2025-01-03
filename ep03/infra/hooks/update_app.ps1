@@ -8,9 +8,6 @@
 # $REPOSITORY_ROOT = git rev-parse --show-toplevel
 $REPOSITORY_ROOT = "$(Split-Path $MyInvocation.MyCommand.Path)/../.."
 
-# Load the azd environment variables
-# & "$REPOSITORY_ROOT/infra/hooks/load_azd_env.ps1"
-
 if ([string]::IsNullOrEmpty($env:GITHUB_WORKSPACE)) {
     # The GITHUB_WORKSPACE is not set, meaning this is not running in a GitHub Action
     & "$REPOSITORY_ROOT/infra/hooks/login.ps1"
@@ -26,7 +23,7 @@ if ([string]::IsNullOrEmpty($env:GITHUB_WORKSPACE)) {
     $RESOURCE_GROUP = "rg-$(azd env get-value AZURE_ENV_NAME)"
 
     $CONTAINERAPP_NAME = $(azd env get-value AZURE_RESOURCE_CONTAINERAPP_NAME)
-    $CONTAINERAPP_URL = $(azd env get-value AZURE_RESOURCE_ONTAINERAPP_URL)
+    $CONTAINERAPP_URL = $(azd env get-value AZURE_RESOURCE_CONTAINERAPP_URL)
 
     # Get a service principal
     $appId = $CLIENT_ID
