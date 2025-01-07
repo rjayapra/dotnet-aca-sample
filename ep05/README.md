@@ -55,7 +55,7 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
     docker compose down
     ```
 
-## Greating the GitHub Action Workflow
+## Initialize Azure Developer CLI (azd) environment
 
 1. Make sure that you're in the `ep05` directory.
 
@@ -70,5 +70,24 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
     ```
 
    > During initialization, you'll be asked to provide the environment name.
+
+## Greating a CI/CD Pipeline with AZD
+
+1. To create the configuration file that will define the pipeline, run the following command:
+    ```bash
+    azd pipeline config
+    ```
+
+    > While executing this command, you'll be asked to select between GitHub or Azure DevOps the Azure subscription ID and location.
+
+    > **NOTE**: The file `azure.yaml` won't be created under `ep05` folder. This probably cause because of the structure of the tutorial repository and will probably fix in a next release of the CLI. The `azd pipeline config` command is currently in *beta*
+
+1. Move the `azure-dev.yml` file from `$REPOSITORY_ROOT/.github/workflows` into the `.github/workflows` folder to the `ep05` folder, and remove the empty `workflows` folder using the following commands:
+
+    ```bash
+    mkdir -p $REPOSITORY_ROOT/ep05/.github/workflows
+    mv $REPOSITORY_ROOT/.github/workflows/azure-dev.yml $REPOSITORY_ROOT/ep05/.github/workflows/azure-dev.yml
+    rm $REPOSITORY_ROOT/.github/workflows
+    ```
 
 
