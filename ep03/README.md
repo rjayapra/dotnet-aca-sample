@@ -115,6 +115,7 @@ Use Azure Developer CLI (AZD) to deploy the monolith app to ACA.
 
 - [Authentication and authorization in Azure Container Apps](https://learn.microsoft.com/azure/container-apps/authentication)
 - [Enable authentication and authorization in Azure Container Apps with Microsoft Entra ID](https://learn.microsoft.com/azure/container-apps/authentication-entra)
+- [Extend the authentication and authorization feature for Azure Container Apps](./extra.md)
 
 ## Clean up the deployed resources
 
