@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 
-name: ep05
+name: dotnet-on-aca-ep05
 metadata:
     template: azd-init@1.11.0
 services:
@@ -8,11 +8,23 @@ services:
         project: src/eShopLite.Products
         host: containerapp
         language: dotnet
+        docker:
+            path: ../../Dockerfile.products
+            context: ../../
+            remoteBuild: true
     eshoplite-store:
         project: src/eShopLite.Store
         host: containerapp
         language: dotnet
+        docker:
+            path: ../../Dockerfile.store
+            context: ../../
+            remoteBuild: true
     eshoplite-weather:
         project: src/eShopLite.Weather
         host: containerapp
         language: dotnet
+        docker:
+            path: ../../Dockerfile.weather
+            context: ../../
+            remoteBuild: true

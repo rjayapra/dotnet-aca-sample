@@ -104,7 +104,7 @@ module eshopliteProducts 'br/public:avm/res/app/container-app:0.8.0' = {
   name: 'eshopliteProducts'
   params: {
     name: 'eshoplite-products'
-    ingressTargetPort: 80
+    ingressTargetPort: 8080
     scaleMinReplicas: 1
     scaleMaxReplicas: 10
     secrets: {
@@ -134,7 +134,7 @@ module eshopliteProducts 'br/public:avm/res/app/container-app:0.8.0' = {
           }
           {
             name: 'PORT'
-            value: '80'
+            value: '8080'
           }
         ],
         eshopliteProductsEnv,
@@ -191,7 +191,7 @@ module eshopliteStore 'br/public:avm/res/app/container-app:0.8.0' = {
   name: 'eshopliteStore'
   params: {
     name: 'eshoplite-store'
-    ingressTargetPort: 80
+    ingressTargetPort: 8080
     scaleMinReplicas: 1
     scaleMaxReplicas: 10
     secrets: {
@@ -221,7 +221,15 @@ module eshopliteStore 'br/public:avm/res/app/container-app:0.8.0' = {
           }
           {
             name: 'PORT'
-            value: '80'
+            value: '8080'
+          }
+          {
+            name: 'ProductsApi'
+            value: 'https://${eshopliteProducts.outputs.fqdn}'
+          }
+          {
+            name: 'WeatherApi'
+            value: 'https://${eshopliteWeather.outputs.fqdn}'
           }
         ],
         eshopliteStoreEnv,
@@ -278,7 +286,7 @@ module eshopliteWeather 'br/public:avm/res/app/container-app:0.8.0' = {
   name: 'eshopliteWeather'
   params: {
     name: 'eshoplite-weather'
-    ingressTargetPort: 80
+    ingressTargetPort: 8080
     scaleMinReplicas: 1
     scaleMaxReplicas: 10
     secrets: {
@@ -308,7 +316,7 @@ module eshopliteWeather 'br/public:avm/res/app/container-app:0.8.0' = {
           }
           {
             name: 'PORT'
-            value: '80'
+            value: '8080'
           }
         ],
         eshopliteWeatherEnv,
