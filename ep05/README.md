@@ -1,8 +1,8 @@
 # EP05: Implementing CI/CD Pipeline for ACA
 
-This sample demonstrates how to implement a Continous Integration/Continous Deployment (CI/CD) pipeline for Azure Container Apps (ACA) using Azure DevOps. We will create a GitHub action workflow to build and push the Docker images to Azure Container Registry (ACR) and deploy them to ACA. The code is based on the previous episode [EP04](../ep04/README.md).
+This sample demonstrates how to put in place a Continous Integration/Continous Deployment (CI/CD) pipeline. We will create a GitHub Action workflow to build and push, and deploy the Docker images to Azure Container App. The code is based on the previous episode [EP04](../ep04/README.md).
 
-To acheive this we will create a new GitHub repository (see [Getting Started](../ep05/README.md#getting-started)), to reflect a more realistic environment where one soluiton is present in a single repository. 
+To acheive this we will create a new GitHub repository (see [Getting Started](../ep05/README.md#getting-started)), to reflect a more realistic environment where one solution is present in a single repository. 
 
 ## Prerequisites
 
@@ -57,7 +57,7 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
 
    > During initialization, you'll be asked to provide the environment name, remember this as it will be used to create the resource group and other resources in Azure.
 
-## Greating a CI/CD Pipeline with AZD
+## Creating a CI/CD Pipeline with AZD
 
 1. To create the configuration file that will define the pipeline, run the following command:
     ```bash
@@ -68,7 +68,7 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
        1. When ask, select GitHub. 
        1. Select the Azure subscription and location you want to use.
        1. Accept to add the `azure-dev.yml` file.
-       1. Accecpt to create git remote to GitHub, and provide a name (ex: dotnet-on-aca-ep05).
+       1. Accept  to create git remote to GitHub, and provide a name (ex: dotnet-on-aca-ep05).
        1. The last question will be if `Would you like to commit and push your local changes to start the configured CI pipeline` reply with `y` to commit the changes.
 
     **NOTE**: If the deployment fails because .NET SDK 9 is not installed, you can edit the `azure-dev.yml`. Add the a step between `Checkout` and `Install azd` to install the .NET SDK 9.0.
@@ -91,7 +91,7 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
 
 ## Examine the GitHub Actions Workflow
 
-The deployment will take a few minutes. You can monitor thepipeline status in the tab `Actions` in your Github page. The URL should have been printed in the console after the `azd pipeline config` command. (ex: https://github.com/FBoucher/dotnet-on-aca-ep05/actions) 
+The deployment will take a few minutes. You can monitor the pipeline status in the tab `Actions` in your Github page. The URL should have been printed in the console after the `azd pipeline config` command. (ex: https://github.com/FBoucher/dotnet-on-aca-ep05/actions) 
 
 While it's deploying let's examine the `.github/workflows/azure-dev.yml` file in your code editor.
 
