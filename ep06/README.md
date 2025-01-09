@@ -149,4 +149,21 @@ module eshopliteWeather 'br/public:avm/res/app/container-app:0.8.0' = {
 
 There many other things you can do to optimize the cost, like using the dedicated plan, using the right size of the container, and using the right number of replicas and customs Scaling rules. Keep in mind to do those changes in the bicep file, so you can keep track of the changes and redeploy the app when needed.
 
-## Monitoring Cost
+## Monitoring the Cost
+
+Optimizing the cost is not a one-time task, it's an ongoing process. It's a good idea to monitor your applications stay informed about the cost. There are may ways and level of details you can monitor the cost of resources in Azure. Let's create a budget for the Azure Container Apps resource we just deplyed.
+
+1. Go to the Azure portal and navigate to the Resource Group where the Azure Container Apps resource is deployed (ex: rg-ep06). From the left menu, expenad the `Cost Management` section and click on budgets.
+   
+1. Click the Add to create a new bugget. Fill the form and specify the date, period, and amount you want to set for the budget. You can also set alerts with diferent threshold (ex: 50%) to be notified by email when those are reached.
+
+1. Click on `Create` to finalize the budget.
+
+
+## Clean up the deployed resources
+
+You can reuse this version for [EP07](../ep07/README.md). To clean up the resources, run the following command:
+
+```bash
+azd down --force --purge
+```
