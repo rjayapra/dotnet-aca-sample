@@ -48,16 +48,105 @@ The number os running replicas will also impact the cost. We will see how we can
 Billing for apps and jobs running in the Dedicated plan is based on workload profile instances, not by individual applications. 
 
 
+## Getting Started
+
+You can reuse the code and deployed solution from the previous episode (ep04 or ep05). If you deleted the resources, you can redeploy them solution using the following steps.
+
+1. Getting the Repository Root
+
+	To simplify the copy paste of the commands that sometimes required an absolute path, we will be using the variable `REPOSITORY_ROOT` to keep the path of the root folder where you cloned/ downloaded this repository. The command `git rev-parse --show-toplevel` returns that path.
+
+	```bash
+	# Bash/Zsh
+	REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
+	```
+
+	```powershell
+	# PowerShell
+	$REPOSITORY_ROOT = git rev-parse --show-toplevel
+	```
+
+1. Move to the `ep06` directory.
+
+    ```bash
+    cd $REPOSITORY_ROOT/ep06
+    ```
+
+1. Initialize the Azure Developer CLI (azd) in the current directory.
+
+    ```bash
+    azd init
+    ```
+
+1. Provision and deploy the microservice apps to ACA.
+
+    ```bash
+    azd up
+    ```
+
+1. Open the browser and navigate to the deployed app to validate that it's working as expected.
+   
 
 ## Change the MIN and MAX number of replicas
+
 
 You can change the number of replicas and the scaling directly in the Azure portal, but doing so would be overrided each time you deploy using the AZD CLI or the CI/CD pipeline. A better way would be to modify the bicep file and redeploy the app.
 
 Open the `infra/resources.bicep` file and look for the `scaleMinReplicas` and `scaleMaxReplicas` for each containers. 
 
+1. Change the minimum values from 1 to 0. This will allow the container to scale to zero when there is no traffic. When the App is accessed again, the container will be started again. This will save cost when the app is not being used, it's a good strategy for development, testing environments, and even for production environments that are not used 24/7.
+1. Change the maximum values to 1. This will limit the number of replicas to 1. This will save cost as it limits the number of replicas that can be started. This can be a good strategy for development or when the app doesn't need to scale.
+
 ```bicep
+module eshopliteProducts 'br/public:avm/res/app/container-app:0.8.0' = {
+  name: 'eshopliteProducts'
+  params: {
+    name: 'eshoplite-products'
+    ingressTargetPort: 8080
+    // scaleMinReplicas: 1
+    // 👇👇👇 Change the number of Replicas below
+    scaleMinReplicas: 0
+    scaleMaxReplicas: 1
+    // 👆👆👆 Change the number of Replicas above
+    // scaleMaxReplicas: 10
 ```
 
-explain the impact of the change.
+```bicep
+module eshopliteStore 'br/public:avm/res/app/container-app:0.8.0' = {
+  name: 'eshopliteStore'
+  params: {
+    name: 'eshoplite-store'
+    ingressTargetPort: 8080
+    // scaleMinReplicas: 1
+    // 👇👇👇 Change the number of Replicas below
+    scaleMinReplicas: 0
+    scaleMaxReplicas: 1
+    // 👆👆👆 Change the number of Replicas above
+    // scaleMaxReplicas: 10
+```
+
+```bicep
+module eshopliteWeather 'br/public:avm/res/app/container-app:0.8.0' = {
+  name: 'eshopliteWeather'
+  params: {
+    name: 'eshoplite-weather'
+    ingressTargetPort: 8080
+    // scaleMinReplicas: 1
+    // 👇👇👇 Change the number of Replicas below
+    scaleMinReplicas: 0
+    scaleMaxReplicas: 1
+    // 👆👆👆 Change the number of Replicas above
+    // scaleMaxReplicas: 10
+```
+
+1. Redeploy the app. If you are using the (ep05) CI/CD pipeline, you can push the changes to the repository and the pipeline will deploy the changes. If you are using the AZD CLI, you can run the following command.
+
+    ```bash
+    azd up
+    ```
+
+1. You can visualize the number of replicas in the Azure portal. Go to the Azure Container Apps resource, and click on one of the Container App (ex: eshoplite-store). From the left menu, in the `Application` section, click on `Scale`, the to see the number of replicas.
+
+There many other things you can do to optimize the cost, like using the dedicated plan, using the right size of the container, and using the right number of replicas and customs Scaling rules. Keep in mind to do those changes in the bicep file, so you can keep track of the changes and redeploy the app when needed.
 
 ## Monitoring Cost
