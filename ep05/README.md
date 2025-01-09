@@ -2,8 +2,6 @@
 
 This sample demonstrates how to put in place a Continous Integration/Continous Deployment (CI/CD) pipeline. We will create a GitHub Action workflow to build and push, and deploy the Docker images to Azure Container App. The code is based on the previous episode [EP04](../ep04/README.md).
 
-To acheive this we will create a new GitHub repository (see [Getting Started](../ep05/README.md#getting-started)), to reflect a more realistic environment where one solution is present in a single repository. 
-
 ## Prerequisites
 
 To run this sample app, make sure you have all the [prerequisites](../README.md#prerequisites).
@@ -24,30 +22,14 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
 	$REPOSITORY_ROOT = git rev-parse --show-toplevel
 	```
 
-1. Copy the Required Files
-
-    To have a more realistic environment, we will create a new GitHub repository to reflect a more realistic environment where one solution is present in a single repository. To do this, we will copy the files from this folder `ep05` to the new folder.
-
-    You can copy the files the way you prefer, but here is a commands to copy the files and reopen VS Code in the new folder:
-
-    ```bash
-    mkdir $REPOSITORY_ROOT/../dotnet-on-aca-ep05
-    cp -r $REPOSITORY_ROOT/ep05/* $REPOSITORY_ROOT/../dotnet-on-aca-ep05
-    code $REPOSITORY_ROOT/../dotnet-on-aca-ep05 -r
-    ```
-
-1. Initialize the new repository
-
-    Let's initialize Git locally, and commit the files to the new local repository.
-
-    ```bash
-    git init
-    git add .
-    git commit -m "Initial ep05 commit"
-    ```
-
 
 ## Initialize Azure Developer CLI (azd) environment
+
+1. Move to the `ep05` directory.
+
+    ```bash
+    cd $REPOSITORY_ROOT/ep05
+    ```
 
 1. Initialize the Azure Developer CLI (azd) in the current directory.
 
@@ -68,30 +50,60 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
        1. When ask, select GitHub. 
        1. Select the Azure subscription and location you want to use.
        1. Accept to add the `azure-dev.yml` file.
-       1. Accept  to create git remote to GitHub, and provide a name (ex: dotnet-on-aca-ep05).
-       1. The last question will be if `Would you like to commit and push your local changes to start the configured CI pipeline` reply with `y` to commit the changes.
+       1. The last question will be if `Would you like to commit and push your local changes to start the configured CI pipeline` reply with `n`, we have some changes to do before we can commit the files
 
-    **NOTE**: If the deployment fails because .NET SDK 9 is not installed, you can edit the `azure-dev.yml`. Add the a step between `Checkout` and `Install azd` to install the .NET SDK 9.0.
+
+1. Open the `azure-dev.yml` file in the `.github/workflows` directory in your code editor. The `.github` folder is at the root of your repository. Because this current repository contains many solutions in many subdirectories, we need to specify where is the solution we want to deploy. Edit the steps `Provision Infrastructure` and `Deploy Application` to specify the path to the solution. 
 
     ```yaml
-        steps:
-        - name: Checkout
-            uses: actions/checkout@v4
+      - name: Provision Infrastructure
+        run: |
+            pushd ep05
+            azd provision --no-prompt
+            popd
+        env:
+          AZD_INITIAL_ENVIRONMENT_CONFIG: ${{ secrets.AZD_INITIAL_ENVIRONMENT_CONFIG }}
 
-        // 👇👇👇 Add the step Setup .NET below
-        - name: Setup .NET
-            uses: actions/setup-dotnet@v4
-            with:
-            dotnet-version: 9.0.x
-        // 👆👆👆 Add the step Setup .NET above
+      - name: Deploy Application
+        run: |
+            pushd ep05
+            azd deploy --no-prompt
+            popd
+    ```
 
-        - name: Install azd
-            uses: Azure/setup-azd@v1.0.0
+    > ⚠️ Make sure to respect the extact intentation and spacing. The `pushd` and `popd` commands are used to change the directory to the `ep05` folder and then return to the previous folder.
+
+    > 💡 Validate that the step `Install azd` is using `Azure/setup-azd@v2`. If you are still using `v1` the deployment will fail. You should update AZD CLI, and change the version in the file.
+
+1. Commit the changes to the repository. And Push the changes to GitHub. You can use the user interface or the command line: 
+
+    ```bash
+    git add .
+    git commit -m "Add CI/CD pipeline"
+    git push origin
     ```
 
 ## Examine the GitHub Actions Workflow
 
 The deployment will take a few minutes. You can monitor the pipeline status in the tab `Actions` in your Github page. The URL should have been printed in the console after the `azd pipeline config` command. (ex: https://github.com/FBoucher/dotnet-on-aca-ep05/actions) 
+
+> **NOTE**: If the deployment fails because .NET SDK 9 is not installed, you can edit the `azure-dev.yml`. Add the a step between `Checkout` and `Install azd` to install the .NET SDK 9.0.
+```yaml
+    steps:
+    - name: Checkout
+        uses: actions/checkout@v4
+
+    // 👇👇👇 Add the step Setup .NET below
+    - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+        dotnet-version: 9.0.x
+    // 👆👆👆 Add the step Setup .NET above
+
+    - name: Install azd
+        uses: Azure/setup-azd@v1.0.0
+```
+
 
 While it's deploying let's examine the `.github/workflows/azure-dev.yml` file in your code editor.
 
@@ -110,7 +122,7 @@ While it's deploying let's examine the `.github/workflows/azure-dev.yml` file in
 
 2. How the permission works
 
-    The workflow uses the `Azure/setup-azd@v1.0.0` action to authenticate with Azure. The action uses the `AZD_INITIAL_ENVIRONMENT_CONFIG` secret that was created in the previous step with the `azd pipeline config` command.
+    The workflow uses the `Azure/setup-azd@v2.0.0` action to authenticate with Azure. The action uses the `AZD_INITIAL_ENVIRONMENT_CONFIG` secret that was created in the previous step with the `azd pipeline config` command.
     The secret is saved in the repository settings under `Settings` -> `Secrets and variables` -> `Actions`. You won't be able to see the value of the secret, but you can update it if needed.
 
 3. What the workflow does
@@ -144,18 +156,8 @@ While it's deploying let's examine the `.github/workflows/azure-dev.yml` file in
 
 ## Clean up the deployed resources
 
-To clean up the resources, run the following command:
+You can reuse this version for [EP06](../ep06/README.md). To clean up the resources, run the following command:
 
 ```bash
 azd down --force --purge
 ```
-
-## Clean up the GitHub repository
-
-To clean up the GitHub repository, go to the repository settings and scroll down to the `Danger Zone` section. Click on the `Delete this repository` button and confirm the deletion.
-
-
-
-
-
-
