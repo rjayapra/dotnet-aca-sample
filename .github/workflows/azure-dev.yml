@@ -41,10 +41,12 @@ jobs:
         run: |
           pushd ep05
           azd provision --no-prompt
+          popd
         env:
           AZD_INITIAL_ENVIRONMENT_CONFIG: ${{ secrets.AZD_INITIAL_ENVIRONMENT_CONFIG }}
 
       - name: Deploy Application
         run: |
+          pushd ep05
           azd deploy --no-prompt
           popd
