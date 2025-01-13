@@ -3,6 +3,8 @@ using eShopLite.Store.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 // Add services to the container.
 builder.Services.AddProblemDetails();
 
@@ -11,27 +13,12 @@ builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
 // Add HTTP clients
-builder.Services.AddHttpClient<ProductApiClient>(client =>
-{
-    var productsApiUrl = builder.Configuration.GetValue<string>("ProductsApi");
-    if (string.IsNullOrEmpty(productsApiUrl))
-    {
-        throw new ArgumentNullException(nameof(productsApiUrl), "ProductsApi configuration value is missing or empty.");
-    }
-    client.BaseAddress = new Uri(productsApiUrl);
-});
-
-builder.Services.AddHttpClient<WeatherApiClient>(client =>
-{
-    var weatherApiUrl = builder.Configuration.GetValue<string>("WeatherApi");
-    if (string.IsNullOrEmpty(weatherApiUrl))
-    {
-        throw new ArgumentNullException(nameof(weatherApiUrl), "WeatherApi configuration value is missing or empty.");
-    }
-    client.BaseAddress = new Uri(weatherApiUrl);
-});
+builder.Services.AddHttpClient<ProductApiClient>(client => client.BaseAddress = new Uri("https+http://products"));
+builder.Services.AddHttpClient<WeatherApiClient>(client => client.BaseAddress = new Uri("https+http://weather"));
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -3,16 +3,27 @@
   <Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0" />
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
     <IsAspireHost>true</IsAspireHost>
+    <OutputType>Exe</OutputType>
+
+    <AssemblyName>eShopLite.AppHost</AssemblyName>
+    <RootNamespace>eShopLite.AppHost</RootNamespace>
     <UserSecretsId>0a5ff750-eef2-4757-8c92-bd1769da7e49</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" Version="9.0.0" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\eShopLite.Products\eShopLite.Products.csproj" />
+    <ProjectReference Include="..\eShopLite.Weather\eShopLite.Weather.csproj" />
+    <ProjectReference Include="..\eShopLite.Store\eShopLite.Store.csproj" />
   </ItemGroup>
 
 </Project>

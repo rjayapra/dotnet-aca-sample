@@ -2,9 +2,9 @@ using eShopLite.Products.Data;
 using eShopLite.Products.Endpoints;
 using eShopLite.Products.Extensions;
 
-using Microsoft.EntityFrameworkCore;
-
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
@@ -14,13 +14,11 @@ builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
 
 // Add database context
-builder.Services.AddDbContext<ProductDbContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("ProductsContext") ?? throw new InvalidOperationException("Connection string 'ProductsContext' not found.");
-    options.UseSqlite(connectionString);
-});
+builder.AddNpgsqlDbContext<ProductDbContext>("productsdb");
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

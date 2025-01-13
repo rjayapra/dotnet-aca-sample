@@ -104,6 +104,200 @@ To orchestrate all the apps without Dockerfiles or Docker Compose files, Let's a
     dotnet sln add ./src/eShopLite.ServiceDefaults
     ```
 
+1. Add the following references to the `eShopLite.AppHost` project.
+
+    ```bash
+    dotnet add ./src/eShopLite.AppHost reference ./src/eShopLite.Products
+    dotnet add ./src/eShopLite.AppHost reference ./src/eShopLite.Weather
+    dotnet add ./src/eShopLite.AppHost reference ./src/eShopLite.Store
+    ```
+
+1. Add the the `eShopLite.ServiceDefaults` project to each app as a reference.
+
+    ```bash
+    dotnet add ./src/eShopLite.Products reference ./src/eShopLite.ServiceDefaults
+    dotnet add ./src/eShopLite.Weather reference ./src/eShopLite.ServiceDefaults
+    dotnet add ./src/eShopLite.Store reference ./src/eShopLite.ServiceDefaults
+    ```
+
+1. Open `src/eShopLite.AppHost/Program.cs` and add the following codes between `var builder = DistributedApplication.CreateBuilder(args);` and `builder.Build().Run();`.
+
+    ```csharp
+    var builder = DistributedApplication.CreateBuilder(args);
+    
+    // 👇👇👇 Add the codes below.
+    
+    // Add PostgreSQL database
+    var productsdb = builder.AddPostgres("pg")
+                            .WithPgAdmin()
+                            .AddDatabase("productsdb");
+    
+    // Add the Products API app
+    var products = builder.AddProject<Projects.eShopLite_Products>("products")
+                          .WithReference(productsdb)
+                          .WaitFor(productsdb);
+    
+    // Add the Weather API app
+    var weather = builder.AddProject<Projects.eShopLite_Weather>("weather");
+    
+    // Add the Store app
+    var store = builder.AddProject<Projects.eShopLite_Store>("store")
+                       .WithReference(products)
+                       .WithReference(weather)
+                       .WaitFor(products)
+                       .WaitFor(weather);
+    
+    // 👆👆👆 Add the codes above.
+    
+    builder.Build().Run();
+    ```
+
+1. Open `src/eShopLite.Products/Program.cs` and add the following codes.
+
+    ```csharp
+    var builder = WebApplication.CreateBuilder(args);
+    
+    // 👇👇👇 Add the code below.
+    builder.AddServiceDefaults();
+    // 👆👆👆 Add the code above.
+    
+    ...
+    
+    var app = builder.Build();
+    
+    // 👇👇👇 Add the code below.
+    app.MapDefaultEndpoints();
+    // 👆👆👆 Add the code above.
+    
+    ...
+    
+    app.Run();
+    ```
+
+1. Open `src/eShopLite.Weather/Program.cs` and `src/eShopLite.Store/Program.cs`, and do the same thing as above.
+
+1. Open `src/eShopLite.Store/Program.cs`, find the `builder.Services.AddHttpClient<ProductApiClient>(...` line, and update it with the following code.
+
+    ```csharp
+    // Before
+    builder.Services.AddHttpClient<ProductApiClient>(client =>
+    {
+        var productsApiUrl = builder.Configuration.GetValue<string>("ProductsApi");
+        if (string.IsNullOrEmpty(productsApiUrl))
+        {
+            throw new ArgumentNullException(nameof(productsApiUrl), "ProductsApi configuration value is missing or empty.");
+        }
+        client.BaseAddress = new Uri(productsApiUrl);
+    });
+    
+    builder.Services.AddHttpClient<WeatherApiClient>(client =>
+    {
+        var weatherApiUrl = builder.Configuration.GetValue<string>("WeatherApi");
+        if (string.IsNullOrEmpty(weatherApiUrl))
+        {
+            throw new ArgumentNullException(nameof(weatherApiUrl), "WeatherApi configuration value is missing or empty.");
+        }
+        client.BaseAddress = new Uri(weatherApiUrl);
+    });
+    
+    // After
+    builder.Services.AddHttpClient<ProductApiClient>(client => client.BaseAddress = new Uri("https+http://products"));
+    builder.Services.AddHttpClient<WeatherApiClient>(client => client.BaseAddress = new Uri("https+http://weather"));
+    ```
+
+1. Open `src/eShopLite.Store/appsettings.json` and remove the `ProductsApi` and `WeatherApi` configurations.
+
+    ```jsonc
+    {
+      // Remove the following lines
+      "ProductsApi": "http://localhost:5228",
+      "WeatherApi": "http://localhost:5151"
+    }
+    ```
+
+### Replace SQLite with PostgreSQL
+
+Let's replace the existing SQLite database with a containerized PostgreSQL one.
+
+1. Make sure that you're in the `ep08/1_start` directory.
+
+    ```bash
+    cd $REPOSITORY_ROOT/ep08/1_start
+    ```
+
+1. Add the PostgreSQL NuGet package to the `eShopLite.AppHost` project.
+
+    ```bash
+    dotnet add ./src/eShopLite.AppHost package Aspire.Hosting.PostgreSQL
+    ```
+
+1. Add the PostgreSQL NuGet package to the `eShopLite.Products` project as well.
+
+    ```bash
+    dotnet add ./src/eShopLite.Products package Aspire.Npgsql.EntityFrameworkCore.PostgreSQL
+    ```
+
+   Then, remove the SQLite NuGet package.
+
+    ```bash
+    dotnet remove ./src/eShopLite.Products package Microsoft.EntityFrameworkCore.Sqlite
+    ```
+
+1. Open `src/eShopLite.Products/Program.cs`, find the `builder.Services.AddDbContext<ProductDbContext>(...` line, and update it with the following code.
+
+    ```csharp
+    // Before
+    builder.Services.AddDbContext<ProductDbContext>(options =>
+    {
+        var connectionString = builder.Configuration.GetConnectionString("ProductsContext") ?? throw new InvalidOperationException("Connection string 'ProductsContext' not found.");
+        options.UseSqlite(connectionString);
+    });
+    
+    // After
+    builder.AddNpgsqlDbContext<ProductDataContext>("productsdb");
+    ```
+
+### Running the Microservice Apps with .NET Aspire Locally
+
+1. Make sure that Docker Desktop is running on your machine.
+
+1. Make sure that you're in the `ep08/1_start` directory.
+
+    ```bash
+    cd $REPOSITORY_ROOT/ep08/1_start
+    ```
+
+1. Run the following command to build and run the solution.
+
+    ```bash
+    dotnet watch run --project ./src/eShopLite.AppHost
+    ```
+
+1. Open a browser and navigate to `https://localhost:17287` to see the .NEt Aspire dashboard is up and running (the port number might be different from yours).
+
+   ![.NET Aspire Dashboard](./images/ep08-01.png)
+
+   As you can see the dashboard, the Products API app now uses PostgreSQL instead of SQLite.
+
+1. Click the "View details" menu of the Products API app and see the connection string of the PostgreSQL database.
+
+   ![.NET Aspire Dashboard - PostgreSQL Connection String](./images/ep08-02.png)
+
+1. Click the Store app link to see the app running. Then navigate to `/weather` and `/products` to see both pages are properly working.
+
+1. To stop the apps, press `Ctrl+C` in a terminal.
+
+### Deploying the Microservice Apps to Azure Container Apps with .NET Aspire
+
+TBD
+
+
+
+
+
+
+
+
 
 
 
