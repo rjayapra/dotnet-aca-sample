@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BDD71B01-00B4-4F15-BABA-415FFD02D31B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopLite.DataEntities", "src\eShopLite.DataEntities\eShopLite.DataEntities.csproj", "{5CF09857-5793-4894-BB09-F9745D58336B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopLite.Store", "src\eShopLite.Store\eShopLite.Store.csproj", "{89160934-A130-4355-980E-5E8281C826D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopLite.Products", "src\eShopLite.Products\eShopLite.Products.csproj", "{7191D093-AEC2-488C-AF83-7AEE71316117}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopLite.Weather", "src\eShopLite.Weather\eShopLite.Weather.csproj", "{8EEDEA76-12DA-43E3-AC2B-0DFA17C1A465}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopLite.AppHost", "src\eShopLite.AppHost\eShopLite.AppHost.csproj", "{4074070D-E953-4527-8D9F-0950E8AA9315}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopLite.ServiceDefaults", "src\eShopLite.ServiceDefaults\eShopLite.ServiceDefaults.csproj", "{04AD9B5F-74A9-4DB7-BC46-CA125F6507C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5CF09857-5793-4894-BB09-F9745D58336B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CF09857-5793-4894-BB09-F9745D58336B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CF09857-5793-4894-BB09-F9745D58336B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CF09857-5793-4894-BB09-F9745D58336B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89160934-A130-4355-980E-5E8281C826D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89160934-A130-4355-980E-5E8281C826D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89160934-A130-4355-980E-5E8281C826D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89160934-A130-4355-980E-5E8281C826D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7191D093-AEC2-488C-AF83-7AEE71316117}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7191D093-AEC2-488C-AF83-7AEE71316117}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7191D093-AEC2-488C-AF83-7AEE71316117}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7191D093-AEC2-488C-AF83-7AEE71316117}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EEDEA76-12DA-43E3-AC2B-0DFA17C1A465}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EEDEA76-12DA-43E3-AC2B-0DFA17C1A465}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EEDEA76-12DA-43E3-AC2B-0DFA17C1A465}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EEDEA76-12DA-43E3-AC2B-0DFA17C1A465}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4074070D-E953-4527-8D9F-0950E8AA9315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4074070D-E953-4527-8D9F-0950E8AA9315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4074070D-E953-4527-8D9F-0950E8AA9315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4074070D-E953-4527-8D9F-0950E8AA9315}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04AD9B5F-74A9-4DB7-BC46-CA125F6507C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04AD9B5F-74A9-4DB7-BC46-CA125F6507C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04AD9B5F-74A9-4DB7-BC46-CA125F6507C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04AD9B5F-74A9-4DB7-BC46-CA125F6507C1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5CF09857-5793-4894-BB09-F9745D58336B} = {BDD71B01-00B4-4F15-BABA-415FFD02D31B}
+		{89160934-A130-4355-980E-5E8281C826D1} = {BDD71B01-00B4-4F15-BABA-415FFD02D31B}
+		{7191D093-AEC2-488C-AF83-7AEE71316117} = {BDD71B01-00B4-4F15-BABA-415FFD02D31B}
+		{8EEDEA76-12DA-43E3-AC2B-0DFA17C1A465} = {BDD71B01-00B4-4F15-BABA-415FFD02D31B}
+		{4074070D-E953-4527-8D9F-0950E8AA9315} = {BDD71B01-00B4-4F15-BABA-415FFD02D31B}
+		{04AD9B5F-74A9-4DB7-BC46-CA125F6507C1} = {BDD71B01-00B4-4F15-BABA-415FFD02D31B}
+	EndGlobalSection
+EndGlobal
