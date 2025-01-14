@@ -8,16 +8,16 @@ public class ProductApiClient(HttpClient http)
     {
         List<Product>? products = null;
 
-        await foreach (var forecast in http.GetFromJsonAsAsyncEnumerable<Product>("/api/products", cancellationToken))
+        await foreach (var product in http.GetFromJsonAsAsyncEnumerable<Product>("/api/products", cancellationToken))
         {
             if (products?.Count >= maxItems)
             {
                 break;
             }
-            if (forecast is not null)
+            if (product is not null)
             {
                 products ??= [];
-                products.Add(forecast);
+                products.Add(product);
             }
         }
 
