@@ -39,6 +39,7 @@ You can reuse the code and deployed solution from the previous episode, but this
     ```
 
 1. Open the browser and navigate to the deployed app to validate that it's working as expected.
+
    > **Note**: You may feel some delay in the response of the Product service, it's purposely added to simulate a slow response.
  
 
@@ -133,4 +134,5 @@ To clean up the resources, run the following command:
 ```bash
 azd down --force --purge
 ```
+
 
