@@ -66,7 +66,7 @@ From the Azure portal, on the Azure Container Apps resource, you can visualize m
 1. Click on **Save to dashboard**, **Pin to dashboard** and select **Create new**.
 1. Give the dashboard a name, for example, `ep07`. Then click on the **Create and pin** button.
 
-Let's create to more metric but from the weather container app.
+Let's create two more metric but from the weather container app.
 
 1. From the Azure portal, navigate to the **weather** Azure Container Apps resource.
 1. In the left-hand menu, under Monitoring, select **Metrics**.
@@ -77,15 +77,15 @@ Let's create to more metric but from the weather container app.
 
 Now, you can open the dashboard in a new tab and see the metrics side by side. This can be done by clicking the third icon (Dashboard) from the hamburger menu in the top left corner of the Azure portal. 
 
-> If your dasboard is not visible, you select it from the list of dashboards, in the top left corner.
+> If your dashboard is not visible, you select it from the list of dashboards, in the top left corner.
 
 ![dashboard](images/dashboard.png)
 
-Your Dashborad is probably showing flat lines, as we haven't accessed the apps yet. Open the store webapp in a new tab and refresh the page. You should see the metrics updating in the dashboard. We will get back to it in a moment.
+Your Dashboard is probably showing flat lines, as we haven't accessed the apps yet. Open the store webapp in a new tab and refresh the page. You should see the metrics updating in the dashboard. We will get back to it in a moment.
 
 ### Create an Alert Rule
 
-Alert can be really useful to track important tresholds and be able to react to them. Let's create an alert rule for the weather container app.
+Alert can be really useful to track important thresholds and be able to react to them. Let's create an alert rule for the weather container app.
 
 1. From the Azure portal, navigate to the **weather** Azure Container Apps resource.
 1. In the left-hand menu, under Monitoring, select **Alerts**.
