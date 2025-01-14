@@ -15,6 +15,7 @@ var weather = builder.AddProject<Projects.eShopLite_Weather>("weather");
 
 // Add the Store app
 var store = builder.AddProject<Projects.eShopLite_Store>("store")
+                   .WithExternalHttpEndpoints()
                    .WithReference(products)
                    .WithReference(weather)
                    .WaitFor(products)
