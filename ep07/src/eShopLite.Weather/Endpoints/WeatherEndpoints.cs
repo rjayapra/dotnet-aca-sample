@@ -24,7 +24,6 @@ public static class WeatherEndpoints
         // Start the combined burst simulation in a background task
         Task.Run(() => SimulateCombinedBurst());
         
-
         var forecast =  Enumerable.Range(1, 5).Select(index =>
             new WeatherForecast
             (
@@ -38,37 +37,39 @@ public static class WeatherEndpoints
 
     private static void SimulateCombinedBurst()
     {
+        DateTime lastLogTime = DateTime.Now;
         var endTime = DateTime.Now.AddSeconds(30); // Run for 30 seconds
-        var midTime = DateTime.Now.AddSeconds(15); // Midpoint
-        Random random = new Random();
-        double tempSum = 0;
-        List<byte[]> memoryHog = new List<byte[]>();
-        bool midTimeLogged = false;
         
-        Console.WriteLine("Burst simulation started...");
+        Random random = new Random();
+        int batchNo = random.Next(1000, 10000); // Generates a random 4-digit number
+        int loopPass = 0;
+        List<byte[]> memoryHog = new List<byte[]>();
+
+        Console.WriteLine($"Burst simulation #{batchNo} started...");
 
         while (DateTime.Now < endTime)
         {
             // CPU intensive task
-            for (int i = 0; i < 1000000; i++) // Increase iterations
+            for (int i = 0; i < 100000; i++) // Increase iterations
             {
                 var result = Math.Sqrt(i);
-                tempSum += result + random.Next(1, 11);
             }
 
             // Memory intensive task
-            memoryHog.Add(new byte[2 * 1024 * 1024]); // Allocate 2MB
+            memoryHog.Add(new byte[1024 * 1024]); // Allocate 1MB
             // Reduce or remove delay
             Task.Delay(100).Wait();
 
-            // Log midpoint message
-            if (!midTimeLogged && DateTime.Now >= midTime)
+            // Log every 10 seconds
+            if ((DateTime.Now - lastLogTime).TotalSeconds >= 10)
             {
-                Console.WriteLine("Burst simulation is at midpoint.");
-                midTimeLogged = true;
+                Console.WriteLine($"Burst simulation #{batchNo} is ongoing, {loopPass} loops done.");
+                lastLogTime = DateTime.Now;
             }
+            loopPass++;
         }
-        Console.WriteLine($"Burst simulation ended.");
-        Console.WriteLine($"Math total: {tempSum}");
+        Console.WriteLine($"Burst simulation #{batchNo} ended.");
+        Console.WriteLine($"Done in {loopPass} loops");
+        Console.WriteLine($"MemoryHog size: {memoryHog.Count * 2} MB");
     }
 }
