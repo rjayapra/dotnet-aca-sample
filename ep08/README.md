@@ -127,15 +127,8 @@ To orchestrate all the apps without Dockerfiles or Docker Compose files, let's a
     
     // 👇👇👇 Add the codes below.
     
-    // Add PostgreSQL database
-    var productsdb = builder.AddPostgres("pg")
-                            .WithPgAdmin()
-                            .AddDatabase("productsdb");
-    
     // Add the Products API app
-    var products = builder.AddProject<Projects.eShopLite_Products>("products")
-                          .WithReference(productsdb)
-                          .WaitFor(productsdb);
+    var products = builder.AddProject<Projects.eShopLite_Products>("products");
     
     // Add the Weather API app
     var weather = builder.AddProject<Projects.eShopLite_Weather>("weather");
@@ -244,6 +237,33 @@ Let's replace the existing SQLite database with a containerized PostgreSQL one.
 
     ```bash
     dotnet remove ./src/eShopLite.Products package Microsoft.EntityFrameworkCore.Sqlite
+    ```
+
+1. Open `src/eShopLite.AppHost/Program.cs`, find the `var builder = DistributedApplication.CreateBuilder(args);` line, and add the following code.
+
+    ```csharp
+    var builder = DistributedApplication.CreateBuilder(args);
+    
+    // 👇👇👇 Add the codes below.
+    
+    // Add PostgreSQL database
+    var productsdb = builder.AddPostgres("pg")
+                            .WithPgAdmin()
+                            .AddDatabase("productsdb");
+    
+    // 👆👆👆 Add the codes above.
+    ```
+
+1. In the same file, find the `var products = builder.AddProject<Projects.eShopLite_Products>("products");` line and update it with the following code.
+
+    ```csharp
+    // Before
+    var products = builder.AddProject<Projects.eShopLite_Products>("products")
+    
+    // After
+    var products = builder.AddProject<Projects.eShopLite_Products>("products")
+                          .WithReference(productsdb)
+                          .WaitFor(productsdb);
     ```
 
 1. Open `src/eShopLite.Products/Program.cs`, find the `builder.Services.AddDbContext<ProductDbContext>(...` line, and update it with the following code.
