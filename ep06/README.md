@@ -157,7 +157,7 @@ Optimizing the cost is not a one-time task, it's an ongoing process. It's a good
 
 ## Clean up the deployed resources
 
-You can reuse this version for [EP07](../ep07/README.md). To clean up the resources, run the following command:
+To clean up the resources, run the following command:
 
 ```bash
 azd down --force --purge
