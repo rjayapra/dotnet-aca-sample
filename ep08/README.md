@@ -278,7 +278,7 @@ Let's replace the existing SQLite database with a containerized PostgreSQL one.
     // Before - 👆👆👆 Remove the lines above
     
     // After - 👇👇👇 Add the line below
-    builder.AddNpgsqlDbContext<ProductDataContext>("productsdb");
+    builder.AddNpgsqlDbContext<ProductDbContext>("productsdb");
     // After - 👆👆👆 Add the line above
     ```
 
