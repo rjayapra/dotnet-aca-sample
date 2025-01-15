@@ -57,7 +57,7 @@ To orchestrate all the apps without Dockerfiles or Docker Compose files, let's a
     dotnet add ./src/eShopLite.AppHost reference ./src/eShopLite.Store
     ```
 
-1. Add the the `eShopLite.ServiceDefaults` project to each app as a reference.
+1. Add the `eShopLite.ServiceDefaults` project to each app as a reference.
 
     ```bash
     dotnet add ./src/eShopLite.Products reference ./src/eShopLite.ServiceDefaults
