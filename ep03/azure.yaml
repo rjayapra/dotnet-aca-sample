@@ -15,37 +15,37 @@ services:
       context: ../../
       remoteBuild: true
 
-hooks:
-  preup:
-    posix:
-      shell: sh
-      continueOnError: false
-      interactive: true
-      run: infra/hooks/preup.sh
-    windows:
-      shell: pwsh
-      continueOnError: false
-      interactive: true
-      run: infra/hooks/preup.ps1
-  preprovision:
-    posix:
-      shell: sh
-      continueOnError: false
-      interactive: true
-      run: infra/hooks/preprovision.sh
-    windows:
-      shell: pwsh
-      continueOnError: false
-      interactive: true
-      run: infra/hooks/preprovision.ps1
-  postprovision:
-    posix:
-      shell: sh
-      continueOnError: false
-      interactive: true
-      run: infra/hooks/postprovision.sh
-    windows:
-      shell: pwsh
-      continueOnError: false
-      interactive: true
-      run: infra/hooks/postprovision.ps1
+# hooks:
+#   preup:
+#     posix:
+#       shell: sh
+#       continueOnError: false
+#       interactive: true
+#       run: infra/hooks/preup.sh
+#     windows:
+#       shell: pwsh
+#       continueOnError: false
+#       interactive: true
+#       run: infra/hooks/preup.ps1
+#   preprovision:
+#     posix:
+#       shell: sh
+#       continueOnError: false
+#       interactive: true
+#       run: infra/hooks/preprovision.sh
+#     windows:
+#       shell: pwsh
+#       continueOnError: false
+#       interactive: true
+#       run: infra/hooks/preprovision.ps1
+#   postprovision:
+#     posix:
+#       shell: sh
+#       continueOnError: false
+#       interactive: true
+#       run: infra/hooks/postprovision.sh
+#     windows:
+#       shell: pwsh
+#       continueOnError: false
+#       interactive: true
+#       run: infra/hooks/postprovision.ps1

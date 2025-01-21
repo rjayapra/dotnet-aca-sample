@@ -9,9 +9,9 @@ param environmentName string
 @description('Primary location for all resources')
 param location string
 
-param eshopliteStoreExists bool
+param eshopLiteStoreExists bool
 @secure()
-param eshopliteStoreDefinition object
+param eshopLiteStoreDefinition object
 
 @description('Id of the user or app to assign application roles')
 param principalId string
@@ -36,13 +36,16 @@ module resources 'resources.bicep' = {
   scope: rg
   name: 'resources'
   params: {
+    environmentName: environmentName
     location: location
     tags: tags
     principalId: principalId
-    eshopliteStoreExists: eshopliteStoreExists
-    eshopliteStoreDefinition: eshopliteStoreDefinition
+    eshopLiteStoreExists: eshopLiteStoreExists
+    eshopLiteStoreDefinition: eshopLiteStoreDefinition
   }
 }
+
+output AZURE_PRINCIPAL_ID string = resources.outputs.AZURE_PRINCIPAL_ID
 
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = resources.outputs.AZURE_CONTAINER_REGISTRY_ENDPOINT
 output AZURE_KEY_VAULT_ENDPOINT string = resources.outputs.AZURE_KEY_VAULT_ENDPOINT
