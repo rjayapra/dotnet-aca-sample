@@ -199,7 +199,7 @@ module eshopLiteStoreAuthConfig './modules/containerapps-authconfigs.bicep' = {
     storageAccountName: storageAccount.outputs.name
     clientId: appRegistration.outputs.appId
     openIdIssuer: issuer
-    unauthenticatedClientAction: 'AllowAnonymous'
+    unauthenticatedClientAction: 'RedirectToLoginPage'
   }
 }
 
