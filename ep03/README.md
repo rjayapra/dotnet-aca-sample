@@ -38,45 +38,6 @@ Use Azure Developer CLI (AZD) to deploy the monolith app to ACA.
     cd $REPOSITORY_ROOT/ep03
     ```
 
-1. Open `azure.yaml` and see the `hooks` section. Unlike the [previous episodes](../ep02/), it has many hooking scripts to run before and after provisioning the resources to register the Microsoft Entra ID app and update it for the built-in authentication feature.
-
-    ```yml
-    hooks:
-      preup:
-        posix:
-          shell: sh
-          continueOnError: false
-          interactive: true
-          run: infra/hooks/preup.sh
-        windows:
-          shell: pwsh
-          continueOnError: false
-          interactive: true
-          run: infra/hooks/preup.ps1
-      preprovision:
-        posix:
-          shell: sh
-          continueOnError: false
-          interactive: true
-          run: infra/hooks/preprovision.sh
-        windows:
-          shell: pwsh
-          continueOnError: false
-          interactive: true
-          run: infra/hooks/preprovision.ps1
-      postprovision:
-        posix:
-          shell: sh
-          continueOnError: false
-          interactive: true
-          run: infra/hooks/postprovision.sh
-        windows:
-          shell: pwsh
-          continueOnError: false
-          interactive: true
-          run: infra/hooks/postprovision.ps1
-    ```
-
 1. Create a new environment for the app. For example, use `acadotnet` followed by a 4-digit random number.
 
     ```bash
@@ -98,12 +59,7 @@ Use Azure Developer CLI (AZD) to deploy the monolith app to ACA.
    > While executing this command, you'll be asked to provide the Azure subscription ID and location.
 
 1. Open your web browser and navigate to the URL provided by the ACA instance on the screen to see the monolith app running in ACA.
-
-1. At the top-right corner, click the **Login** button to see the built-in authentication feature of ACA in action.
-
-   ![Landing page - before login](./images/ep03-01.png)
-
-   You will be redirected to the Microsoft Entra ID login page, and see the following consent page.
+1. You will be redirected to the Microsoft Entra ID login page, and see the following consent page.
 
    ![Consent page](./images/ep03-02.png)
 
