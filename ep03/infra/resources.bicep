@@ -1,12 +1,15 @@
+@description('Name of the environment that can be used as part of naming resource convention')
+param environmentName string
+
 @description('The location used for all deployed resources')
 param location string = resourceGroup().location
 
 @description('Tags that will be applied to all resources')
 param tags object = {}
 
-param eshopliteStoreExists bool
+param eshopLiteStoreExists bool
 @secure()
-param eshopliteStoreDefinition object
+param eshopLiteStoreDefinition object
 
 @description('Id of the user or app to assign application roles')
 param principalId string
@@ -26,6 +29,26 @@ module monitoring 'br/public:avm/ptn/azd/monitoring:0.1.0' = {
   }
 }
 
+// Storage account
+module storageAccount 'br/public:avm/res/storage/storage-account:0.15.0' = {
+  name: 'storageAccount'
+  params: {
+    name: '${abbrs.storageStorageAccounts}${resourceToken}'
+    kind: 'StorageV2'
+    location: location
+    tags: tags
+    skuName: 'Standard_LRS'
+    blobServices: {
+      containers: [
+        {
+          name: 'token-store'
+          publicAccess: 'None'
+        }
+      ]
+    }
+  }
+}
+
 // Container registry
 module containerRegistry 'br/public:avm/res/container-registry/registry:0.6.0' = {
   name: 'registry'
@@ -36,9 +59,9 @@ module containerRegistry 'br/public:avm/res/container-registry/registry:0.6.0' =
     tags: tags
     exportPolicyStatus: 'enabled'
     publicNetworkAccess: 'Enabled'
-    roleAssignments:[
+    roleAssignments: [
       {
-        principalId: eshopliteStoreIdentity.outputs.principalId
+        principalId: eshopLiteStoreIdentity.outputs.principalId
         principalType: 'ServicePrincipal'
         roleDefinitionIdOrName: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
       }
@@ -57,35 +80,44 @@ module containerAppsEnvironment 'br/public:avm/res/app/managed-environment:0.8.1
   }
 }
 
-module eshopliteStoreIdentity 'br/public:avm/res/managed-identity/user-assigned-identity:0.4.0' = {
-  name: 'eshopliteStoreidentity'
+module eshopLiteStoreIdentity 'br/public:avm/res/managed-identity/user-assigned-identity:0.4.0' = {
+  name: 'eshopLiteStoreIdentity'
   params: {
-    name: '${abbrs.managedIdentityUserAssignedIdentities}eshopliteStore-${resourceToken}'
+    name: '${abbrs.managedIdentityUserAssignedIdentities}eshoplitestore-${resourceToken}'
     location: location
   }
 }
 
-module eshopliteStoreFetchLatestImage './modules/fetch-container-image.bicep' = {
-  name: 'eshopliteStore-fetch-image'
+module eshopLiteStoreIdentityRoleAssignment './modules/role-assignment.bicep' = {
+  name: 'eshopLiteStoreIdentityRoleAssignment'
   params: {
-    exists: eshopliteStoreExists
+    managedIdentityName: eshopLiteStoreIdentity.outputs.name
+    storageAccountName: storageAccount.outputs.name
+    principalType: 'ServicePrincipal'
+  }
+}
+
+module eshopLiteStoreFetchLatestImage './modules/fetch-container-image.bicep' = {
+  name: 'eshoplite-store-fetch-image'
+  params: {
+    exists: eshopLiteStoreExists
     name: 'eshoplite-store'
   }
 }
 
-var eshopliteStoreAppSettingsArray = filter(array(eshopliteStoreDefinition.settings), i => i.name != '')
-var eshopliteStoreSecrets = map(filter(eshopliteStoreAppSettingsArray, i => i.?secret != null), i => {
+var eshopLiteStoreAppSettingsArray = filter(array(eshopLiteStoreDefinition.settings), i => i.name != '')
+var eshopLiteStoreSecrets = map(filter(eshopLiteStoreAppSettingsArray, i => i.?secret != null), i => {
   name: i.name
   value: i.value
   secretRef: i.?secretRef ?? take(replace(replace(toLower(i.name), '_', '-'), '.', '-'), 32)
 })
-var eshopliteStoreEnv = map(filter(eshopliteStoreAppSettingsArray, i => i.?secret == null), i => {
+var eshopLiteStoreEnv = map(filter(eshopLiteStoreAppSettingsArray, i => i.?secret == null), i => {
   name: i.name
   value: i.value
 })
 
-module eshopliteStore 'br/public:avm/res/app/container-app:0.11.0' = {
-  name: 'eshopliteStore'
+module eshopLiteStore 'br/public:avm/res/app/container-app:0.11.0' = {
+  name: 'eshopLiteStore'
   params: {
     name: 'eshoplite-store'
     ingressTargetPort: 8080
@@ -94,14 +126,14 @@ module eshopliteStore 'br/public:avm/res/app/container-app:0.11.0' = {
     secrets: {
       secureList: union([
       ],
-      map(eshopliteStoreSecrets, secret => {
+      map(eshopLiteStoreSecrets, secret => {
         name: secret.secretRef
         value: secret.value
       }))
     }
     containers: [
       {
-        image: eshopliteStoreFetchLatestImage.outputs.?containers[?0].?image ?? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+        image: eshopLiteStoreFetchLatestImage.outputs.?containers[?0].?image ?? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
         name: 'main'
         resources: {
           cpu: json('0.5')
@@ -114,33 +146,60 @@ module eshopliteStore 'br/public:avm/res/app/container-app:0.11.0' = {
           }
           {
             name: 'AZURE_CLIENT_ID'
-            value: eshopliteStoreIdentity.outputs.clientId
+            value: eshopLiteStoreIdentity.outputs.clientId
           }
           {
             name: 'PORT'
             value: '8080'
           }
         ],
-        eshopliteStoreEnv,
-        map(eshopliteStoreSecrets, secret => {
+        eshopLiteStoreEnv,
+        map(eshopLiteStoreSecrets, secret => {
             name: secret.name
             secretRef: secret.secretRef
         }))
       }
     ]
-    managedIdentities:{
+    managedIdentities: {
       systemAssigned: false
-      userAssignedResourceIds: [eshopliteStoreIdentity.outputs.resourceId]
+      userAssignedResourceIds: [
+        eshopLiteStoreIdentity.outputs.resourceId
+      ]
     }
-    registries:[
+    registries: [
       {
         server: containerRegistry.outputs.loginServer
-        identity: eshopliteStoreIdentity.outputs.resourceId
+        identity: eshopLiteStoreIdentity.outputs.resourceId
       }
     ]
     environmentResourceId: containerAppsEnvironment.outputs.resourceId
     location: location
     tags: union(tags, { 'azd-service-name': 'eshoplite-store' })
+  }
+}
+
+// EasyAuth
+var issuer = '${environment().authentication.loginEndpoint}${tenant().tenantId}/v2.0'
+
+module appRegistration './modules/app-registration.bicep' = {
+  name: 'appRegistration'
+  params: {
+    appName: 'spn-${environmentName}'
+    issuer: issuer
+    containerAppIdentityId: eshopLiteStoreIdentity.outputs.principalId
+    containerAppEndpoint: 'https://${eshopLiteStore.outputs.fqdn}'
+  }
+}
+
+module eshopLiteStoreAuthConfig './modules/containerapps-authconfigs.bicep' = {
+  name: 'eshopLiteStoreAuthConfig'
+  params: {
+    containerAppName: eshopLiteStore.outputs.name
+    managedIdentityName: eshopLiteStoreIdentity.outputs.name
+    storageAccountName: storageAccount.outputs.name
+    clientId: appRegistration.outputs.appId
+    openIdIssuer: issuer
+    unauthenticatedClientAction: 'RedirectToLoginPage'
   }
 }
 
@@ -154,7 +213,7 @@ module keyVault 'br/public:avm/res/key-vault/vault:0.11.1' = {
     enableRbacAuthorization: false
     accessPolicies: concat([
       {
-        objectId: eshopliteStoreIdentity.outputs.principalId
+        objectId: eshopLiteStoreIdentity.outputs.principalId
         permissions: {
           secrets: [ 'get', 'list' ]
         }
@@ -172,10 +231,12 @@ module keyVault 'br/public:avm/res/key-vault/vault:0.11.1' = {
   }
 }
 
+output AZURE_PRINCIPAL_ID string = appRegistration.outputs.appId
+
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerRegistry.outputs.loginServer
 output AZURE_KEY_VAULT_ENDPOINT string = keyVault.outputs.uri
 output AZURE_KEY_VAULT_NAME string = keyVault.outputs.name
 
-output AZURE_RESOURCE_CONTAINERAPP_ID string = eshopliteStore.outputs.resourceId
-output AZURE_RESOURCE_CONTAINERAPP_NAME string = eshopliteStore.outputs.name
-output AZURE_RESOURCE_CONTAINERAPP_URL string = 'https://${eshopliteStore.outputs.fqdn}'
+output AZURE_RESOURCE_CONTAINERAPP_ID string = eshopLiteStore.outputs.resourceId
+output AZURE_RESOURCE_CONTAINERAPP_NAME string = eshopLiteStore.outputs.name
+output AZURE_RESOURCE_CONTAINERAPP_URL string = 'https://${eshopLiteStore.outputs.fqdn}'

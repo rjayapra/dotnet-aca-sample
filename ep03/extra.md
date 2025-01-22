@@ -20,6 +20,37 @@ REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
 $REPOSITORY_ROOT = git rev-parse --show-toplevel
 ```
 
+## Allowing Anonymous Access to ACA
+
+1. Make sure that you're in the `ep03` directory.
+
+    ```bash
+    cd $REPOSITORY_ROOT/ep03
+    ```
+
+1. Open `infra/resources.bicep` and find the module that calls `modules/containerapps-authconfigs.bicep`. Change the `unauthenticatedClientAction` value from `RedirectToLoginPage` to `AllowAnonymous`. This change allows users to access to the entire ACA app without having to sign-in.
+
+    ```bicep
+    module eshopLiteStoreAuthConfig './modules/containerapps-authconfigs.bicep' = {
+      name: 'eshopLiteStoreAuthConfig'
+      params: {
+        containerAppName: eshopLiteStore.outputs.name
+        managedIdentityName: eshopLiteStoreIdentity.outputs.name
+        storageAccountName: storageAccount.outputs.name
+        clientId: appRegistration.outputs.appId
+        openIdIssuer: issuer
+    
+        // 👇👇👇 Remove the line below
+        unauthenticatedClientAction: 'RedirectToLoginPage'
+        // 👆👆👆 Remove the line above
+    
+        // 👇👇👇 Add the line below
+        unauthenticatedClientAction: 'AllowAnonymous'
+        // 👆👆👆 Add the line above
+      }
+    }
+    ```
+
 ## Extending Authorization for ACA
 
 Once you have the built-in authentication feature enabled on ACA, you will have the `x-ms-client-principal` header in every request. You will have to convert this header to ASP.NET Core's `ClaimsPrincipal` to authorize the user.
@@ -63,16 +94,32 @@ Once you have the built-in authentication feature enabled on ACA, you will have 
     @* 👆👆👆 Add the line above *@
     ```
 
-1. Run the following command to update the existing app on ACA.
+### Deploying the Updated App to ACA via Azure Developer CLI (AZD)
+
+1. Make sure that you're in the `ep03` directory.
 
     ```bash
-    azd deploy
+    cd $REPOSITORY_ROOT/ep03
     ```
 
-   > **NOTE**: If you've already cleaned up all the resources, you should start from `azd up` first.
+1. With all changes, run the following command to update the existing app on ACA.
 
-1. Visit the Blazor app on ACA and navigate to the `/products` page. You should see the `401 Unauthorized` error.
-1. Navigate back to the home page and click the "Login" button on the top-right corner and sign in with your account.
+    ```bash
+    azd up
+    ```
+
+1. Open your web browser and navigate to the URL provided by the ACA instance on the screen to see the monolith app running in ACA.
+1. You'll see the landing page. Navigate to the `/products` and see the `401 Unauthorized` error.
+1. Navigate back to the landing page. At the top-right corner, click the **Login** button to see the built-in authentication feature of ACA in action.
+
+   ![Landing page - before login](./images/ep03-01.png)
+
+   You will be redirected to the Microsoft Entra ID login page.
+
+   After successful login, you will be redirected back to the monolith app.
+
+   ![Landing page - after login](./images/ep03-03.png)
+
 1. Navigate to the `/products` page again. You should see the list of products.
 
 ## Clean up the deployed resources
