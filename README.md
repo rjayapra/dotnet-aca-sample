@@ -2,6 +2,8 @@
 
 This provides sample apps for the .NET on [Azure Container Apps](https://learn.microsoft.com/en-us/azure/container-apps/overview) for Beginners series.
 
+Hello everybody and welcome to a course, workshop, and video series that cover Azure Container Apps for .NET developers. We're here to get you going on how to build cloud applications using Azure Container Apps.
+
 ## Prerequisites
 
 To run the sample apps, you need the following tools installed on your machine:
