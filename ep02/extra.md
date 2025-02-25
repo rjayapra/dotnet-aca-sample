@@ -1,4 +1,4 @@
-# EP02: Monolith App on ACA &ndash; EXTRA
+# 🏫EXTRA LEARNING! Monolith Applications on ACA
 
 This section is totally optional and demonstrates a more advance technique to deploy Azure resources using [Azure CLI](https://learn.microsoft.com/cli/azure/).
 
@@ -22,7 +22,7 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 
 ## Deploying the monolith app to ACA via Azure CLI
 
-This time to deploy the application to Azure Container Apps, we're going to use the Azure Command Line Interface (or Azure CLI) directly.
+This time to deploy the application to Azure Container Apps, we're going to use the Azure Command Line Interface (or Azure CLI) directly. The Azure CLI offers more granular control over Azure resources allowing you to do more fine-grained work than with azd. Of course that means you'll be doing much more work than issuing `azd init` and `azd up` commands.
 
 1. Make sure that you're in the `ep02` directory.
 
@@ -30,7 +30,7 @@ This time to deploy the application to Azure Container Apps, we're going to use 
     cd $REPOSITORY_ROOT/ep02
     ```
 
-2. Set environment variables like `AZURE_ENV_NAME` and `AZURE_LOCATION`. `{{LOCATION}}` is the Azure region where you want to deploy the resources.
+2. Set the environment variables `AZURE_ENV_NAME` and `AZURE_LOCATION`. Note that `{{LOCATION}}` is the Azure region where you want to deploy the resources.
 
     ```bash
     # Bash/Zsh
@@ -44,10 +44,10 @@ This time to deploy the application to Azure Container Apps, we're going to use 
     $AZURE_LOCATION = "{{LOCATION}}"
     ```
 
-3. Provision relevant resources onto Azure, including [Azure Container Registry (ACR)](https://learn.microsoft.com/azure/container-registry/container-registry-intro), [Azure Container App Environment (CAE)](https://learn.microsoft.com/azure/container-apps/environment), and Azure Container Apps (ACA) instances.
+3. Provision the relevant Azure resources, including [Azure Container Registry (ACR)](https://learn.microsoft.com/azure/container-registry/container-registry-intro), [Azure Container App Environment (CAE)](https://learn.microsoft.com/azure/container-apps/environment), and Azure Container Apps (ACA) instances.
 
     ```bash
-    # Bash/Zsh
+    # bash/zsh
     resources=$(az deployment sub create \
         -n $AZURE_ENV_NAME \
         -l $AZURE_LOCATION \
