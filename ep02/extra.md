@@ -4,14 +4,14 @@ This section is totally optional and demonstrates a more advance technique to de
 
 ## Prerequisites
 
-You have done and completed the [ep02](README.md) content.
+You have done and completed the [Running a monolith application on ACA](README.md) content. We'll need the container image you created in that section!
 
 ### Getting the repository root
 
-Initialize the variable `REPOSITORY_ROOT` in your preferred terminal.
+Re-initialize the variable `REPOSITORY_ROOT` in your preferred terminal.
 
 ```bash
-# Bazh/Zsh
+# Bash/Zsh
 REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
 ```
 
@@ -20,9 +20,9 @@ REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
 $REPOSITORY_ROOT = git rev-parse --show-toplevel
 ```
 
-## Deploying the Monolith App to ACA via Azure CLI
+## Deploying the monolith app to ACA via Azure CLI
 
-Once you're happy with the monolith app running in a container, you can deploy it to ACA.
+This time to deploy the application to Azure Container Apps, we're going to use the Azure Command Line Interface (or Azure CLI) directly.
 
 1. Make sure that you're in the `ep02` directory.
 
@@ -30,7 +30,7 @@ Once you're happy with the monolith app running in a container, you can deploy i
     cd $REPOSITORY_ROOT/ep02
     ```
 
-1. Set environment variables like `AZURE_ENV_NAME` and `AZURE_LOCATION`. `{{LOCATION}}` is the Azure region where you want to deploy the resources.
+2. Set environment variables like `AZURE_ENV_NAME` and `AZURE_LOCATION`. `{{LOCATION}}` is the Azure region where you want to deploy the resources.
 
     ```bash
     # Bash/Zsh
@@ -44,7 +44,7 @@ Once you're happy with the monolith app running in a container, you can deploy i
     $AZURE_LOCATION = "{{LOCATION}}"
     ```
 
-1. Provision relevant resources onto Azure, including [Azure Container Registry (ACR)](https://learn.microsoft.com/azure/container-registry/container-registry-intro), [Azure Container App Environment (CAE)](https://learn.microsoft.com/azure/container-apps/environment), and Azure Container Apps (ACA) instances.
+3. Provision relevant resources onto Azure, including [Azure Container Registry (ACR)](https://learn.microsoft.com/azure/container-registry/container-registry-intro), [Azure Container App Environment (CAE)](https://learn.microsoft.com/azure/container-apps/environment), and Azure Container Apps (ACA) instances.
 
     ```bash
     # Bash/Zsh
@@ -70,7 +70,7 @@ Once you're happy with the monolith app running in a container, you can deploy i
         --parameters eshopliteStoreExists=false) | ConvertFrom-Json
     ```
 
-1. Build the container image using Azure Container Registry (ACR).
+4. Build the container image using Azure Container Registry (ACR).
 
     ```bash
     # Bash/Zsh
@@ -92,7 +92,7 @@ Once you're happy with the monolith app running in a container, you can deploy i
         "$REPOSITORY_ROOT/ep02"
     ```
 
-1. Deploy the container image to ACA.
+5. Deploy the container image to ACA.
 
     ```bash
     # Bash/Zsh
@@ -114,7 +114,7 @@ Once you're happy with the monolith app running in a container, you can deploy i
         -i "$ACR_NAME.azurecr.io/eshoplite/store:latest"
     ```
 
-1. Open your web browser and navigate to the URL provided by the ACA instance to see the monolith app running in ACA. You can find the URL in the output of the previous command.
+6. Open your web browser and navigate to the URL provided by the ACA instance to see the monolith app running in ACA. You can find the URL in the output of the previous command.
 
     ```bash
     # Bash/Zsh
