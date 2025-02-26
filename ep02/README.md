@@ -19,7 +19,6 @@ You'll want to open the terminal and change directories to the base of where you
 > 📝**NOTE:**
 > 
 > To simplify the copy paste of the commands that sometimes require an absolute path, we will be using the variable `REPOSITORY_ROOT` to keep the path of the root folder where you cloned/downloaded this repository. The command `git rev-parse --show-toplevel` returns that path.
-> 
 
 If you're running on a linux or Mac-based machine or are using bash, run the following:
 
@@ -67,7 +66,7 @@ Now that we know the app runs locally, let's build a container image of it. We c
 
 > 🧐**INFO:**
 > 
-> Make sure you have Docker running
+> Make sure you have Docker running!
 
 1. Build the container image using Docker CLI.
 
@@ -132,9 +131,9 @@ The [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/develope
 
 1. You'll now be asked to provide the environment name. This can be whatever you want and serves as a unique identifier for a specific deployment. It's also used to prefix all the Azure resources created as part of your deployment.
 
-3. Once the initialization is complete, there will be several new files created. One of them is named **azure.yaml**. We will need to update that file with the Docker settings to use Azure Container Registry remote build.
+1. Once the initialization is complete, there will be several new files created. One of them is named **azure.yaml** and will be found directly under the **sample** directory. We will need to update that file with the Docker settings to use Azure Container Registry remote build.
 
-    > 🧐**INFO**
+    > 🧐**INFO:**
     > Azure Container Registry's remote build feature allows developers to offload container image builds to Azure, enabling cloud-based image creation without requiring local Docker installations. 
 
     ```yaml
@@ -155,39 +154,7 @@ The [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/develope
         # 👆👆👆 Add the docker settings above
     ```
 
-4. Because the .NET container app uses the target port number of `8080`, you need to update another file that azd created, **infra/resources.bicep** to use the correct target port number.
-
-    ```bicep
-    // Update resources.bicep with the target port value
-    module eshopliteStore 'br/public:avm/res/app/container-app:0.11.0' = {
-      name: 'eshopliteStore'
-      params: {
-        name: 'eshoplite-store'
-        // Change the target port value from 80 to 8080
-        // 👇👇👇
-        ingressTargetPort: 8080
-        ...
-        containers: [
-          {
-            ...
-            env: union([
-              ...
-              {
-                name: 'PORT'
-                // Change the value from '80' to '8080'
-                // 👇👇👇
-                value: '8080'
-              }
-            ],
-            ...
-          }
-        ]
-        ...
-      }
-    }
-    ```
-
-5. Finally we'll have azd create the necessary Azure resources and deploy our application for us, all with one single command!
+1. Finally we'll have azd create the necessary Azure resources and deploy our application for us, all with one single command!
 
     ```bash
     azd up
@@ -196,7 +163,7 @@ The [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/develope
    > 📝**NOTE:**
    > While executing this command, you'll be asked to provide the Azure subscription ID and location.
 
-6. As the Azure resources provision you'll a status that is similar to the following.
+1. As the Azure resources provision you'll a status that is similar to the following.
 
     ```bash
     (✓) Done: Resource group: rg-matt-feb25-1437 (1.907s)
@@ -209,7 +176,7 @@ The [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/develope
     (✓) Done: Container App: eshoplite-store (18.363s)
     ```
 
-7. Once everything is finished, azd will output the URL of the application. Open your web browser and navigate to the URL provided by the ACA instance on the screen to see the monolith app running in ACA.
+1. Once everything is finished, azd will output the URL of the application. Open your web browser and navigate to the URL provided by the ACA instance on the screen to see the monolith app running in ACA.
 
 ## Clean up the deployed resources
 
@@ -221,7 +188,7 @@ azd down --force --purge
 
 ## Learn more
 
-- There multiple ways to deploy your application to Azure. Learn how to [Deploy to ACA using the Azure CLI](./extra.md)
+- You can learn more about the Azure Developer CLI with [3 hands-on learning modules in Microsoft Learn](https://learn.microsoft.com/training/paths/azure-developer-cli/).
 
 ## Up next
 
