@@ -14,7 +14,7 @@ We'll be doing a lot of work from the command line in this lesson. You can use a
 
 You'll want to open the terminal and change directories to the base of where you cloned or downloaded this repository to.
 
-### Getting the repository root
+### Get the repository root
 
 > 📝**NOTE:**
 > 
@@ -99,7 +99,7 @@ Once you have the container image of the monolith app, you can run it in a conta
 
 1. Open your web browser and navigate to `http://localhost:8080` to see the monolith app running in a container. When you click on the **Products** menu item you should see the same products as when you ran the app locally.
 
-### Deploying the monolith application to ACA via the Azure Developer CLI (azd)
+### Deploy the monolith application to ACA via the Azure Developer CLI (azd)
 
 Once you're happy with the monolith app running in a container, you can deploy it to ACA through Azure Developer CLI (azd).
 
