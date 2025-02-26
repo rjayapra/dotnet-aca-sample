@@ -42,7 +42,7 @@ First off, let's run the application locally - without using a container, just t
 1. Change to this directory.
 
     ```bash
-    cd $REPOSITORY_ROOT/ep02
+    cd $REPOSITORY_ROOT/ep02/sample
     ```
 
 2. Build the app.
@@ -65,7 +65,7 @@ When the application launches in your web browser, click on the **Products** lin
 
 Now that we know the app runs locally, let's build a container image of it. We can use `docker build` to do that. Run the following command.
 
-> 🧐**INFO!**
+> 🧐**INFO:**
 > 
 > Make sure you have Docker running
 
@@ -106,10 +106,10 @@ Once you're happy with the monolith app running in a container, you can deploy i
 
 The [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/overview) is an open-source tool that accelerates provisioning and deploying app resources on Azure. It provides developer-friendly commands that map to key stages in your development workflow, whether you're working in the terminal, an integrated development environment (IDE), or through CI/CD pipelines. In other words, it makes working with your application and Azure services a lot easier.
 
-1. Make sure that you're in the `ep02` directory.
+1. Make sure that you're in the `ep02/sample` directory.
 
     ```bash
-    cd $REPOSITORY_ROOT/ep02
+    cd $REPOSITORY_ROOT/ep02/sample
     ```
 
 1. Initialize the Azure Developer CLI (azd) with the following command:
