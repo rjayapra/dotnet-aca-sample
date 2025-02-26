@@ -163,8 +163,7 @@ The [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/develope
    > 📝**NOTE:**
    > While executing this command, you'll be asked to provide the Azure subscription ID and location.
 
-1. As the Azure resources provision you'll a status that is similar to the following.
-
+1. As the Azure resources provision, you'll see a status similar to the following:
     ```bash
     (✓) Done: Resource group: rg-matt-feb25-1437 (1.907s)
     (✓) Done: Log Analytics workspace: log-jyplv7abrwvxa (17.594s)
