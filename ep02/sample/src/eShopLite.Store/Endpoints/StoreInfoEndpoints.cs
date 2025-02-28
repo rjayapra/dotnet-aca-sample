@@ -53,8 +53,6 @@ public static class StoreInfoEndpoints
                                        .SetProperty(m => m.City, storeInfo.City)
                                        .SetProperty(m => m.State, storeInfo.State)
                                        .SetProperty(m => m.Hours, storeInfo.Hours)
-                                       .SetProperty(m => m.Latitude, storeInfo.Latitude)
-                                       .SetProperty(m => m.Longitude, storeInfo.Longitude)
                                    );
             return affected == 1 ? Results.Ok() : Results.NotFound();
         })
