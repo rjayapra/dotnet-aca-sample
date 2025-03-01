@@ -1,73 +1,85 @@
-# EP04: Transforming Monolith App to MSA
+# Refactoring to microservices
 
-This sample app demonstrates how to transform a monolith app (Blazor web app) to microservice architecture (MSA) and deploy them to [Azure Container Apps (ACA)](https://learn.microsoft.com/azure/container-apps/overview).
+You've seen how you can run a monolith app in a container and deploy it to Azure Container Apps. In this chapter you'll learn how to refactor the monolith app into microservices and deploy them to Azure Container Apps.
 
 ## Prerequisites
 
 To run this sample app, make sure you have all the [prerequisites](../README.md#prerequisites).
 
-## Quick tour of the split solution
+## Quick tour of the microservices architecture
 
-We will break-down the current project into four smaller projects:
+One of the organizing principles of microservices is to break down a monolith into smaller, more manageable services. Each service should be responsible for a specific business capability and should be independently deployable. This allows for better scalability, maintainability, and flexibility in the development process.
 
-- `eShopLite.Store`: It's as the same name as in the previous monolith, but kept only the frontend components.
+We will split up our monolith app into four smaller projects (you can find all the code in the [sample directory](./sample/src/)):
+
+- `eShopLite.Store`: This has the same name as the monolith did, but now only contains the front-end components. It still is capable of calling the newly split out web APIs for products and store info.
 - `eShopLite.Products`: New web API project where the product API and databases are hosted
-- `eShopLite.Weather`: New web API project where the Weather API is hosted
-- `eShopLite.DataEntities`: New class library project for the data entities
+- `eShopLite.StoreInfo`: New web API project where the individual retail store info API and databases are hosted
+- `eShopLite.DataEntities`: New class library project for the data entities - this project is referenced from all of the other projects.
 
 ## Getting Started
 
-### Getting the Repository Root
+### Get the repository root
 
-To simplify the copy paste of the commands that sometimes required an absolute path, we will be using the variable `REPOSITORY_ROOT` to keep the path of the root folder where you cloned/ downloaded this repository. The command `git rev-parse --show-toplevel` returns that path.
+> 📝**NOTE:**
+> 
+> To simplify the copy paste of the commands that sometimes require an absolute path, we will be using the variable `REPOSITORY_ROOT` to keep the path of the root folder where you cloned/downloaded this repository. The command `git rev-parse --show-toplevel` returns that path.
+
+If you're running on a linux or Mac-based machine or are using bash, run the following:
 
 ```bash
-# Bazh/Zsh
+# bash/zsh
 REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
 ```
+
+Otherwise if you are using Windows and PowerShell, run this:
 
 ```powershell
 # PowerShell
 $REPOSITORY_ROOT = git rev-parse --show-toplevel
 ```
 
-### Running the Microservice Apps Locally
+### Run all the microservics locally
+
+Our end goal is to containerize all of these applications and deploy them to Azure Container Apps. But before we do that, let's run them locally to make sure everything is working as expected.
 
 To build and run this entire solution on your local machine, run the following commands in your terminal.
+
+1. Change to the current sample's directory.
+
+    ```bash
+    cd $REPOSITORY_ROOT/4-microservices/sample
+    ```
 
 1. Build the solution.
 
     ```bash
-    dotnet restore $REPOSITORY_ROOT/ep04 && dotnet build $REPOSITORY_ROOT/ep04
+    dotnet restore && dotnet build
     ```
 
-1. Open three terminals. Each terminal runs each project respectively.
+1. From the command line it can be a pain to start 3 projects individually. You can copy/paste one of these 2 scripts to help you.
 
+    **PowerShell**
+    ```powershell
+    Start-Process powershell -ArgumentList "dotnet run --project ./src/eShopLite.Products"
+    Start-Process powershell -ArgumentList "dotnet run --project ./src/eShopLite.StoreInfo"
+    Start-Process powershell -ArgumentList "dotnet run --project ./src/eShopLite.Store"
+    ```
+
+    _You'll probabably get a warning asking you if you want to paste multiple lines at once, just click yes. You'll also want to be sure to hit **ENTER** after the last line too._
+
+    **Bash**
     ```bash
-    # Terminal 1
-    cd $REPOSITORY_ROOT/ep04
-    dotnet watch run --project ./src/eShopLite.Products
+    dotnet run --project ./src/eShopLite.Products &
+    dotnet run --project ./src/eShopLite.StoreInfo &
+    dotnet run --project ./src/eShopLite.Store &
     ```
 
-    ```bash
-    # Terminal 2
-    cd $REPOSITORY_ROOT/ep04
-    dotnet watch run --project ./src/eShopLite.Weather
-    ```
-
-    ```bash
-    # Terminal 3
-    cd $REPOSITORY_ROOT/ep04
-    dotnet watch run --project ./src/eShopLite.Store
-    ```
-
-   > **NOTE**: If new terminals don't recognize `$REPOSITORY_ROOT` variable, run the command again to get the path.
-
-1. Alternatively, open your VS code at `ep04` and run the `Run all` profile, in the Run & Debug panel.
+**TODO: Add an image of the running app **
 
 ### Containerizing Microservice Apps
 
-Just like you learnt previously, you can containerize the each project in its own container. You have `Dockerfile.products`, `Dockerfile.weather` and `Dockerfile.store`. Each `Dockerfile` doesn't only copy its own project but also copies the `eShopLite.DataEntities` project to the container. This is because each `eShopLite.Products`, `eShopLite.Weather` and `eShopLite.Store` project depends on the `eShopLite.DataEntities` project.
+We've created `Dockerfile.products`, `Dockerfile.storeinfo` and `Dockerfile.store`. Each `Dockerfile` doesn't only copy its own project but also copies the `eShopLite.DataEntities` project to the container. This is because each `eShopLite.Products`, `eShopLite.Weather` and `eShopLite.Store` project depends on the `eShopLite.DataEntities` project.
 
 Here's the sample of the `Dockerfile.products` file:
 

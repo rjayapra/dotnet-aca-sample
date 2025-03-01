@@ -2,10 +2,10 @@
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 
-COPY ./src/eShopLite.Weather /source/eShopLite.Weather
+COPY ./src/eShopLite.StoreInfo /source/eShopLite.StoreInfo
 COPY ./src/eShopLite.DataEntities /source/eShopLite.DataEntities
 
-WORKDIR /source/eShopLite.Weather
+WORKDIR /source/eShopLite.StoreInfo
 
 RUN dotnet publish -c Release -o /app
 
@@ -17,4 +17,4 @@ COPY --from=build /app .
 
 USER $APP_UID
 
-ENTRYPOINT ["dotnet", "eShopLite.Weather.dll"]
+ENTRYPOINT ["dotnet", "eShopLite.StoreInfo.dll"]
