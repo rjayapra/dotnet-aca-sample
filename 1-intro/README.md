@@ -50,4 +50,4 @@ Azure offers many places to deploy your containerized apps—from App Service to
 
 Now let's get learning and dive into some code!
 
-👉 [Running a monolith app on ACA](../ep02/README.md)
+👉 [Running a monolith app on ACA](../2-monolith-on-aca/)
