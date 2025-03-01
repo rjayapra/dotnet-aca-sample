@@ -57,7 +57,7 @@ To build and run this entire solution on your local machine, run the following c
     dotnet restore && dotnet build
     ```
 
-1. From the command line it can be a pain to start 3 projects individually. You can copy/paste one of these 2 scripts to help you.
+1. From the command line it can be a pain to start 3 projects individually. To make things easier, you can copy/paste one of these 2 scripts to help you.
 
     **PowerShell**
     ```powershell
@@ -66,7 +66,9 @@ To build and run this entire solution on your local machine, run the following c
     Start-Process powershell -ArgumentList "dotnet run --project ./src/eShopLite.Store"
     ```
 
-    _You'll probabably get a warning asking you if you want to paste multiple lines at once, just click yes. You'll also want to be sure to hit **ENTER** after the last line too._
+    > 📝**NOTE:** You'll probabably get a warning asking you if you want to paste multiple lines at once, just click yes. 
+    >
+    > Also don't forget to hit **ENTER** after the last line in the original terminal window to run the last command.
 
     **Bash**
     ```bash
@@ -75,13 +77,21 @@ To build and run this entire solution on your local machine, run the following c
     dotnet run --project ./src/eShopLite.Store &
     ```
 
-**TODO: Add an image of the running app **
+1. A browser should open and display `http:localhost:5158`, if it doesn't, go ahead and navigate there. You should see the main eShopLite front-end website. And if you click on **Our Stores** or **Products** from the navigation menu, it will load the respective data from the microservices.
 
-### Containerizing Microservice Apps
+    ![A screeshot of eShopLite running locally with each of the microservices running in their own terminal windows overlayed on top of the website](./images/app-running-3-term.png)
 
-We've created `Dockerfile.products`, `Dockerfile.storeinfo` and `Dockerfile.store`. Each `Dockerfile` doesn't only copy its own project but also copies the `eShopLite.DataEntities` project to the container. This is because each `eShopLite.Products`, `eShopLite.Weather` and `eShopLite.Store` project depends on the `eShopLite.DataEntities` project.
+## Containerizing the microservices
 
-Here's the sample of the `Dockerfile.products` file:
+We've created 3 Dockerfiles for you that take care of containerizing its respective microservice application: **Dockerfile.products**, **Dockerfile.storeinfo** and **Dockerfile.store**. 
+
+### Exploring the Dockerfiles
+
+The Docker files are located directly under the `/sample` directory.
+
+Open up any one of the Dockerfiles. You'll see that it copies both its own project and the **eShopLite.DataEntities** project to the container. This is because each top-level microservice projects depend on **eShopLite.DataEntities** project.
+
+Here's a sample from the **Dockerfile.products** file:
 
 ```dockerfile
 ...
@@ -90,22 +100,42 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 
 COPY ./src/eShopLite.Products /source/eShopLite.Products
 COPY ./src/eShopLite.DataEntities /source/eShopLite.DataEntities
+# any other project dependencies would be listed here as well
 
 ...
 ```
 
-1. Move to the `ep04` directory.
+Another interesting thing to note is the **Dockerfile.storeinfo** and **Dockerfile.products** both create an empty file that will eventually hold their respective SQLite database.
+
+```dockerfile
+
+...
+
+RUN touch /app/StoreInfo.db
+# or RUN touch /app/Products.db for the Dockerfile.products
+
+...
+
+```
+
+The rest of the Dockerfile is pretty standard. It builds the project and specifies and entrypoint to the applications.
+
+### Updating where the front-end finds the APIs
+
+The front-end application (eShopLite.Store) needs to know where to find the APIs for products and store info. Before it was using the launch URLs from the API's **launchSettings.json** file, but now that we are running the APIs in separate containers, we need to update the URLs to point to the correct container names.
+
+1. Move to the **eShopLite.Store** directory.
 
     ```bash
-    cd $REPOSITORY_ROOT/ep04
+    cd $REPOSITORY_ROOT/4-microservices/sample/src/eShopLite.Store
     ```
 
-1. Open `src/eShopLite.Store/appsettings.json` and update the `ProductsApi` and `WeatherApi` URLs to point to the new API endpoints. The URLs should be as follows:
+1. Open **appsettings.json** and update the `ProductsApi` and `StoreInfoApi` URLs to point to the new API endpoints. The URLs should be as follows:
 
     ```json
     {
       "ProductsApi": "http://products:8080",
-      "WeatherApi": "http://weather:8080"
+      "StoreInfoApi": "http://storeinfo:8080"
     }
     ```
 
@@ -113,7 +143,7 @@ COPY ./src/eShopLite.DataEntities /source/eShopLite.DataEntities
 
     ```bash
     docker build -t eshoplite-products:latest  -f ./Dockerfile.products .
-    docker build -t eshoplite-weather:latest  -f ./Dockerfile.weather .
+    docker build -t eshoplite-storeinfo:latest  -f ./Dockerfile.storeinfo .
     docker build -t eshoplite-store:latest  -f ./Dockerfile.store .
     ```
 

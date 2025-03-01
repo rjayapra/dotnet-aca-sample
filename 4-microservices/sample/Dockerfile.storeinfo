@@ -2,10 +2,10 @@
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 
-COPY ./src/eShopLite.Products /source/eShopLite.Products
+COPY ./src/eShopLite.StoreInfo /source/eShopLite.StoreInfo
 COPY ./src/eShopLite.DataEntities /source/eShopLite.DataEntities
 
-WORKDIR /source/eShopLite.Products
+WORKDIR /source/eShopLite.StoreInfo
 
 RUN dotnet publish -c Release -o /app
 
@@ -19,6 +19,6 @@ RUN chown $APP_UID /app
 
 USER $APP_UID
 
-RUN touch /app/Products.db
+RUN touch /app/StoreInfo.db
 
-ENTRYPOINT ["dotnet", "eShopLite.Products.dll"]
+ENTRYPOINT ["dotnet", "eShopLite.StoreInfo.dll"]
