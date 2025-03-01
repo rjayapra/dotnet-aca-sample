@@ -120,104 +120,42 @@ RUN touch /app/StoreInfo.db
 
 The rest of the Dockerfile is pretty standard. It builds the project and specifies and entrypoint to the applications.
 
-### Updating where the front-end finds the APIs
+## Deploying to ACA via azd
 
-The front-end application (eShopLite.Store) needs to know where to find the APIs for products and store info. Before it was using the launch URLs from the API's **launchSettings.json** file, but now that we are running the APIs in separate containers, we need to update the URLs to point to the correct container names.
+Our next steps then to get our refactored eShopLite microservice-based application out into world is to deploy it to Azure Container Apps. We'll use the Azure Developer CLI (azd) to do this.
 
-1. Move to the **eShopLite.Store** directory.
+### Initializing the solution for azd
 
-    ```bash
-    cd $REPOSITORY_ROOT/4-microservices/sample/src/eShopLite.Store
-    ```
-
-1. Open **appsettings.json** and update the `ProductsApi` and `StoreInfoApi` URLs to point to the new API endpoints. The URLs should be as follows:
-
-    ```json
-    {
-      "ProductsApi": "http://products:8080",
-      "StoreInfoApi": "http://storeinfo:8080"
-    }
-    ```
-
-1. Build the container image using Docker CLI.
+1. Make sure that you're in this chapter's sample directory.
 
     ```bash
-    docker build -t eshoplite-products:latest  -f ./Dockerfile.products .
-    docker build -t eshoplite-storeinfo:latest  -f ./Dockerfile.storeinfo .
-    docker build -t eshoplite-store:latest  -f ./Dockerfile.store .
+    cd $REPOSITORY_ROOT/4-microservices/sample
     ```
 
-### Running the Microservice Apps in Containers
-
-Once you have all the container images of for the microservice apps, you can run them in containers.
-
-1. Create a network for the containers to communicate with each other.
-
-    ```bash
-    docker network create eshop-net
-    ```
-
-1. Run the following commands to run the microservice apps in containers.
-
-    ```bash
-    docker run -d -p 5228:8080 --network eshop-net --network-alias products --name products eshoplite-products:latest
-    docker run -d -p 5151:8080 --network eshop-net --network-alias weather --name weather eshoplite-weather:latest
-    docker run -d -p 5158:8080 --network eshop-net --network-alias store --name store eshoplite-store:latest
-    ```
-
-1. Open your browser and navigate to the eShopLite website at `http://localhost:5158` and navigate to the `/weather` and `/products` pages.
-
-1. Run the following commands to stop the containers.
-
-    ```bash
-    docker stop store weather products
-    docker rm store weather products --force
-    docker rmi eshoplite-store:latest eshoplite-weather:latest eshoplite-products:latest --force
-    docker network rm eshop-net --force
-    ```
-
-1. Alternatively, you can use Docker Compose to orchestrate the containers. Looking at the `docker-compose.yml` file you will see that we are defining the services for each project. We also created **links** between the services to make it easier for eshoplite-store reach the other services.
-
-    ```bash
-    docker compose up --build -d
-    ```
-
-   > **NOTE**: Make sure to update the `appsettings.json` file in the `eShopLite.Store` project to point to the new API endpoints.
-   >
-   > ```json
-   > {
-   >   "ProductsApi": "http://products:8080",
-   >   "WeatherApi": "http://weather:8080"
-   > }
-   > ```
-
-1. Open your browser and navigate to the eShopLite website at `http://localhost:5158` and navigate to the `/weather` and `/products` pages.
-
-1. Run the following commands to stop the containers.
-
-    ```bash
-    docker compose down --rmi local
-    ```
-
-### Deploying the Microservice Apps to ACA via Azure Developer CLI (AZD)
-
-Once you're happy with the microservice apps running in a container, you can deploy it to ACA through Azure Developer CLI (AZD).
-
-1. Make sure that you're in the `ep04` directory.
-
-    ```bash
-    cd $REPOSITORY_ROOT/ep04
-    ```
-
-1. Initialize the Azure Developer CLI (azd) in the current directory.
+1. Initialize the Azure Developer CLI (azd) with the following command:
 
     ```bash
     azd init
     ```
 
-   > During initialization, you'll be asked to provide the environment name.
+1. You'll be prompted **How do you want to initialize your app?** 
 
-1. Once the initialization is complete, update the `azure.yaml` file with the Docker settings to use ACR remote build.
+    > Choose **Use code in the current directory**. 
+
+1. azd will scan the directory and find projects that are available to deploy. Once it completes its scan you should see output similar to the following:
+
+    ```bash
+    azd will generate the files necessary to host your app on Azure using Azure Container Apps.
+    ```
+
+    > Select **Confirm and continue initializing my app**.
+
+1. You'll now be asked to provide the environment name. This can be whatever you want and serves as a unique identifier for a specific deployment. It's also used to prefix all the Azure resources created as part of your deployment.
+
+  > 📝**NOTE:**
+  > Pick a different name than you did in the second chapter. This is just to be safe and make sure we don't run into any naming collisions.
+  
+1. Once the initialization is complete, there will be several new files created. One of them is named **azure.yaml** and will be found directly under the **sample** directory. We will need to update that file with the Docker settings to use Azure Container Registry remote build.
 
     ```yaml
     name: ep04
@@ -244,33 +182,19 @@ Once you're happy with the microservice apps running in a container, you can dep
           context: ../../
           remoteBuild: true
         # 👆👆👆 Add the docker settings above
-      eshoplite-weather:
-        project: src/eShopLite.Weather
+      eshoplite-storeinfo:
+        project: src/eShopLite.StoreInfo
         host: containerapp
         language: dotnet
         # 👇👇👇 Add the docker settings below
         docker:
-          path: ../../Dockerfile.weather
+          path: ../../Dockerfile.storeinfo
           context: ../../
           remoteBuild: true
         # 👆👆👆 Add the docker settings above
     ```
 
-1. Because the .NET container app uses the target port number of `8080`, you need to update the `infra/resources.bicep` file to use the correct target port number. This time, you have three ACA instances: `eshoplite-products`, `eshoplite-store` and `eshoplite-weather`. Therefore, you will have to update three locations of the `ingressTargetPort` and `PORT` values.
-
-    ```bicep
-    ...
-     // ingressTargetPort: 80
-     ingressTargetPort: 8080
-    ...
-        {
-            name: 'PORT'
-            // value: '80'
-            value: '8080'
-        }
-    ```
-
-1. Also the Store app should be able to discover both Products and Weather APIs. Therefore, also update the `infra/resources.bicep` for the service discovery.
+1. We need to make sure the **eShopLite.Store** frontend has the correct URLs to call both backend web APIs. The **infra/resources.bicep** lets us specify URLs for service discovery. Add the environment variables below the `eshopliteStore` module definition.
 
     ```bicep
     module eshopliteStore 'br/public:avm/res/app/container-app:0.8.0' = {
@@ -295,8 +219,8 @@ Once you're happy with the microservice apps running in a container, you can dep
                 value: 'https://${eshopliteProducts.outputs.fqdn}'
               }
               {
-                name: 'WeatherApi'
-                value: 'https://${eshopliteWeather.outputs.fqdn}'
+                name: 'StoreInfoApi'
+                value: 'https://${eshopliteStoreinfo.outputs.fqdn}'
               }
               // 👆👆👆 Add the environment variables above
             ],
@@ -312,12 +236,30 @@ Once you're happy with the microservice apps running in a container, you can dep
 
    > While executing this command, you'll be asked to provide the Azure subscription ID and location.
 
-1. Open your web browser and navigate to the URLs provided by the ACA instances on the screen to see the microservice apps running in ACA.
+1. It may take several minutes, but eventually you will get a message that all the resources have been deployed.
+
+  ![A screenshot of the final azd up output showing the URLs of the deployed microservices](./images/successful-deploy.png)
+
+1. Open your web browser and navigate to the URL indicated for **eshop-store** in the output. You should see the eShopLite frontend running in Azure Container Apps.
+
+1. If you browse to the Azure portal and open up the Container Apps Environment that was created from as part of this provisioning process, you will see all 3 microservice applications.
+
+  ![A screenshot of the Azure portal showing the 3 microservices running in Azure Container Apps](./images/container-apps-in-cae.png)
 
 ## Clean up the deployed resources
 
-To clean up the resources, run the following command:
+You are running in Azure and depending on your subscription may be incurring costs. Run the following command to delete everything you just provisioned.
 
 ```bash
 azd down --force --purge
 ```
+
+## Learn more
+
+** ADD LEARN MORE LINKS HERE **
+
+## Up next
+
+Every time you make a change to your application, you could run `azd up` to redeploy it. That would work, but it would be better if you had a CI/CD pipeline that would automatically redeploy for you, and that's what we'll learn about in the next chapter.
+
+👉[CI/CD with GitHub Actions](../ep05/README.md)
