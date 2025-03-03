@@ -487,3 +487,7 @@ $RECYCLE.BIN/
 Database.*
 StoreInfo.*
 .vscode/settings.json
+StoreInfo.db
+Products.db
+StoreInfo.db.*
+Products.db.*

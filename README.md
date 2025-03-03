@@ -21,10 +21,10 @@ To run the sample apps, you need the following tools installed on your machine:
 
 ## Getting Started
 
-- [EP01: Introduction of ACA for .NET Developers](./ep01)
-- [EP02: Monolith App on ACA](./ep02)
+- [Chapter 1: All of the container services on Azure - and where ACA fits in](./1-intro)
+- [Chapter 2: Running a monolith on ACA](./2-monolith-on-aca/)
 - [EP03: Authenticating App on ACA](./ep03)
-- [EP04: Transforming Monolith App to MSA](./ep04)
+- [Chapter 4: Refactoring to microservices](./4-microservices/)
 - [EP05: Implementing CI/CD Pipeline for ACA](./ep05)
 - [EP06: Cost Optimization for ACA](./ep06)
 - [EP07: Monitoring ACA](./ep07)
