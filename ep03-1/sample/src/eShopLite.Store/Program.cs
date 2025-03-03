@@ -2,6 +2,7 @@ using eShopLite.Store.ApiClients;
 using eShopLite.Store.Components;
 using eShopLite.Store.Endpoints;
 using eShopLite.Store.Extensions;
+using eShopLite.Store.Handlers;
 using eShopLite.Store.ProductData;
 using eShopLite.Store.Services;
 
@@ -41,6 +42,10 @@ builder.Services.AddHttpClient<WeatherApiClient>(client =>
     client.BaseAddress = new("http://localhost:8080");
 });
 
+builder.Services.AddAuthentication(EasyAuthAuthenticationHandler.EASY_AUTH_SCHEME_NAME)
+                .AddAzureEasyAuthHandler();
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -68,5 +73,8 @@ app.MapProductEndpoints();
 app.MapWeatherEndpoints();
 
 app.CreateDbIfNotExists();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();

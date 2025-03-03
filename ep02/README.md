@@ -60,7 +60,7 @@ When the application launches in your web browser, click on the **Products** lin
 
 ![Screenshot of the monolith application running locally showing a list of products](./images/local-app.png)
 
-### Containerizing the Monolith App
+### Containerize the Monolith App
 
 Now that we know the app runs locally, let's build a container image of it. We can use `docker build` to do that. Run the following command.
 
@@ -74,7 +74,7 @@ Now that we know the app runs locally, let's build a container image of it. We c
     docker build -f ./Dockerfile.store -t eshoplite-store:latest .
     ```
 
-### Running the Monolith App in a Container
+### Run the Monolith App in a Container
 
 Once you have the container image of the monolith app, you can run it in a container.
 
@@ -103,7 +103,7 @@ Once you have the container image of the monolith app, you can run it in a conta
 
 Once you're happy with the monolith app running in a container, you can deploy it to ACA through Azure Developer CLI (azd).
 
-The [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/overview) is an open-source tool that accelerates provisioning and deploying app resources on Azure. It provides developer-friendly commands that map to key stages in your development workflow, whether you're working in the terminal, an integrated development environment (IDE), or through CI/CD pipelines. In other words, it makes working with your application and Azure services a lot easier.
+The [Azure Developer CLI (azd)](https://learn.microsoft.com/azure/developer/azure-developer-cli/overview) is an open-source tool that accelerates provisioning and deploying app resources on Azure. It provides developer-friendly commands that map to key stages in your development workflow, whether you're working in the terminal, an integrated development environment (IDE), or through CI/CD pipelines. In other words, it makes working with your application and Azure services a lot easier.
 
 1. Make sure that you're in the `ep02/sample` directory.
 
@@ -164,6 +164,7 @@ The [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/develope
    > While executing this command, you'll be asked to provide the Azure subscription ID and location.
 
 1. As the Azure resources provision, you'll see a status similar to the following:
+
     ```bash
     (✓) Done: Resource group: rg-matt-feb25-1437 (1.907s)
     (✓) Done: Log Analytics workspace: log-jyplv7abrwvxa (17.594s)
