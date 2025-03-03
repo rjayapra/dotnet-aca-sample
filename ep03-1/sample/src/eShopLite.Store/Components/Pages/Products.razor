@@ -1,7 +1,9 @@
 ﻿@page "/products"
 @using eShopLite.Store.DataEntities
 @using eShopLite.Store.ApiClients
+@using Microsoft.AspNetCore.Authorization
 @attribute [StreamRendering]
+@attribute [Authorize(AuthenticationSchemes = "EasyAuth")]
 @inject ProductApiClient ProductApi
 
 <PageTitle>Products</PageTitle>

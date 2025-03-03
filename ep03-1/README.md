@@ -1,17 +1,19 @@
-# EP03.1: Authenticating App on ACA &ndash; Extra
+# Extending authentication and authorization on ACA
 
-This section is totally optional and demonstrates a more advance technique to extend the [authentication and authorization feature](https://learn.microsoft.com/azure/container-apps/authentication) for [Azure Container Apps (ACA)](https://learn.microsoft.com/azure/container-apps/overview).
+The built-in [EasyAuth feature](https://learn.microsoft.com/azure/container-apps/authentication) for [Azure Container Apps (ACA)](https://learn.microsoft.com/azure/container-apps/overview) only takes care of your application being protected from unauthenticated visitors. However, in many cases, you want to allow visitors at least to see the landing page without having to login, while the other pages remain protected.
+
+This requires you to add some codes for authorization. Let's dig deeper how to augment the built-in EasyAuth feature with applying authorization to individual pages.
 
 ## Prerequisites
 
-You have done and completed the [ep03](../ep03/README.md) content.
+You have done and completed the [previous episode](../ep03/README.md) that explains the built-in EasyAuth feature.
 
 ### Getting the repository root
 
 Initialize the variable `REPOSITORY_ROOT` in your preferred terminal.
 
 ```bash
-# Bazh/Zsh
+# bazh/zsh
 REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
 ```
 
@@ -20,93 +22,22 @@ REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
 $REPOSITORY_ROOT = git rev-parse --show-toplevel
 ```
 
-## Allowing Anonymous Access to ACA
+### Deploy the application to ACA via Azure Developer CLI (AZD)
 
-1. Make sure that you're in the `ep03-1` directory.
-
-    ```bash
-    cd $REPOSITORY_ROOT/ep03-1
-    ```
-
-1. Open `infra/resources.bicep` and find the module that calls `modules/containerapps-authconfigs.bicep`. Change the `unauthenticatedClientAction` value from `RedirectToLoginPage` to `AllowAnonymous`. This change allows users to access to the entire ACA app without having to sign-in.
-
-    ```bicep
-    module eshopLiteStoreAuthConfig './modules/containerapps-authconfigs.bicep' = {
-      name: 'eshopLiteStoreAuthConfig'
-      params: {
-        containerAppName: eshopLiteStore.outputs.name
-        managedIdentityName: eshopLiteStoreIdentity.outputs.name
-        storageAccountName: storageAccount.outputs.name
-        clientId: appRegistration.outputs.appId
-        openIdIssuer: issuer
-    
-        // 👇👇👇 Remove the line below
-        unauthenticatedClientAction: 'RedirectToLoginPage'
-        // 👆👆👆 Remove the line above
-    
-        // 👇👇👇 Add the line below
-        unauthenticatedClientAction: 'AllowAnonymous'
-        // 👆👆👆 Add the line above
-      }
-    }
-    ```
-
-## Extending Authorization for ACA
-
-Once you have the built-in authentication feature enabled on ACA, you will have the `x-ms-client-principal` header in every request. You will have to convert this header to ASP.NET Core's `ClaimsPrincipal` to authorize the user.
-
-1. Make sure that you're in the `ep03-1` directory.
+1. Make sure that you're in the `ep03-1/sample` directory.
 
     ```bash
-    cd $REPOSITORY_ROOT/ep03-1
+    cd $REPOSITORY_ROOT/ep03-1/sample
     ```
 
-1. Open the `src/eShopLite.Store/Program.cs` file and find the `var app = builder.Build();` line. Then, add the following code just above it.
-
-    ```csharp
-    builder.Services.AddAuthentication(EasyAuthAuthenticationHandler.EASY_AUTH_SCHEME_NAME)
-                    .AddAzureEasyAuthHandler();
-    builder.Services.AddAuthorization();
-    ```
-
-   > **NOTE**: You might be asked to add the `using eShopLite.Store.Handlers;` line at the top of the file.
-
-1. In the same `src/eShopLite.Store/Program.cs` file, find the `app.Run();` line and add the following code just above it.
-
-    ```csharp
-    app.UseAuthentication();
-    app.UseAuthorization();
-    ```
-
-1. Open the `src/eShopLite.Store/Components/Pages/Products.razor` file and add the following codes.
-
-    ```razor
-    @page "/products"
-    
-    @* 👇👇👇 Add the line below *@
-    @using Microsoft.AspNetCore.Authorization
-    @* 👆👆👆 Add the line above *@
-    
-    ...
-    
-    @* 👇👇👇 Add the line below *@
-    @attribute [Authorize(AuthenticationSchemes = "EasyAuth")]
-    @* 👆👆👆 Add the line above *@
-    ```
-
-### Deploying the Updated App to ACA via Azure Developer CLI (AZD)
-
-1. Make sure that you're in the `ep03-1` directory.
-
-    ```bash
-    cd $REPOSITORY_ROOT/ep03-1
-    ```
-
-1. With all changes, run the following command to update the existing app on ACA.
+1. Run the following command to deploy a new application to ACA.
 
     ```bash
     azd up
     ```
+
+   > 📝**NOTE:**
+   > While executing this command, you'll be asked to provide the Azure subscription ID and location.
 
 1. Open your web browser and navigate to the URL provided by the ACA instance on the screen to see the monolith app running in ACA.
 1. You'll see the landing page. Navigate to the `/products` and see the `401 Unauthorized` error.
@@ -121,6 +52,14 @@ Once you have the built-in authentication feature enabled on ACA, you will have 
    ![Landing page - after login](./images/ep03-1-03.png)
 
 1. Navigate to the `/products` page again. You should see the list of products.
+
+### What's happening?
+
+There's a magic behind. After enabling the built-in EasyAuth feature, your sign-in details are securely stored. Every time you navigate pages, the access token is passed through the request header, `x-ms-client-principal` so that the Blazor app recognizes you are the authenticated user. However, as this access token is different from what the Blazor application understands, the application doesn't know how to apply authorization. Therefore, the access token should be converted for the Blazor app to understand.
+
+There's a custom handler code for the conversion, called `EasyAuthAuthenticationHandler`. It reads the access token from `x-ms-client-principal` and converts it to the `ClaimsPrincipal` instance so that the Blazor app now finally understands how to apply authorization for each page.
+
+If you want to deep further, please analyze this handler code: [https://github.com/Azure-Samples/dotnet-on-aca-for-beginners/blob/main/ep03-1/sample/src/eShopLite.Store/Handlers/EasyAuthAuthenticationHandler.cs](https://github.com/Azure-Samples/dotnet-on-aca-for-beginners/blob/main/ep03-1/sample/src/eShopLite.Store/Handlers/EasyAuthAuthenticationHandler.cs).
 
 ## Clean up the deployed resources
 

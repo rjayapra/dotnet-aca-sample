@@ -2,8 +2,10 @@ using eShopLite.Store.ApiClients;
 using eShopLite.Store.Components;
 using eShopLite.Store.Endpoints;
 using eShopLite.Store.Extensions;
+using eShopLite.Store.Handlers;
 using eShopLite.Store.ProductData;
 using eShopLite.Store.Services;
+using eShopLite.Store.StoreInfoData;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +29,12 @@ builder.Services.AddDbContext<ProductDbContext>(options =>
     options.UseSqlite(connectionString);
 });
 
+builder.Services.AddDbContext<StoreInfoDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("StoreInfoContext") ?? throw new InvalidOperationException("Connection string 'StoreInfoContext' not found.");
+    options.UseSqlite(connectionString);
+});
+
 // Add razor components
 builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
@@ -36,10 +44,14 @@ builder.Services.AddHttpClient<ProductApiClient>(client =>
 {
     client.BaseAddress = new("http://localhost:8080");
 });
-builder.Services.AddHttpClient<WeatherApiClient>(client =>
+builder.Services.AddHttpClient<StoreInfoApiClient>(client =>
 {
     client.BaseAddress = new("http://localhost:8080");
 });
+
+builder.Services.AddAuthentication(EasyAuthAuthenticationHandler.EASY_AUTH_SCHEME_NAME)
+                .AddAzureEasyAuthHandler();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -65,8 +77,12 @@ app.MapRazorComponents<App>()
    .AddInteractiveServerRenderMode();
 
 app.MapProductEndpoints();
-app.MapWeatherEndpoints();
+app.MapStoreInfoEndpoints();
 
-app.CreateDbIfNotExists();
+app.CreateProductDbIfNotExists();
+app.CreateStoreInfoDbIfNotExists();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
