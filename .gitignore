@@ -485,4 +485,5 @@ $RECYCLE.BIN/
 
 # Repository-specific
 Database.*
+StoreInfo.*
 .vscode/settings.json
