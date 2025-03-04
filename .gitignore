@@ -484,8 +484,6 @@ $RECYCLE.BIN/
 *.swp
 
 # Repository-specific
-Database.*
-StoreInfo.*
 .vscode/settings.json
 StoreInfo.db
 Products.db

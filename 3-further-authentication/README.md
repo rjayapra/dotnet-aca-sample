@@ -6,7 +6,7 @@ This requires you to add some codes for authorization. Let's dig deeper how to a
 
 ## Prerequisites
 
-You have done and completed the [previous episode](../ep03/README.md) that explains the built-in EasyAuth feature.
+You have done and completed the [previous episode](../3-authentication/README.md) that explains the built-in EasyAuth feature.
 
 ### Getting the repository root
 
@@ -24,10 +24,10 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 
 ### Deploy the application to ACA via Azure Developer CLI (AZD)
 
-1. Make sure that you're in the `ep03-1/sample` directory.
+1. Make sure that you're in the `3-further-authentication/sample` directory.
 
     ```bash
-    cd $REPOSITORY_ROOT/ep03-1/sample
+    cd $REPOSITORY_ROOT/3-further-authentication/sample
     ```
 
 1. Run the following command to deploy a new application to ACA.
@@ -43,13 +43,15 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 1. You'll see the landing page. Navigate to the `/products` and see the `401 Unauthorized` error.
 1. Navigate back to the landing page. At the top-right corner, click the **Login** button to see the built-in authentication feature of ACA in action.
 
-   ![Landing page - before login](./images/ep03-1-01.png)
+   ![Landing page - before login](./images/landing-page-before-login.png)
 
-   You will be redirected to the Microsoft Entra ID login page.
+   You will be redirected to the Microsoft Entra ID login page with Entra ID consent.
+
+   ![Entra ID consent](./images/entraid-consent.png)
 
    After successful login, you will be redirected back to the monolith app.
 
-   ![Landing page - after login](./images/ep03-1-03.png)
+   ![Landing page - after login](./images/landing-page-after-login.png)
 
 1. Navigate to the `/products` page again. You should see the list of products.
 
@@ -68,3 +70,7 @@ To clean up the resources, run the following command:
 ```bash
 azd down --force --purge
 ```
+
+## Optional Learning
+
+- [Azure EasyAuth Extensions](https://github.com/aliencube/azure-easyauth-extensions): Community contributions for Azure EasyAuth handler library

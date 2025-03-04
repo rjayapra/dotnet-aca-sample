@@ -41,7 +41,7 @@ First off, let's run the application locally - without using a container, just t
 1. Change to this directory.
 
     ```bash
-    cd $REPOSITORY_ROOT/ep02/sample
+    cd $REPOSITORY_ROOT/2-monolith-on-aca/sample
     ```
 
 2. Build the app.
@@ -105,10 +105,10 @@ Once you're happy with the monolith app running in a container, you can deploy i
 
 The [Azure Developer CLI (azd)](https://learn.microsoft.com/azure/developer/azure-developer-cli/overview) is an open-source tool that accelerates provisioning and deploying app resources on Azure. It provides developer-friendly commands that map to key stages in your development workflow, whether you're working in the terminal, an integrated development environment (IDE), or through CI/CD pipelines. In other words, it makes working with your application and Azure services a lot easier.
 
-1. Make sure that you're in the `ep02/sample` directory.
+1. Make sure that you're in the `2-monolith-on-aca/sample` directory.
 
     ```bash
-    cd $REPOSITORY_ROOT/ep02/sample
+    cd $REPOSITORY_ROOT/2-monolith-on-aca/sample
     ```
 
 1. Initialize the Azure Developer CLI (azd) with the following command:
@@ -138,7 +138,7 @@ The [Azure Developer CLI (azd)](https://learn.microsoft.com/azure/developer/azur
 
     ```yaml
     # azure.yaml
-    name: ep02
+    name: 2-monolith-on-aca
     metadata:
       template: azd-init@1.11.0
     services:
@@ -194,4 +194,4 @@ azd down --force --purge
 
 Authentication and authorization are topics that are easy in concept, but can be difficult to implement. In the next chapter we'll learn how to implement AuthN/AuthZ with Azure Container Apps.
 
-👉[Authentication on Azure Container Apps](../ep03/README.md)
+👉[Authentication on Azure Container Apps](../3-authentication)

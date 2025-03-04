@@ -6,11 +6,11 @@ Let's see how you can do it with a few mouse clicks!
 
 ## Prerequisites
 
-For this episode, we will be using the app deployed from the [previous episode](../ep02/README.md). Note that no code needs to be changed to add this authentication feature.
+For this episode, we will be using the app deployed from the [previous episode](../2-monolith-on-aca/README.md). Note that no code needs to be changed to add this authentication feature.
 
 ## Secure the app in a few clicks
 
-The app is now deployed, but it's not secure. Navigate to the [Azure Portal](https://portal.azure.com/), and find the Resource Group you just deployed (e.g., rg-ep02). In this resource group, open the `Container Apps Environment`.
+The app is now deployed, but it's not secure. Navigate to the [Azure Portal](https://portal.azure.com/), and find the Resource Group you just deployed (e.g., rg-monolith-on-aca). In this resource group, open the `Container Apps Environment`.
 
 ![select the Container Apps Environment](./images/container_app_env.png)
 
@@ -53,7 +53,7 @@ For more details about the built-in authentication feature of ACA, see [Authenti
 
 ## Optional Learning
 
-- [Extend the authentication and authorization feature for Azure Container Apps](../ep03-1/README.md)
+- [Extend the authentication and authorization feature for Azure Container Apps](../3-further-authentication)
 - [Authentication and authorization in Azure Container Apps](https://learn.microsoft.com/azure/container-apps/authentication)
 - [Enable authentication and authorization in Azure Container Apps with Microsoft Entra ID](https://learn.microsoft.com/azure/container-apps/authentication-entra)
 
@@ -69,5 +69,5 @@ azd down --force --purge
 
 Learn how the Monolith application can be break down into microservices and deployed to ACA. 
 
-👉[EP04: Deploying App on ACA with Azure SQL](../ep04/README.md)
+👉[4: Deploying App on ACA with Azure SQL](../4-microservices)
 
