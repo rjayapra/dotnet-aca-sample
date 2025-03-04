@@ -2,11 +2,11 @@
 
 The built-in [EasyAuth feature](https://learn.microsoft.com/azure/container-apps/authentication) for [Azure Container Apps (ACA)](https://learn.microsoft.com/azure/container-apps/overview) only takes care of your application being protected from unauthenticated visitors. However, in many cases, you want to allow visitors at least to see the landing page without having to login, while the other pages remain protected.
 
-This requires you to add some codes for authorization. Let's dig deeper how to augment the built-in EasyAuth feature with applying authorization to individual pages.
+This requires you to add some code for authorization. Let's dig deeper how to augment the built-in EasyAuth feature with applying authorization to individual pages.
 
 ## Prerequisites
 
-You have done and completed the [previous episode](../ep03/README.md) that explains the built-in EasyAuth feature.
+You have done and completed the [previous chapter](../3-authentication/) that explains the built-in EasyAuth feature.
 
 ### Getting the repository root
 
@@ -24,13 +24,16 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 
 ### Deploy the application to ACA via Azure Developer CLI (AZD)
 
-1. Make sure that you're in the `ep03-1/sample` directory.
+> 📝**NOTE**: If you already have an environment from a previous chapter, you can skip this part on deployment.
+> 
+
+1. Make sure that you're in the **3-opt-fine-grained-auth** directory.
 
     ```bash
-    cd $REPOSITORY_ROOT/ep03-1/sample
+    cd $REPOSITORY_ROOT/3-opt-fine-grained-auth/sample
     ```
 
-1. Run the following command to deploy a new application to ACA.
+1. Run the following command to deploy a new application to ACA. (We've already provided all the bicep and infrastructure files you need.)
 
     ```bash
     azd up
@@ -39,9 +42,12 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
    > 📝**NOTE:**
    > While executing this command, you'll be asked to provide the Azure subscription ID and location.
 
-1. Open your web browser and navigate to the URL provided by the ACA instance on the screen to see the monolith app running in ACA.
-1. You'll see the landing page. Navigate to the `/products` and see the `401 Unauthorized` error.
-1. Navigate back to the landing page. At the top-right corner, click the **Login** button to see the built-in authentication feature of ACA in action.
+### Explore the fine-grained authentication
+
+1. Open your web browser and navigate to your application (either provided by the azd output or obtained via the Azure Portal).
+2. You'll see the landing page. 
+3. Navigate to the `/products` and see the `401 Unauthorized` error.
+4. Navigate back to the landing page. At the top-right corner, click the **Login** button to see the built-in authentication feature of ACA in action.
 
    ![Landing page - before login](./images/ep03-1-01.png)
 
@@ -51,7 +57,7 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 
    ![Landing page - after login](./images/ep03-1-03.png)
 
-1. Navigate to the `/products` page again. You should see the list of products.
+5. Navigate to the `/products` page again. You should see the list of products.
 
 ### What's happening?
 

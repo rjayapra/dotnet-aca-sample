@@ -180,7 +180,7 @@ The [Azure Developer CLI (azd)](https://learn.microsoft.com/azure/developer/azur
 
 ## Clean up the deployed resources
 
-You are running in Azure and depending on your subscription may be incurring costs. Run the following command to delete everything you just provisioned.
+You are running in Azure and depending on your subscription may be incurring costs. Run the following command to delete everything you just provisioned. (But if you plan on going right to Chapter 3 - you can skip this part!)
 
 ```bash
 azd down --force --purge
