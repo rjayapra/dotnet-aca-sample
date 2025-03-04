@@ -1,0 +1,46 @@
+
+version: '3.4'
+
+name: eshoplite
+services:
+
+  eshoplite-products:
+    image: eshoplite-products
+    container_name: eshoplite-products
+    hostname: products
+    build:
+      context: .
+      dockerfile: ./Dockerfile.products
+    networks:
+      - eshop-net
+
+  eshoplite-storeinfo:
+    image: eshoplite-storeinfo
+    container_name: eshoplite-storeinfo
+    hostname: storeinfo
+    build:
+      context: .
+      dockerfile: ./Dockerfile.storeinfo
+    networks:
+      - eshop-net
+      
+  eshoplite-store:
+    image: eshoplite-store
+    container_name: eshoplite-store
+    hostname: store
+    build:
+      context: .
+      dockerfile: ./Dockerfile.store
+    ports:
+      - 5158:8080
+    links:
+      - eshoplite-products:products
+      - eshoplite-storeinfo:storeinfo
+    depends_on:
+      - eshoplite-products
+      - eshoplite-storeinfo
+    networks:
+      - eshop-net
+
+networks:
+  eshop-net:
