@@ -46,31 +46,51 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 
 1. Open your web browser and navigate to your application (either provided by the azd output or obtained via the Azure Portal).
 2. You'll see the landing page. 
-3. Navigate to the `/products` and see the `401 Unauthorized` error.
+3. Navigate to the `/products` and see `401 Unauthorized` error.
 4. Navigate back to the landing page. At the top-right corner, click the **Login** button to see the built-in authentication feature of ACA in action.
 
-   ![Landing page - before login](./images/ep03-1-01.png)
+   ![Landing page - before login](./images/before-login.png)
 
    You will be redirected to the Microsoft Entra ID login page.
 
    After successful login, you will be redirected back to the monolith app.
 
-   ![Landing page - after login](./images/ep03-1-03.png)
+   ![Landing page - after login](./images/after-login.png)
 
 5. Navigate to the `/products` page again. You should see the list of products.
 
+So to reiterate what happened - the main landing page was not authenticated. It was viewable by anybody at any time. But the `/products/` page required users to be signed-in to view.
+
 ### What's happening?
 
-There's a magic behind. After enabling the built-in EasyAuth feature, your sign-in details are securely stored. Every time you navigate pages, the access token is passed through the request header, `x-ms-client-principal` so that the Blazor app recognizes you are the authenticated user. However, as this access token is different from what the Blazor application understands, the application doesn't know how to apply authorization. Therefore, the access token should be converted for the Blazor app to understand.
+After enabling the built-in EasyAuth feature, your sign-in details are securely stored. 
 
-There's a custom handler code for the conversion, called `EasyAuthAuthenticationHandler`. It reads the access token from `x-ms-client-principal` and converts it to the `ClaimsPrincipal` instance so that the Blazor app now finally understands how to apply authorization for each page.
+Every time you navigate pages, the access token is passed through the request header, `x-ms-client-principal` so that the Blazor app recognizes you are the authenticated user.
 
-If you want to deep further, please analyze this handler code: [https://github.com/Azure-Samples/dotnet-on-aca-for-beginners/blob/main/ep03-1/sample/src/eShopLite.Store/Handlers/EasyAuthAuthenticationHandler.cs](https://github.com/Azure-Samples/dotnet-on-aca-for-beginners/blob/main/ep03-1/sample/src/eShopLite.Store/Handlers/EasyAuthAuthenticationHandler.cs).
+However, the Blazor application doesn't understand the format of the access token. So it doesn't know how to apply authorization. So we need to covert the access token for the Blazor app to understand it.
+
+To help with that, we created a class called `EasyAuthenticationHandler`. It's a custom handler class that reads the access token from `x-ms-client-principal` and converts it to the `ClaimsPrincipal` instance so that the Blazor app can apply authorization to each page.
+
+Then to make sure a page requires authentication add the `@attribute [Authorize(AuthenticationSchemes = "EasyAuth")]` attribute to the top of the page itself.
+
+So now we have a rudimentary authorization scheme as well.
+
+Digging into the specifics of how `EasyAuthenticationHandler` is implemented is a bit beyond the scope of this course. But you can checkout the code in the `sample\src\eShopLite.Store\Handlers` directory.
+
+## Learn more
+
+**TODO: ADD LEARN MORE RESOURCES**
 
 ## Clean up the deployed resources
 
-To clean up the resources, run the following command:
+You are running in Azure and depending on your subscription may be incurring costs. Run the following command to delete everything you have provisioned. 
 
 ```bash
 azd down --force --purge
 ```
+
+## Up next
+
+Azure Container Apps really shines when hosting a microservice architecture. In the next chapter find out how we can refactor our app into microservices and get them talking to each other.
+
+👉 [Chapter 4: Refactoring to microservices](../4-microservices/)

@@ -59,7 +59,7 @@ For more details about the built-in authentication feature of ACA, see [Authenti
 
 ## Clean up the deployed resources
 
-You are running in Azure and depending on your subscription may be incurring costs. Run the following command to delete everything you have provisioned. (But if you plan on going right to Chapter 3.1 or Chapter 4 - you can skip this part!)
+You are running in Azure and depending on your subscription may be incurring costs. Run the following command to delete everything you have provisioned. (But if you plan on going right to Chapter 3.1 you can skip this part!)
 
 ```bash
 azd down --force --purge
