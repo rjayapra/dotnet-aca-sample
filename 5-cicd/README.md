@@ -1,6 +1,6 @@
-# EP05: Implementing CI/CD Pipeline for ACA
+# Creating a CI/CD pipeline with azd
 
-This sample demonstrates how to put in place a Continous Integration/Continous Deployment (CI/CD) pipeline. We will create a GitHub Action workflow to build and push, and deploy the Docker images to Azure Container App. The code is based on the previous episode [EP04](../ep04/README.md).
+In this chapter, we'll learn how to create a Continous Integration/Continous Deployment (CI/CD) pipeline. We will create a GitHub Actions workflow to build, push, and deploy the Docker images to our Azure Container App. The code in this chapter is based on [Chapter 4's code](../4-microservices/) and can be found in the [sample directory](./sample/).
 
 ## Prerequisites
 
@@ -28,7 +28,7 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
 1. Move to the `ep05` directory.
 
     ```bash
-    cd $REPOSITORY_ROOT/ep05
+    cd $REPOSITORY_ROOT/5-cicd/sample
     ```
 
 1. Initialize the Azure Developer CLI (azd) in the current directory.
@@ -42,14 +42,15 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
 ## Creating a CI/CD Pipeline with AZD
 
 1. To create the configuration file that will define the pipeline, run the following command:
+
     ```bash
     azd pipeline config
     ```
 
    While executing this command, you'll be asked a few questions:
-       1. When ask, select GitHub. 
-       1. Select the Azure subscription and location you want to use.
+       1. When ask, select GitHub.
        1. Accept to add the `azure-dev.yml` file.
+       1. Select the Azure subscription and location you want to use.
        1. The last question will be if `Would you like to commit and push your local changes to start the configured CI pipeline` reply with `n`, we have some changes to do before we can commit the files
 
 
