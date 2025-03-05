@@ -1,4 +1,4 @@
-# EP08: Introduction of .NET Aspire for Easy Orchestration
+# Easier orchestration with .NET Aspire
 
 This sample app demonstrates how to easily orchestrate MSA apps and deploy them to [Azure Container Apps (ACA)](https://learn.microsoft.com/azure/container-apps/overview), using [.NET Aspire](https://aka.ms/dotnet-aspire).
 
