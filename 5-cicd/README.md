@@ -57,13 +57,14 @@ You can use the Azure Developer CLI to create a CI/CD pipeline for your applicat
        1. Select the Azure subscription and location you want to use.
        1. The last question will be if **Would you like to commit and push your local changes to start the configured CI pipeline?** reply with **n**, we have some changes to do before we can commit the files
 
+    ![screenshot of azd pipeline config with all prompts answered](./images/pipeline-config.png)
 
 1. Open the **azure-dev.yml** file in the **.github/workflows** directory in your code editor. The `.github` folder is at the root of your repository. Because this course contains many solutions in many different subdirectories, we need to specify the exact solution we to deploy. Find the steps named `Provision Infrastructure` and `Deploy Application` to specify the path to the solution in this chapter's sample directory. Update the steps to look like this:
 
     ```yaml
       - name: Provision Infrastructure
         run: |
-            pushd ep05
+            pushd 5-cicd/sample
             azd provision --no-prompt
             popd
         env:
@@ -71,7 +72,7 @@ You can use the Azure Developer CLI to create a CI/CD pipeline for your applicat
 
       - name: Deploy Application
         run: |
-            pushd ep05
+            pushd 5-cicd
             azd deploy --no-prompt
             popd
     ```
