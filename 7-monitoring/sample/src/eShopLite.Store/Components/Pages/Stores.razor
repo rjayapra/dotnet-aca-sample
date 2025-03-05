@@ -1,8 +1,9 @@
 ﻿@page "/stores"
 @using eShopLite.Store.DataEntities
 @using eShopLite.Store.ApiClients
-@attribute [StreamRendering]
+@rendermode InteractiveServer
 @inject StoreInfoApiClient StoreApi
+@inject ILogger<Stores> Logger
 
 <PageTitle>Stores</PageTitle>
 
@@ -21,7 +22,7 @@
 }
 else
 {
-    
+    <button @onclick="ToggleSortOrder" class="btn btn-primary mb-3">@sortButtonText</button>
     <table class="table">
         <thead>
             <tr>
@@ -62,9 +63,50 @@ else
 
 @code {
     private IEnumerable<StoreInfo>? stores;
+    private bool isSortByName = true;
+    private string sortButtonText = "Sort by Location";
+    private int currentCount = 0;
 
     protected override async Task OnInitializedAsync()
     {
         stores = await StoreApi.GetStoreInfoAsync();
+        SortStores();
+    }
+
+    private void ToggleSortOrder()
+    {
+        isSortByName = !isSortByName;
+        sortButtonText = isSortByName ? "Sort by Location" : "Sort by Name";
+        SortStores();
+        IncrementCount();
+    }
+
+    private void SortStores()
+    {
+        if (stores != null)
+        {
+            stores = isSortByName ? stores.OrderBy(s => s.Name) : stores.OrderBy(s => s.City).ThenBy(s => s.State);
+        }
+    }
+
+    private void IncrementCount()
+    {
+        try
+        {
+            currentCount++;
+            if (currentCount % 5 == 0)
+            {
+            throw new Exception("An error occurred at every 5th click.");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log the exception using Console
+            Console.WriteLine($"Exception caught: {ex.Message}");
+            // Log the exception using ILogger
+            Logger.LogError(ex, "Exception caught during IncrementCount");
+        }
+
+        currentCount++;
     }
 }
