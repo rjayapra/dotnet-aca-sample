@@ -115,20 +115,14 @@ Azure Container Apps provides a built-in log stream that you can use to view log
 
 Now that you know where to look for the metrics, logs, and alerts, let's create some activities in the app to see them in action. We baked in a few things in the app to help us with that.
 
-⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️
-WE NEED TO UPDATE THESE
-⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️
-- Counter Page
-      - At each 5 clicks of the *Click Me* button, an exception will be logged. You won't notice any difference in the app, but you will see them logs.
-- Weather Page
-  	- When this page is displayed a background process starts and uses in a burst CPU and Memory for about 30 sec. You will see the metrics updating in the dashboard. 
+- Our Stores Page
+    - At each 5 clicks of the *Sort By* button, an exception will be logged. You won't notice any difference in the app, but you will see them logs.
+- Our Stores Page
+    - When this page is displayed a background process starts and uses in a burst CPU and Memory for about 30 sec. You will see the metrics updating in the dashboard. 
   	- The background process also generates messages into the log.
-  	- By Clicking 2-3 time on the **Weather** in the left menu, you should create enough memory usage to trigger the alert.
+  	- By clicking 2-3 times on the **Our Stores** in the left menu, you should create enough memory usage to trigger the alert.
 - Product Page
   - The response time is purposely slow (between 0.5 and 10 sec.) you will see the metrics updating in the dashboard.
-⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️
-WE NEED TO UPDATE THESE
-⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️
 
 Have fun exploring the monitoring capabilities of Azure Container Apps. Open side by side the web app and the Azure portal to see the metrics, the logs updating as you click through the web app.
 
