@@ -11,9 +11,9 @@ param eshopliteProductsDefinition object
 param eshopliteStoreExists bool
 @secure()
 param eshopliteStoreDefinition object
-param eshopliteWeatherExists bool
+param eshopliteStoreinfoExists bool
 @secure()
-param eshopliteWeatherDefinition object
+param eshopliteStoreinfoDefinition object
 
 @description('Id of the user or app to assign application roles')
 param principalId string
@@ -54,7 +54,7 @@ module containerRegistry 'br/public:avm/res/container-registry/registry:0.1.1' =
         roleDefinitionIdOrName: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
       }
       {
-        principalId: eshopliteWeatherIdentity.outputs.principalId
+        principalId: eshopliteStoreinfoIdentity.outputs.principalId
         principalType: 'ServicePrincipal'
         roleDefinitionIdOrName: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
       }
@@ -223,14 +223,6 @@ module eshopliteStore 'br/public:avm/res/app/container-app:0.8.0' = {
             name: 'PORT'
             value: '8080'
           }
-          {
-            name: 'ProductsApi'
-            value: 'https://${eshopliteProducts.outputs.fqdn}'
-          }
-          {
-            name: 'WeatherApi'
-            value: 'https://${eshopliteWeather.outputs.fqdn}'
-          }
         ],
         eshopliteStoreEnv,
         map(eshopliteStoreSecrets, secret => {
@@ -255,51 +247,51 @@ module eshopliteStore 'br/public:avm/res/app/container-app:0.8.0' = {
   }
 }
 
-module eshopliteWeatherIdentity 'br/public:avm/res/managed-identity/user-assigned-identity:0.2.1' = {
-  name: 'eshopliteWeatheridentity'
+module eshopliteStoreinfoIdentity 'br/public:avm/res/managed-identity/user-assigned-identity:0.2.1' = {
+  name: 'eshopliteStoreinfoidentity'
   params: {
-    name: '${abbrs.managedIdentityUserAssignedIdentities}eshopliteWeather-${resourceToken}'
+    name: '${abbrs.managedIdentityUserAssignedIdentities}eshopliteStoreinfo-${resourceToken}'
     location: location
   }
 }
 
-module eshopliteWeatherFetchLatestImage './modules/fetch-container-image.bicep' = {
-  name: 'eshopliteWeather-fetch-image'
+module eshopliteStoreinfoFetchLatestImage './modules/fetch-container-image.bicep' = {
+  name: 'eshopliteStoreinfo-fetch-image'
   params: {
-    exists: eshopliteWeatherExists
-    name: 'eshoplite-weather'
+    exists: eshopliteStoreinfoExists
+    name: 'eshoplite-storeinfo'
   }
 }
 
-var eshopliteWeatherAppSettingsArray = filter(array(eshopliteWeatherDefinition.settings), i => i.name != '')
-var eshopliteWeatherSecrets = map(filter(eshopliteWeatherAppSettingsArray, i => i.?secret != null), i => {
+var eshopliteStoreinfoAppSettingsArray = filter(array(eshopliteStoreinfoDefinition.settings), i => i.name != '')
+var eshopliteStoreinfoSecrets = map(filter(eshopliteStoreinfoAppSettingsArray, i => i.?secret != null), i => {
   name: i.name
   value: i.value
   secretRef: i.?secretRef ?? take(replace(replace(toLower(i.name), '_', '-'), '.', '-'), 32)
 })
-var eshopliteWeatherEnv = map(filter(eshopliteWeatherAppSettingsArray, i => i.?secret == null), i => {
+var eshopliteStoreinfoEnv = map(filter(eshopliteStoreinfoAppSettingsArray, i => i.?secret == null), i => {
   name: i.name
   value: i.value
 })
 
-module eshopliteWeather 'br/public:avm/res/app/container-app:0.8.0' = {
-  name: 'eshopliteWeather'
+module eshopliteStoreinfo 'br/public:avm/res/app/container-app:0.8.0' = {
+  name: 'eshopliteStoreinfo'
   params: {
-    name: 'eshoplite-weather'
+    name: 'eshoplite-storeinfo'
     ingressTargetPort: 8080
     scaleMinReplicas: 1
     scaleMaxReplicas: 10
     secrets: {
       secureList:  union([
       ],
-      map(eshopliteWeatherSecrets, secret => {
+      map(eshopliteStoreinfoSecrets, secret => {
         name: secret.secretRef
         value: secret.value
       }))
     }
     containers: [
       {
-        image: eshopliteWeatherFetchLatestImage.outputs.?containers[?0].?image ?? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+        image: eshopliteStoreinfoFetchLatestImage.outputs.?containers[?0].?image ?? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
         name: 'main'
         resources: {
           cpu: json('0.5')
@@ -312,15 +304,15 @@ module eshopliteWeather 'br/public:avm/res/app/container-app:0.8.0' = {
           }
           {
             name: 'AZURE_CLIENT_ID'
-            value: eshopliteWeatherIdentity.outputs.clientId
+            value: eshopliteStoreinfoIdentity.outputs.clientId
           }
           {
             name: 'PORT'
             value: '8080'
           }
         ],
-        eshopliteWeatherEnv,
-        map(eshopliteWeatherSecrets, secret => {
+        eshopliteStoreinfoEnv,
+        map(eshopliteStoreinfoSecrets, secret => {
             name: secret.name
             secretRef: secret.secretRef
         }))
@@ -328,17 +320,17 @@ module eshopliteWeather 'br/public:avm/res/app/container-app:0.8.0' = {
     ]
     managedIdentities:{
       systemAssigned: false
-      userAssignedResourceIds: [eshopliteWeatherIdentity.outputs.resourceId]
+      userAssignedResourceIds: [eshopliteStoreinfoIdentity.outputs.resourceId]
     }
     registries:[
       {
         server: containerRegistry.outputs.loginServer
-        identity: eshopliteWeatherIdentity.outputs.resourceId
+        identity: eshopliteStoreinfoIdentity.outputs.resourceId
       }
     ]
     environmentResourceId: containerAppsEnvironment.outputs.resourceId
     location: location
-    tags: union(tags, { 'azd-service-name': 'eshoplite-weather' })
+    tags: union(tags, { 'azd-service-name': 'eshoplite-storeinfo' })
   }
 }
 // Create a keyvault to store secrets
@@ -369,7 +361,7 @@ module keyVault 'br/public:avm/res/key-vault/vault:0.6.1' = {
         }
       }
       {
-        objectId: eshopliteWeatherIdentity.outputs.principalId
+        objectId: eshopliteStoreinfoIdentity.outputs.principalId
         permissions: {
           secrets: [ 'get', 'list' ]
         }
@@ -384,4 +376,4 @@ output AZURE_KEY_VAULT_ENDPOINT string = keyVault.outputs.uri
 output AZURE_KEY_VAULT_NAME string = keyVault.outputs.name
 output AZURE_RESOURCE_ESHOPLITE_PRODUCTS_ID string = eshopliteProducts.outputs.resourceId
 output AZURE_RESOURCE_ESHOPLITE_STORE_ID string = eshopliteStore.outputs.resourceId
-output AZURE_RESOURCE_ESHOPLITE_WEATHER_ID string = eshopliteWeather.outputs.resourceId
+output AZURE_RESOURCE_ESHOPLITE_STOREINFO_ID string = eshopliteStoreinfo.outputs.resourceId

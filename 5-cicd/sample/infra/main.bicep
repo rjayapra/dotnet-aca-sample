@@ -15,9 +15,9 @@ param eshopliteProductsDefinition object
 param eshopliteStoreExists bool
 @secure()
 param eshopliteStoreDefinition object
-param eshopliteWeatherExists bool
+param eshopliteStoreinfoExists bool
 @secure()
-param eshopliteWeatherDefinition object
+param eshopliteStoreinfoDefinition object
 
 @description('Id of the user or app to assign application roles')
 param principalId string
@@ -49,8 +49,8 @@ module resources 'resources.bicep' = {
     eshopliteProductsDefinition: eshopliteProductsDefinition
     eshopliteStoreExists: eshopliteStoreExists
     eshopliteStoreDefinition: eshopliteStoreDefinition
-    eshopliteWeatherExists: eshopliteWeatherExists
-    eshopliteWeatherDefinition: eshopliteWeatherDefinition
+    eshopliteStoreinfoExists: eshopliteStoreinfoExists
+    eshopliteStoreinfoDefinition: eshopliteStoreinfoDefinition
   }
 }
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = resources.outputs.AZURE_CONTAINER_REGISTRY_ENDPOINT
@@ -58,4 +58,4 @@ output AZURE_KEY_VAULT_ENDPOINT string = resources.outputs.AZURE_KEY_VAULT_ENDPO
 output AZURE_KEY_VAULT_NAME string = resources.outputs.AZURE_KEY_VAULT_NAME
 output AZURE_RESOURCE_ESHOPLITE_PRODUCTS_ID string = resources.outputs.AZURE_RESOURCE_ESHOPLITE_PRODUCTS_ID
 output AZURE_RESOURCE_ESHOPLITE_STORE_ID string = resources.outputs.AZURE_RESOURCE_ESHOPLITE_STORE_ID
-output AZURE_RESOURCE_ESHOPLITE_WEATHER_ID string = resources.outputs.AZURE_RESOURCE_ESHOPLITE_WEATHER_ID
+output AZURE_RESOURCE_ESHOPLITE_STOREINFO_ID string = resources.outputs.AZURE_RESOURCE_ESHOPLITE_STOREINFO_ID

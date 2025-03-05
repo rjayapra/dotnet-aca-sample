@@ -52,10 +52,10 @@
           ]
         }
       },
-      "eshopliteWeatherExists": {
-        "value": "${SERVICE_ESHOPLITE_WEATHER_RESOURCE_EXISTS=false}"
+      "eshopliteStoreinfoExists": {
+        "value": "${SERVICE_ESHOPLITE_STOREINFO_RESOURCE_EXISTS=false}"
       },
-      "eshopliteWeatherDefinition": {
+      "eshopliteStoreinfoDefinition": {
         "value": {
           "settings": [
             {
