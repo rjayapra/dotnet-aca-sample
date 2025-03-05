@@ -169,8 +169,18 @@ While it's deploying let's examine the `.github/workflows/azure-dev.yml` file in
 
 ## Clean up the deployed resources
 
-You can reuse this version for [EP06](../ep06/README.md). To clean up the resources, run the following command:
+You are running in Azure and depending on your subscription may be incurring costs. Run the following command to delete everything you just provisioned. (Unless you plan on proceeding to Chapter 6, in which case you can skip this step.)
 
 ```bash
 azd down --force --purge
 ```
+
+## Learn more
+
+**TODO: ADD LEARN MORE RESOURCES**
+
+## Up next
+
+In the next chapter, we'll learn how to optimize the cost of our Azure Container Apps.
+
+👉 [Chapter 6: Cost optimization]
