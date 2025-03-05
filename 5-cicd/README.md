@@ -1,6 +1,8 @@
 # Creating a CI/CD pipeline with azd
 
-In this chapter, we'll learn how to create a Continous Integration/Continous Deployment (CI/CD) pipeline. We will create a GitHub Actions workflow to build, push, and deploy the Docker images to our Azure Container App. The code in this chapter is based on [Chapter 4's code](../4-microservices/) and can be found in the [sample directory](./sample/).
+In this chapter, we'll learn how to create a Continous Integration/Continous Deployment (CI/CD) pipeline. 
+
+We'll create a GitHub Actions workflow that builds, pushes, and deploys the Docker images to our Azure Container App environment. The code in this chapter is based on the [Chapter 4 microservice's code](../4-microservices/) and can be found in the [sample directory](./sample/).
 
 ## Prerequisites
 
@@ -25,7 +27,7 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
 
 ## Initialize Azure Developer CLI (azd) environment
 
-1. Move to the `ep05` directory.
+1. Move to the **sample** directory in the this chapter's directory.
 
     ```bash
     cd $REPOSITORY_ROOT/5-cicd/sample
@@ -37,9 +39,11 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
     azd init
     ```
 
-   > During initialization, you'll be asked to provide the environment name, remember this as it will be used to create the resource group and other resources in Azure.
+   > 📝**NOTE**: During initialization, you'll be asked to provide the environment name, remember this as it will be used to create the resource group and other resources in Azure.
 
-## Creating a CI/CD Pipeline with AZD
+## Creating a CI/CD Pipeline with azd
+
+You can use the Azure Developer CLI to create a CI/CD pipeline for your application. The pipeline will be created using GitHub Actions. Let's see how to do that.
 
 1. To create the configuration file that will define the pipeline, run the following command:
 
@@ -48,13 +52,13 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
     ```
 
    While executing this command, you'll be asked a few questions:
-       1. When ask, select GitHub.
-       1. Accept to add the `azure-dev.yml` file.
+       1. When asked, select GitHub.
+       1. Accept to create the `azure-dev.yml` file.
        1. Select the Azure subscription and location you want to use.
-       1. The last question will be if `Would you like to commit and push your local changes to start the configured CI pipeline` reply with `n`, we have some changes to do before we can commit the files
+       1. The last question will be if **Would you like to commit and push your local changes to start the configured CI pipeline?** reply with **n**, we have some changes to do before we can commit the files
 
 
-1. Open the `azure-dev.yml` file in the `.github/workflows` directory in your code editor. The `.github` folder is at the root of your repository. Because this current repository contains many solutions in many subdirectories, we need to specify where is the solution we want to deploy. Edit the steps `Provision Infrastructure` and `Deploy Application` to specify the path to the solution. 
+1. Open the **azure-dev.yml** file in the **.github/workflows** directory in your code editor. The `.github` folder is at the root of your repository. Because this course contains many solutions in many different subdirectories, we need to specify the exact solution we to deploy. Find the steps named `Provision Infrastructure` and `Deploy Application` to specify the path to the solution in this chapter's sample directory. Update the steps to look like this:
 
     ```yaml
       - name: Provision Infrastructure
@@ -72,11 +76,13 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
             popd
     ```
 
-    > ⚠️ Make sure to respect the extact intentation and spacing. The `pushd` and `popd` commands are used to change the directory to the `ep05` folder and then return to the previous folder.
+    > ⚠️**INFO** 
+    > Make sure to respect the extact indentation and spacing. The `pushd` and `popd` commands are used to change the directory to the **5-cicd** folder and then return to the previous folder.
 
-    > 💡 Validate that the step `Install azd` is using `Azure/setup-azd@v2`. If you are still using `v1` the deployment will fail. You should update AZD CLI, and change the version in the file.
+    > 💡**TIP** 
+    > Validate that the step `Install azd` is using `Azure/setup-azd@v2`. If you are still using `v1` the deployment will fail. You should update AZD CLI, and change the version in the file.
 
-1. Commit the changes to the repository. And Push the changes to GitHub. You can use the user interface or the command line: 
+1. Commit the changes to the repository. And push the changes to GitHub. You can use any Git user interface you like or the git command line: 
 
     ```bash
     git add .
@@ -84,11 +90,15 @@ To run this sample app, make sure you have all the [prerequisites](../README.md#
     git push origin
     ```
 
-## Examine the GitHub Actions Workflow
+    Upon the push, the GitHub Actions workflow will be triggered.
 
-The deployment will take a few minutes. You can monitor the pipeline status in the tab `Actions` in your Github page. The URL should have been printed in the console after the `azd pipeline config` command. (ex: https://github.com/FBoucher/dotnet-on-aca-ep05/actions) 
+## Examine the GitHub Actions workflow
 
-> **NOTE**: If the deployment fails because .NET SDK 9 is not installed, you can edit the `azure-dev.yml`. Add the a step between `Checkout` and `Install azd` to install the .NET SDK 9.0.
+The deployment will take a few minutes. You can monitor the pipeline status in the tab `Actions` in your Github page. The URL should have been printed in the console after the `azd pipeline config` command. (ex: https://github.com/FBoucher/dotnet-on-aca-5-cicd/actions) 
+
+> ⚠️**INFO**
+> If the deployment fails because .NET SDK 9 is not installed, you can edit the `azure-dev.yml`. Add the a step between `Checkout` and `Install azd` to install the .NET SDK 9.0.
+
 ```yaml
     steps:
     - name: Checkout
@@ -108,7 +118,7 @@ The deployment will take a few minutes. You can monitor the pipeline status in t
 
 While it's deploying let's examine the `.github/workflows/azure-dev.yml` file in your code editor.
 
-1. When the workflow will be triggered
+1. Triggering the workflow
 
     The workflow will be triggered when a push is made to the `main` branch. As we can see in the `on` section of the workflow file:
 
@@ -121,7 +131,7 @@ While it's deploying let's examine the `.github/workflows/azure-dev.yml` file in
           - main
     ```
 
-2. How the permission works
+2. How permissions work
 
     The workflow uses the `Azure/setup-azd@v2.0.0` action to authenticate with Azure. The action uses the `AZD_INITIAL_ENVIRONMENT_CONFIG` secret that was created in the previous step with the `azd pipeline config` command.
     The secret is saved in the repository settings under `Settings` -> `Secrets and variables` -> `Actions`. You won't be able to see the value of the secret, but you can update it if needed.
@@ -139,7 +149,8 @@ While it's deploying let's examine the `.github/workflows/azure-dev.yml` file in
 
 
 ## Look at the deployed resources
-1. Open your web browser and navigate to the Azure Portal (https://portal.azure.com/). Open the resource group with the name matching `rg` + the env name used with azd init (ex: rg-ep05). 
+
+1. Open your web browser and navigate to the Azure Portal (https://portal.azure.com/). Open the resource group with the name matching `rg` + the env name used with azd init (ex: rg-5-cicd). 
 1. Open the `eshoplite-store` Container App and click on the `Application Url`, at the top right of the page, to see the deployed store.
 
 ## Update the code and see the changes
@@ -153,7 +164,7 @@ While it's deploying let's examine the `.github/workflows/azure-dev.yml` file in
     git push
     ```
 
-1. Open the `Actions` tab in your GitHub repository to see the workflow running. Once the workflow is completed, refresh the store page to see the changes.
+1. Open the **Actions** tab in your GitHub repository to see the workflow running. Once the workflow is completed, refresh the store page to see the changes.
 
 ## Clean up the deployed resources
 
