@@ -1,12 +1,14 @@
-# EP07: Monitoring ACA
+# Monitoring ACA
 
-Azure Container Apps provides several built-in observability features that together give you a great view of your container app’s health. In this episode, we will do a quick tour of the monitoring capabilities of Azure Container Apps.
+Azure Container Apps provides several built-in observability features that together give you a great view of your container app’s health. In this chapter, we will do a quick tour of the monitoring capabilities of Azure Container Apps.
 
 ## Getting Started
 
-You can reuse the code and deployed solution from the previous episode, but this version of the app has some additional logging and metrics to showcase the monitoring capabilities.
+You can reuse the code and deployed solution from the previous chapter, but this version of the app has some additional logging and metrics to showcase the monitoring capabilities.
 
-1. Getting the Repository Root
+By now we'll assume you're a pro at deploying ACA apps with azd, so we'll be brief with the instructions.
+
+1. Get the repository root
 
 	To simplify the copy paste of the commands that sometimes required an absolute path, we will be using the variable `REPOSITORY_ROOT` to keep the path of the root folder where you cloned/ downloaded this repository. The command `git rev-parse --show-toplevel` returns that path.
 
@@ -20,10 +22,10 @@ You can reuse the code and deployed solution from the previous episode, but this
 	$REPOSITORY_ROOT = git rev-parse --show-toplevel
 	```
 
-1. Move to the `ep07` directory.
+1. Move to the **7-monitoring/sample** directory.
 
     ```bash
-    cd $REPOSITORY_ROOT/ep07
+    cd $REPOSITORY_ROOT/7-monitoring/sample
     ```
 
 1. Initialize the Azure Developer CLI (azd) in the current directory.
@@ -40,7 +42,8 @@ You can reuse the code and deployed solution from the previous episode, but this
 
 1. Open the browser and navigate to the deployed app to validate that it's working as expected.
 
-   > **Note**: You may feel some delay in the response of the Product service, it's purposely added to simulate a slow response.
+   > 📝 **Note**
+   > You may feel some delay in the response of the Product service, it's purposely added to simulate a slow response.
  
 
 ## Exploring the Monitoring Capabilities in Azure Container Apps
@@ -48,14 +51,13 @@ You can reuse the code and deployed solution from the previous episode, but this
 Azure Container Apps provides several built-in observability features that are available directly from the Azure portal. Let's explore them.
 
 1. Open the Azure portal and navigate to the Azure Container Apps resource.
-1. In the left-hand menu, under Monitoring, you will find the following options:
+1. In the left-hand menu, under **Monitoring**, you will find the following options:
 	- **Metrics**: View metrics for your container app.
 	- **Logs**: View logs for your container app.
 	- **Alerts**: Set up alerts for your container app.
 	- **Diagnostics settings**: Configure diagnostic settings for your container app.
 	- **Activity log**: View the activity log for your container app.
 	- **Insights**: View insights for your container app.
-
 
 ### Creating a Dashboard to visualize the metrics
 
@@ -65,16 +67,16 @@ From the Azure portal, on the Azure Container Apps resource, you can visualize m
 1. In the left-hand menu, under Monitoring, select **Metrics**.
 1. Click on **Add metric** and select **Average Response Time** as Metric, and **Avg** as Aggregation.
 1. Click on **Save to dashboard**, **Pin to dashboard** and select **Create new**.
-1. Give the dashboard a name, for example, `ep07`. Then click on the **Create and pin** button.
+1. Give the dashboard a name, for example, **chapter-7**. Then click on the **Create and pin** button.
 
-Let's create two more metric but from the weather container app.
+Let's create two more metrics but from the **store-info** container app.
 
-1. From the Azure portal, navigate to the **weather** Azure Container Apps resource.
+1. From the Azure portal, navigate to the **store-info** Azure Container Apps resource.
 1. In the left-hand menu, under Monitoring, select **Metrics**.
 1. Click on **Add metric** and select **CPU usage** as Metric, and **Avg** as Aggregation.
-1. Click on **Save to dashboard**, **Pin to dashboard** and select **ep07** dashboard.
+1. Click on **Save to dashboard**, **Pin to dashboard** and select **chapter-7** dashboard.
 1. Click on **Add metric** and select **Memory usage** as Metric, and **Avg** as Aggregation.
-1. Click on **Save to dashboard**, **Pin to dashboard** and select **ep07** dashboard.
+1. Click on **Save to dashboard**, **Pin to dashboard** and select **chapter-7** dashboard.
 
 Now, you can open the dashboard in a new tab and see the metrics side by side. This can be done by clicking the third icon (Dashboard) from the hamburger menu in the top left corner of the Azure portal. 
 
@@ -86,9 +88,9 @@ Your Dashboard is probably showing flat lines, as we haven't accessed the apps y
 
 ### Create an Alert Rule
 
-Alert can be really useful to track important thresholds and be able to react to them. Let's create an alert rule for the weather container app.
+Alert can be really useful to track important thresholds and be able to react to them. Let's create an alert rule for the store-info container app.
 
-1. From the Azure portal, navigate to the **weather** Azure Container Apps resource.
+1. From the Azure portal, navigate to the **store-info** Azure Container Apps resource.
 1. In the left-hand menu, under Monitoring, select **Alerts**.
 1. Click on **Create alert rule**.
 1. Select **Memory Working Set Bytes** usage as the signal name.
@@ -113,6 +115,9 @@ Azure Container Apps provides a built-in log stream that you can use to view log
 
 Now that you know where to look for the metrics, logs, and alerts, let's create some activities in the app to see them in action. We baked in a few things in the app to help us with that.
 
+⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️
+WE NEED TO UPDATE THESE
+⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️
 - Counter Page
       - At each 5 clicks of the *Click Me* button, an exception will be logged. You won't notice any difference in the app, but you will see them logs.
 - Weather Page
@@ -121,6 +126,9 @@ Now that you know where to look for the metrics, logs, and alerts, let's create 
   	- By Clicking 2-3 time on the **Weather** in the left menu, you should create enough memory usage to trigger the alert.
 - Product Page
   - The response time is purposely slow (between 0.5 and 10 sec.) you will see the metrics updating in the dashboard.
+⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️
+WE NEED TO UPDATE THESE
+⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️⬆️
 
 Have fun exploring the monitoring capabilities of Azure Container Apps. Open side by side the web app and the Azure portal to see the metrics, the logs updating as you click through the web app.
 
@@ -134,5 +142,9 @@ To clean up the resources, run the following command:
 ```bash
 azd down --force --purge
 ```
+
+## Learn more
+
+## Up next
 
 

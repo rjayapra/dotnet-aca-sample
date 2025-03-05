@@ -180,4 +180,4 @@ azd down --force --purge
 
 There's nothing worse than your application going down and you not knowing about it. (Well - maybe if your boss knows about it before you do). In the next chapter we'll look at your options for monitoring your application in Azure Container Apps.
 
-👉 [Monitoring ACA](../)
+👉 [Monitoring ACA](../7-monitoring/)
