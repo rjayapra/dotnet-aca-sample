@@ -223,6 +223,14 @@ module eshopliteStore 'br/public:avm/res/app/container-app:0.8.0' = {
             name: 'PORT'
             value: '8080'
           }
+          {
+            name: 'ProductsApi'
+            value: 'https://${eshopliteProducts.outputs.fqdn}'
+          }
+          {
+            name: 'StoreInfoApi'
+            value: 'https://${eshopliteStoreinfo.outputs.fqdn}'
+          }
         ],
         eshopliteStoreEnv,
         map(eshopliteStoreSecrets, secret => {

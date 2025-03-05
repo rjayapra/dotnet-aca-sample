@@ -8,11 +8,23 @@ services:
         project: src/eShopLite.Products
         host: containerapp
         language: dotnet
+        docker:
+            path: ../../Dockerfile.products
+            context: ../../
+            remoteBuild: true
     eshoplite-store:
         project: src/eShopLite.Store
         host: containerapp
         language: dotnet
+        docker:
+            path: ../../Dockerfile.store
+            context: ../../
+            remoteBuild: true
     eshoplite-storeinfo:
         project: src/eShopLite.StoreInfo
         host: containerapp
         language: dotnet
+        docker:
+            path: ../../Dockerfile.storeinfo
+            context: ../../
+            remoteBuild: true
