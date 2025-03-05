@@ -1,0 +1,6 @@
+@eShopLite.StoreInfo_HostAddress = http://localhost:5012
+
+GET {{eShopLite.StoreInfo_HostAddress}}/api/storeinfo
+Accept: application/json
+
+###

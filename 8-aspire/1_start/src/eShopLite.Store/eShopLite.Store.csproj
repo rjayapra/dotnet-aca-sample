@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <AssemblyName>eShopLite.Store</AssemblyName>
+    <RootNamespace>eShopLite.Store</RootNamespace>
+    <UserSecretsId>d2c2ce8c-099f-41ba-9a87-5d5a0b860617</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\eShopLite.DataEntities\eShopLite.DataEntities.csproj" />
+  </ItemGroup>
+
+</Project>
