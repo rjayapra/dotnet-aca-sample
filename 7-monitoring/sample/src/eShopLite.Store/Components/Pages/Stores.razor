@@ -102,7 +102,7 @@ else
         catch (Exception ex)
         {
             // Log the exception using Console
-            Console.WriteLine($"Exception caught: {ex.Message}");
+            Console.WriteLine($"Just logging an Exception to the console: {ex.Message}");
             // Log the exception using ILogger
             Logger.LogError(ex, "Exception caught during IncrementCount");
         }

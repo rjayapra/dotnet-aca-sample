@@ -61,7 +61,9 @@ public static class StoreInfoEndpoints
     private async static Task<List<StoreInfo>> GetAllStoreInfo(StoreInfoDbContext db) 
     {
         // Start the combined burst simulation in a background task
-        Task.Run(() => SimulateCombinedBurst());
+        #pragma warning disable CS4014 // Disable the warning for this line
+        Task.Run(SimulateCombinedBurst);
+        #pragma warning restore CS4014 // Restore the warning
 
         return await db.Store.ToListAsync();
     }

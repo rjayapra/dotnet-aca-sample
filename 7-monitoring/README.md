@@ -63,7 +63,7 @@ Azure Container Apps provides several built-in observability features that are a
 
 From the Azure portal, on the Azure Container Apps resource, you can visualize many metrics, but only one at the time and only for the current Container App. To have a better overview of different metrics covering multiple container Apps, you can create a dashboard.
 
-1. From the Azure portal, navigate to the **store** Azure Container Apps resource.
+1. From the Azure portal, navigate to the **eshoplite-store** Azure Container Apps resource.
 1. In the left-hand menu, under Monitoring, select **Metrics**.
 1. Click on **Add metric** and select **Average Response Time** as Metric, and **Avg** as Aggregation.
 1. Click on **Save to dashboard**, **Pin to dashboard** and select **Create new**.
@@ -71,7 +71,7 @@ From the Azure portal, on the Azure Container Apps resource, you can visualize m
 
 Let's create two more metrics but from the **store-info** container app.
 
-1. From the Azure portal, navigate to the **store-info** Azure Container Apps resource.
+1. From the Azure portal, navigate to the **eshoplite-storeinfo** Azure Container Apps resource.
 1. In the left-hand menu, under Monitoring, select **Metrics**.
 1. Click on **Add metric** and select **CPU usage** as Metric, and **Avg** as Aggregation.
 1. Click on **Save to dashboard**, **Pin to dashboard** and select **chapter-7** dashboard.
@@ -90,9 +90,10 @@ Your Dashboard is probably showing flat lines, as we haven't accessed the apps y
 
 Alert can be really useful to track important thresholds and be able to react to them. Let's create an alert rule for the store-info container app.
 
-1. From the Azure portal, navigate to the **store-info** Azure Container Apps resource.
+1. From the Azure portal, navigate to the **eshoplite-store** Azure Container Apps resource.
 1. In the left-hand menu, under Monitoring, select **Alerts**.
 1. Click on **Create alert rule**.
+1. Select **Static** as the Threshold type.
 1. Select **Memory Working Set Bytes** usage as the signal name.
 1. Change the Units to **MB**.
 1. Set the Threshold to **500**.
@@ -109,17 +110,18 @@ Azure Container Apps provides a built-in log stream that you can use to view log
 
 1. From the Azure portal, navigate to the Azure Container Apps resource.
 1. In the left-hand menu, under Monitoring, select **Log stream**.
-1. This will show only the logs of the current container app. 
+1. This will show only the logs of the current container app.
+   1. You can select **Historical** as Category, and **Application** as Category to get a list of log entries comming from the app.
 
 ### Create some activities
 
 Now that you know where to look for the metrics, logs, and alerts, let's create some activities in the app to see them in action. We baked in a few things in the app to help us with that.
 
 - Our Stores Page
-    - At each 5 clicks of the *Sort By* button, an exception will be logged. You won't notice any difference in the app, but you will see them logs.
+    - At each 5 clicks of the *Sort By* button, an exception will be logged. You won't notice any difference in the app, but you will see them logs of the **eshoplite-store**. Look for "5th click" in the logs.
 - Our Stores Page
     - When this page is displayed a background process starts and uses in a burst CPU and Memory for about 30 sec. You will see the metrics updating in the dashboard. 
-  	- The background process also generates messages into the log.
+  	- The background process also generates messages into the log. Look for "Burst simulation" in the logs.
   	- By clicking 2-3 times on the **Our Stores** in the left menu, you should create enough memory usage to trigger the alert.
 - Product Page
   - The response time is purposely slow (between 0.5 and 10 sec.) you will see the metrics updating in the dashboard.
@@ -139,6 +141,9 @@ azd down --force --purge
 
 ## Learn more
 
+Learn more about all the different monitoring capabilities in [Observability in Azure Container Apps](https://learn.microsoft.com/en-us/azure/container-apps/observability). 
+
+
 ## Up next
 
-
+Now that we learn how things works let's see how we can simplify the development of microservices with .NET Aspire in that [next chapter](../8-aspire/).
