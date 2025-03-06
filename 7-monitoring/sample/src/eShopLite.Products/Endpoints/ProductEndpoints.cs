@@ -24,6 +24,9 @@ public static class ProductEndpoints
 
         group.MapGet("/", async (ProductDbContext db) =>
         {
+            // Purposely slowing down the request adding (between 0.5 and 10 sec.)
+            var random = new Random();
+            await Task.Delay(random.Next(500, 10000));
             return await db.Product.ToListAsync();
         })
         .WithTags("products")
