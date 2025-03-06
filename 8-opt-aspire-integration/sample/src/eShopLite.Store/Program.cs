@@ -21,15 +21,16 @@ builder.Services.AddHttpClient<ProductApiClient>(client =>
     client.BaseAddress = new Uri(productsApiUrl);
 });
 
-builder.Services.AddHttpClient<WeatherApiClient>(client =>
+builder.Services.AddHttpClient<StoreInfoApiClient>(client =>
 {
-    var weatherApiUrl = builder.Configuration.GetValue<string>("WeatherApi");
-    if (string.IsNullOrEmpty(weatherApiUrl))
+    var storeInfoApiUrl = builder.Configuration.GetValue<string>("StoreInfoApi");
+    if (string.IsNullOrEmpty(storeInfoApiUrl))
     {
-        throw new ArgumentNullException(nameof(weatherApiUrl), "WeatherApi configuration value is missing or empty.");
+        throw new ArgumentNullException(nameof(storeInfoApiUrl), "StoreInfoApi configuration value is missing or empty.");
     }
-    client.BaseAddress = new Uri(weatherApiUrl);
+    client.BaseAddress = new Uri(storeInfoApiUrl);
 });
+
 
 var app = builder.Build();
 
