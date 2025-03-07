@@ -9,7 +9,7 @@ Hello everybody and welcome to a course, workshop, and video series that cover A
 To run the sample apps, you need the following tools installed on your machine:
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-- [Visual Studio 2022 ](https://visualstudio.microsoft.com/vs/) or [Visual Studio Code](https://code.visualstudio.com/) with [C# Dev Kit extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit)
+- [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) or [Visual Studio Code](https://code.visualstudio.com/) with [C# Dev Kit extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit)
 - [Docker Desktop](https://docs.docker.com/desktop/)
 - [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) with [Azure Container Apps extension](https://learn.microsoft.com/cli/azure/azure-cli-extensions-list)
 - [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd)
@@ -23,12 +23,12 @@ To run the sample apps, you need the following tools installed on your machine:
 
 - [Chapter 1: All of the container services on Azure - and where ACA fits in](./1-intro)
 - [Chapter 2: Running a monolith on ACA](./2-monolith-on-aca/)
-- [EP03: Authenticating App on ACA](./ep03)
+- [Chapter 3: Authenticating App on ACA](./3-authentication/)
 - [Chapter 4: Refactoring to microservices](./4-microservices/)
-- [EP05: Implementing CI/CD Pipeline for ACA](./ep05)
-- [EP06: Cost Optimization for ACA](./ep06)
-- [EP07: Monitoring ACA](./ep07)
-- [EP08: Introduction of .NET Aspire for Easy Orchestration](./ep08)
+- [Chapter 5: Implementing CI/CD Pipeline for ACA](./5-cicd/)
+- [Chapter 6: Cost Optimization for ACA](./6-cost-optimization/)
+- [Chapter 7: Monitoring ACA](./7-monitoring/)
+- [Chapter 8: Introduction of .NET Aspire for Easy Orchestration](./8-aspire/)
 
 ## Resources
 

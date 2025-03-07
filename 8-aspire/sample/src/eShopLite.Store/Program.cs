@@ -14,7 +14,7 @@ builder.Services.AddRazorComponents()
 
 // Add HTTP clients
 builder.Services.AddHttpClient<ProductApiClient>(client => client.BaseAddress = new Uri("https+http://products"));
-builder.Services.AddHttpClient<WeatherApiClient>(client => client.BaseAddress = new Uri("https+http://weather"));
+builder.Services.AddHttpClient<StoreInfoApiClient>(client => client.BaseAddress = new Uri("https+http://storeinfo"));
 
 var app = builder.Build();
 

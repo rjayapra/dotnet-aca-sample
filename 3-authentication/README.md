@@ -67,15 +67,15 @@ azd down --force --purge
 
 ## Up next
 
-It's choose your own adventure time!
+It's your choice of own adventure time!
 
 You can learn how to opt-out some pages from authentication.
 
-👉[Chapter 3.1 - Fine-grained authenticaiton](../3-opt-fine-grained-auth/)
+👉 [Chapter 3.1 - Fine-grained authenticaiton](../3-opt-fine-grained-auth/)
 
 ... or ...
 
 Learn how to refactor the monolith app down into microservices and deploy all of them to ACA. 
 
-👉[Chapter 4: Refactoring to microservices](../4-microservices/)
+👉 [Chapter 4: Refactoring to microservices](../4-microservices/)
 

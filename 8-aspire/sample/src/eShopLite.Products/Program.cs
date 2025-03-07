@@ -2,6 +2,8 @@ using eShopLite.Products.Data;
 using eShopLite.Products.Endpoints;
 using eShopLite.Products.Extensions;
 
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
