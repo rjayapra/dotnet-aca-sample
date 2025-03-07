@@ -2,9 +2,9 @@ using eShopLite.Store.Endpoints;
 using eShopLite.Store.Extensions;
 using eShopLite.Store.StoreInfoData;
 
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.EntityFrameworkCore;
 
-builder.AddServiceDefaults();
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
@@ -12,11 +12,14 @@ builder.Services.AddProblemDetails();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.AddNpgsqlDbContext<StoreInfoDbContext>("storeinfodb");
+
+builder.Services.AddDbContext<StoreInfoDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("StoreInfoContext") ?? throw new InvalidOperationException("Connection string 'StoreInfoContext' not found.");
+    options.UseSqlite(connectionString);
+});
 
 var app = builder.Build();
-
-app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
