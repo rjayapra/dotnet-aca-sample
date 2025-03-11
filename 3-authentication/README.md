@@ -67,7 +67,7 @@ azd down --force --purge
 
 ## Up next
 
-It's your choice of own adventure time!
+It's *choose your own adventure* time!
 
 You can learn how to opt-out some pages from authentication.
 
