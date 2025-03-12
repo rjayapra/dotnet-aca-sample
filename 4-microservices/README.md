@@ -262,4 +262,4 @@ azd down --force --purge
 
 Every time you make a change to your application, you could run `azd up` to redeploy it. That would work, but it would be better if you had a CI/CD pipeline that would automatically redeploy for you, and that's what we'll learn about in the next chapter.
 
-👉[CI/CD with GitHub Actions](../ep05/README.md)
+👉[CI/CD with GitHub Actions](../5-cicd/README.md)

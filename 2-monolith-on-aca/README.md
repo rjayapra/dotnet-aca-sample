@@ -194,4 +194,4 @@ azd down --force --purge
 
 Authentication and authorization are topics that are easy in concept, but can be difficult to implement. In the next chapter we'll learn how to implement AuthN/AuthZ with Azure Container Apps.
 
-👉[Authentication on Azure Container Apps](../ep03/README.md)
+👉[Authentication on Azure Container Apps](../3-authentication/README.md)

@@ -360,4 +360,4 @@ azd down --force --purge
 
 ## Up next
 
-Congratulations! You've completed our **.NET on Azure Container Apps for Beginners** series!
+🎉 Congratulations! You've completed our **.NET on Azure Container Apps for Beginners** series!

@@ -128,4 +128,4 @@ You can learn how to integrate .NET Aspire with your existing .NET applications.
 
 ... or ...
 
-Congratulations! You've completed our **.NET on Azure Container Apps for Beginners** series!
+Congratulations! 🎉 You've completed our **.NET on Azure Container Apps for Beginners** series!
