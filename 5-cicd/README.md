@@ -183,4 +183,4 @@ azd down --force --purge
 
 In the next chapter, we'll learn how to optimize the cost of our Azure Container Apps.
 
-👉 [Chapter 6: Cost optimization]
+👉 [Chapter 6: Cost optimization](../6-cost-optimization/README.md)
