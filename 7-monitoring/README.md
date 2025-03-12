@@ -141,7 +141,7 @@ azd down --force --purge
 
 ## Learn more
 
-Learn more about all the different monitoring capabilities in [Observability in Azure Container Apps](https://learn.microsoft.com/en-us/azure/container-apps/observability). 
+Learn more about all the different monitoring capabilities in [Observability in Azure Container Apps](https://learn.microsoft.com/azure/container-apps/observability). 
 
 
 ## Up next

@@ -28,8 +28,8 @@ So Azure Container Apps is a good choice for microservices and event-driven appl
 
 Looking at those two pages we can understand better how the cost is calculated. 
 
-- [Billing in Azure Container Apps](https://learn.microsoft.com/en-us/azure/container-apps/billing)
-- [Azure Container Apps Pricing](https://azure.microsoft.com/en-us/pricing/details/container-apps/)
+- [Billing in Azure Container Apps](https://learn.microsoft.com/azure/container-apps/billing)
+- [Azure Container Apps Pricing](https://azure.microsoft.com/pricing/details/container-apps/)
 
 There is a consumption plan and a dedicated plan. The consumption plan is the default one, and it is based on the resources consumed by the container apps. The dedicated plan is based on the workload profile instances, not by individual applications.
 
@@ -166,7 +166,7 @@ Optimizing the cost is not a one-time task, it's an ongoing process. It's a good
 
 ## Learn more
 
-**TODO Add more links to learn more about cost optimization.**
+Learn more about [Azure Monitor cost and usage](https://learn.microsoft.com/azure/azure-monitor/cost-usage).
 
 ## Clean up the deployed resources
 
