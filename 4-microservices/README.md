@@ -63,7 +63,7 @@ To build and run this entire solution on your local machine, run the following c
     ```powershell
     Start-Process powershell -ArgumentList "dotnet run --project ./src/eShopLite.Products"
     Start-Process powershell -ArgumentList "dotnet run --project ./src/eShopLite.StoreInfo"
-    Start-Process powershell -ArgumentList "dotnet run --project ./src/eShopLite.Store"
+    Start-Process powershell -ArgumentList "dotnet watch run --project ./src/eShopLite.Store"
     ```
 
     > 📝**NOTE:** You'll probabably get a warning asking you if you want to paste multiple lines at once, just click yes. 
@@ -74,7 +74,7 @@ To build and run this entire solution on your local machine, run the following c
     ```bash
     dotnet run --project ./src/eShopLite.Products &
     dotnet run --project ./src/eShopLite.StoreInfo &
-    dotnet run --project ./src/eShopLite.Store &
+    dotnet watch run --project ./src/eShopLite.Store &
     ```
 
 1. A browser should open and display `http:localhost:5158`, if it doesn't, go ahead and navigate there. You should see the main eShopLite front-end website. And if you click on **Our Stores** or **Products** from the navigation menu, it will load the respective data from the microservices.
@@ -158,7 +158,7 @@ Our next steps then to get our refactored eShopLite microservice-based applicati
 1. Once the initialization is complete, there will be several new files created. One of them is named **azure.yaml** and will be found directly under the **sample** directory. We will need to update that file with the Docker settings to use Azure Container Registry remote build.
 
     ```yaml
-    name: ep04
+    name: 4-microservices
     metadata:
       template: azd-init@1.11.0
     services:
