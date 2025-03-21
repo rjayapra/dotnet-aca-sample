@@ -79,7 +79,7 @@ Digging into the specifics of how `EasyAuthenticationHandler` is implemented is 
 
 ## Learn more
 
-**TODO: ADD LEARN MORE RESOURCES**
+- [Giving Granular Controls to Azure EasyAuth](https://techcommunity.microsoft.com/blog/appsonazureblog/giving-granular-controls-to-azure-easyauth/4374848)
 
 ## Clean up the deployed resources
 
