@@ -42,7 +42,7 @@ This solution has replaced the SQLite database with a containerized PostgreSQL o
     dotnet watch run --project ./src/eShopLite.AppHost
     ```
 
-4. Open a browser and navigate to `https://localhost:17287` to see the .NET Aspire dashboard is up and running.
+4. It automatically opens a browser and navigate to `https://localhost:17098` to see the .NET Aspire dashboard is up and running.
 
    ![.NET Aspire Dashboard](./images/8-aspire-01.png)
 
