@@ -138,7 +138,7 @@ The [Azure Developer CLI (azd)](https://learn.microsoft.com/azure/developer/azur
 
     ```yaml
     # azure.yaml
-    name: ep02
+    name: 2-monolith-on-aca
     metadata:
       template: azd-init@1.11.0
     services:
