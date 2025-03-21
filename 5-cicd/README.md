@@ -72,7 +72,7 @@ You can use the Azure Developer CLI to create a CI/CD pipeline for your applicat
 
       - name: Deploy Application
         run: |
-            pushd 5-cicd
+            pushd 5-cicd/sample
             azd deploy --no-prompt
             popd
     ```
