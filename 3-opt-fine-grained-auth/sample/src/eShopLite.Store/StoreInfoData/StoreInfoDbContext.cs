@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using eShopLite.Store.DataEntities;
+﻿using eShopLite.Store.DataEntities;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace eShopLite.Store.StoreInfoData;
 
