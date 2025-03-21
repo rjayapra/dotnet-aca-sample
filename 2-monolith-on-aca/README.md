@@ -41,7 +41,7 @@ First off, let's run the application locally - without using a container, just t
 1. Change to this directory.
 
     ```bash
-    cd $REPOSITORY_ROOT/ep02/sample
+    cd $REPOSITORY_ROOT/2-monolith-on-aca/sample
     ```
 
 2. Build the app.
@@ -108,7 +108,7 @@ The [Azure Developer CLI (azd)](https://learn.microsoft.com/azure/developer/azur
 1. Make sure that you're in the `ep02/sample` directory.
 
     ```bash
-    cd $REPOSITORY_ROOT/ep02/sample
+    cd $REPOSITORY_ROOT/2-monolith-on-aca/sample
     ```
 
 1. Initialize the Azure Developer CLI (azd) with the following command:
