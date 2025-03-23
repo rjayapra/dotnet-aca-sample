@@ -1,6 +1,6 @@
-# .NET on Azure Container Apps for Beginners
+# Getting Started .NET on Azure Container Apps
 
-This provides sample apps for the .NET on [Azure Container Apps](https://learn.microsoft.com/azure/container-apps/overview) for Beginners series.
+This provides sample apps for the .NET on [Azure Container Apps](https://learn.microsoft.com/azure/container-apps/overview) series.
 
 Hello everybody and welcome to a course, workshop, and video series that cover Azure Container Apps for .NET developers. We're here to get you going on how to build cloud applications using Azure Container Apps.
 
