@@ -1,3 +1,6 @@
+[![Join Azure AI Community Discord](https://dcbadge.limes.pink/api/server/kzRShWzttr)](https://discord.gg/kzRShWzttr) 
+![.NET](https://img.shields.io/badge/9.0-512BD4?logo=dotnet&logoColor=fff)
+
 # Getting Started .NET on Azure Container Apps
 
 This provides sample apps for the .NET on [Azure Container Apps](https://learn.microsoft.com/azure/container-apps/overview) series.
