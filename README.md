@@ -37,3 +37,9 @@ To run the sample apps, you need the following tools installed on your machine:
 
 - [Join Azure AI Community Discord](https://dcbadge.limes.pink/api/server/kzRShWzttr)
 - [Azure Container Apps (ACA) overview](https://learn.microsoft.com/azure/container-apps/overview)
+
+### Videos
+
+Watch the video series! There one video for each chapter. Here the [playlist](https://aka.ms/getting-started-dotnet-aca)
+
+[![Playlist thumbnail](images/pl_thumb_yt_small.jpg)](https://aka.ms/getting-started-dotnet-aca)

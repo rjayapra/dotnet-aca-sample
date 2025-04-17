@@ -46,6 +46,10 @@ Moving your .NET apps to containers encapsulates your app’s logic and dependen
 
 Azure offers many places to deploy your containerized apps—from App Service to Kubernetes. However, Azure Container Apps hits the sweet spot by allowing considerable customization and control of the infrastructure while also providing best practices in a fully managed service.
 
+### Video
+
+[![Getting Started with .NET on ACA - Part 1](images/ep1_thumb_yt_small.jpg)](https://www.youtube.com/watch?v=mfVd85VETpE&list=PLI7iePan8aH6jQxDupYUvgQsP3G7WGM0b&index=1)
+
 ## Up next
 
 Now let's get learning and dive into some code!

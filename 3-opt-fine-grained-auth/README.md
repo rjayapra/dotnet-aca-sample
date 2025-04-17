@@ -89,6 +89,10 @@ You are running in Azure and depending on your subscription may be incurring cos
 azd down --force --purge
 ```
 
+### Video
+
+[![Running a monolith app on Azure Container Apps | Getting Started with .NET on ACA - Part 2](../3-authentication/images/ep3_thumb_yt_small.jpg)](https://www.youtube.com/watch?v=-Bz2i1g0M-w&list=PLI7iePan8aH6jQxDupYUvgQsP3G7WGM0b&index=3)
+
 ## Up next
 
 Azure Container Apps really shines when hosting a microservice architecture. In the next chapter find out how we can refactor our app into microservices and get them talking to each other.

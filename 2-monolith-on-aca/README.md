@@ -190,6 +190,10 @@ azd down --force --purge
 
 - You can learn more about the Azure Developer CLI with [3 hands-on learning modules in Microsoft Learn](https://learn.microsoft.com/training/paths/azure-developer-cli/).
 
+### Video
+
+[![Getting Started with .NET on ACA - Part 2](images/ep2_thumb_yt_small.jpg)](https://www.youtube.com/watch?v=dUjD82wYdzQ&list=PLI7iePan8aH6jQxDupYUvgQsP3G7WGM0b&index=2)
+
 ## Up next
 
 Authentication and authorization are topics that are easy in concept, but can be difficult to implement. In the next chapter we'll learn how to implement AuthN/AuthZ with Azure Container Apps.
