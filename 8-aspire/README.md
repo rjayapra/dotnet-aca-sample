@@ -118,6 +118,10 @@ To clean up the resources, run the following command:
 azd down --force --purge
 ```
 
+### Video
+
+[![Getting Started with .NET on ACA - Part 8](images/ep8_thumb_yt_small.jpg)](https://www.youtube.com/watch?v=Rnn-f-vDS4Y&list=PLI7iePan8aH6jQxDupYUvgQsP3G7WGM0b&index=8)
+
 ## Up next
 
 It's choose your own adventure time!

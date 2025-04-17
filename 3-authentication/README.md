@@ -65,6 +65,11 @@ You are running in Azure and depending on your subscription may be incurring cos
 azd down --force --purge
 ```
 
+### Video
+
+[![Getting Started with .NET on ACA - Part 3](images/ep3_thumb_yt_small.jpg)](https://www.youtube.com/watch?v=-Bz2i1g0M-w&list=PLI7iePan8aH6jQxDupYUvgQsP3G7WGM0b&index=3)
+
+
 ## Up next
 
 It's *choose your own adventure* time!

@@ -143,6 +143,9 @@ azd down --force --purge
 
 Learn more about all the different monitoring capabilities in [Observability in Azure Container Apps](https://learn.microsoft.com/azure/container-apps/observability). 
 
+### Video
+
+[![Getting Started with .NET on ACA - Part 7](images/ep7_thumb_yt_small.jpg)](https://www.youtube.com/watch?v=ju86QG3zKHU&list=PLI7iePan8aH6jQxDupYUvgQsP3G7WGM0b&index=7)
 
 ## Up next
 

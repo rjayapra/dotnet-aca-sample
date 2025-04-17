@@ -350,6 +350,12 @@ Curious of .NET Aspire? Here are a few resources for you to learn more:
 - [.NET Aspire](https://aka.ms/dotnet-aspire)
 - [Let's Learn .NET - Aspire](https://aka.ms/letslearn/dotnet/aspire)
 
+
+### Video
+
+[![Getting Started with .NET on ACA - Part 8](../8-aspire/images/ep8_thumb_yt_small.jpg)](https://www.youtube.com/watch?v=Rnn-f-vDS4Y&list=PLI7iePan8aH6jQxDupYUvgQsP3G7WGM0b&index=8)
+
+
 ## Clean up the deployed resources
 
 To clean up the resources, run the following command:

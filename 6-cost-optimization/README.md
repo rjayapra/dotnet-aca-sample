@@ -176,6 +176,11 @@ To clean up the resources, run the following command:
 azd down --force --purge
 ```
 
+### Video
+
+[![Getting Started with .NET on ACA - Part 6](images/ep6_thumb_yt_small.jpg)](https://www.youtube.com/watch?v=JMgQ_RAI5Ao&list=PLI7iePan8aH6jQxDupYUvgQsP3G7WGM0b&index=6)
+
+
 ## Up next
 
 There's nothing worse than your application going down and you not knowing about it. (Well - maybe if your boss knows about it before you do). In the next chapter we'll look at your options for monitoring your application in Azure Container Apps.
